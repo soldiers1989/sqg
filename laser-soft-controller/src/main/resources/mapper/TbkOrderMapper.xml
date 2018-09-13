@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkOrderMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="PID" jdbcType="VARCHAR" property="pid" />
+    <result column="ITEM_IMAGE" jdbcType="VARCHAR" property="itemImage" />
+    <result column="ITEM_TITLE" jdbcType="VARCHAR" property="itemTitle" />
+    <result column="ITEM_PRICE" jdbcType="DECIMAL" property="itemPrice" />
+    <result column="SELLER_NAME" jdbcType="VARCHAR" property="sellerName" />
+    <result column="TRADE_ID" jdbcType="BIGINT" property="tradeId" />
+    <result column="ITEM_NUM" jdbcType="INTEGER" property="itemNum" />
+    <result column="PAY_AMOUNT" jdbcType="DECIMAL" property="payAmount" />
+    <result column="COMMISSION" jdbcType="DECIMAL" property="commission" />
+    <result column="COMMISSION_RATE" jdbcType="DECIMAL" property="commissionRate" />
+    <result column="TRADE_TIME" jdbcType="TIMESTAMP" property="tradeTime" />
+    <result column="EARNING_TIME" jdbcType="TIMESTAMP" property="earningTime" />
+    <result column="TRADE_STATUS" jdbcType="INTEGER" property="tradeStatus" />
+    <result column="TRADE_TYPE" jdbcType="VARCHAR" property="tradeType" />
+    <result column="INCOME_RATE" jdbcType="VARCHAR" property="incomeRate" />
+    <result column="SUBSIDY_RATE" jdbcType="VARCHAR" property="subsidyRate" />
+    <result column="RERMINAL_TYPE" jdbcType="VARCHAR" property="rerminalType" />
+    <result column="ALIPAY_TOTAL_PRICE" jdbcType="DECIMAL" property="alipayTotalPrice" />
+    <result column="TOTAL_COMMISSION_RATE" jdbcType="VARCHAR" property="totalCommissionRate" />
+    <result column="TOTAL_COMMISSION_FEE" jdbcType="VARCHAR" property="totalCommissionFee" />
+    <result column="SUBSIDY_FEE" jdbcType="VARCHAR" property="subsidyFee" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USER_ID, PID, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, SELLER_NAME, TRADE_ID, ITEM_NUM, 
+    PAY_AMOUNT, COMMISSION, COMMISSION_RATE, TRADE_TIME, EARNING_TIME, TRADE_STATUS, 
+    TRADE_TYPE, INCOME_RATE, SUBSIDY_RATE, RERMINAL_TYPE, ALIPAY_TOTAL_PRICE, TOTAL_COMMISSION_RATE, 
+    TOTAL_COMMISSION_FEE, SUBSIDY_FEE, UPDATE_TIME, CREATE_TIME
+  </sql>
+  <sql id="t_tbk_order_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="pid != null and pid.trim().length() != 0">
+         AND (PID like concat('%',#{pid},'%')) 
+      </if>
+      <if test="itemImage != null and itemImage.trim().length() != 0">
+         AND (ITEM_IMAGE like concat('%',#{itemImage},'%')) 
+      </if>
+      <if test="itemTitle != null and itemTitle.trim().length() != 0">
+         AND (ITEM_TITLE like concat('%',#{itemTitle},'%')) 
+      </if>
+      <if test="itemPrice != null">
+        AND (ITEM_PRICE = #{itemPrice})
+      </if>
+      <if test="sellerName != null and sellerName.trim().length() != 0">
+         AND (SELLER_NAME like concat('%',#{sellerName},'%')) 
+      </if>
+      <if test="tradeId != null">
+        AND (TRADE_ID = #{tradeId})
+      </if>
+      <if test="itemNum != null">
+        AND (ITEM_NUM = #{itemNum})
+      </if>
+      <if test="payAmount != null">
+        AND (PAY_AMOUNT = #{payAmount})
+      </if>
+      <if test="commission != null">
+        AND (COMMISSION = #{commission})
+      </if>
+      <if test="commissionRate != null">
+        AND (COMMISSION_RATE = #{commissionRate})
+      </if>
+      <if test="tradeTime != null">
+        AND (TRADE_TIME = #{tradeTime})
+      </if>
+      <if test="earningTime != null">
+        AND (EARNING_TIME = #{earningTime})
+      </if>
+      <if test="tradeStatus != null">
+        AND (TRADE_STATUS = #{tradeStatus})
+      </if>
+      <if test="tradeType != null and tradeType.trim().length() != 0">
+         AND (TRADE_TYPE like concat('%',#{tradeType},'%')) 
+      </if>
+      <if test="incomeRate != null and incomeRate.trim().length() != 0">
+         AND (INCOME_RATE like concat('%',#{incomeRate},'%')) 
+      </if>
+      <if test="subsidyRate != null and subsidyRate.trim().length() != 0">
+         AND (SUBSIDY_RATE like concat('%',#{subsidyRate},'%')) 
+      </if>
+      <if test="rerminalType != null and rerminalType.trim().length() != 0">
+         AND (RERMINAL_TYPE like concat('%',#{rerminalType},'%')) 
+      </if>
+      <if test="alipayTotalPrice != null">
+        AND (ALIPAY_TOTAL_PRICE = #{alipayTotalPrice})
+      </if>
+      <if test="totalCommissionRate != null and totalCommissionRate.trim().length() != 0">
+         AND (TOTAL_COMMISSION_RATE like concat('%',#{totalCommissionRate},'%')) 
+      </if>
+      <if test="totalCommissionFee != null and totalCommissionFee.trim().length() != 0">
+         AND (TOTAL_COMMISSION_FEE like concat('%',#{totalCommissionFee},'%')) 
+      </if>
+      <if test="subsidyFee != null and subsidyFee.trim().length() != 0">
+         AND (SUBSIDY_FEE like concat('%',#{subsidyFee},'%')) 
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_order_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="pid != null and pid.trim().length() != 0">
+        AND (PID = #{pid})
+      </if>
+      <if test="itemImage != null and itemImage.trim().length() != 0">
+        AND (ITEM_IMAGE = #{itemImage})
+      </if>
+      <if test="itemTitle != null and itemTitle.trim().length() != 0">
+        AND (ITEM_TITLE = #{itemTitle})
+      </if>
+      <if test="itemPrice != null">
+        AND (ITEM_PRICE = #{itemPrice})
+      </if>
+      <if test="sellerName != null and sellerName.trim().length() != 0">
+        AND (SELLER_NAME = #{sellerName})
+      </if>
+      <if test="tradeId != null">
+        AND (TRADE_ID = #{tradeId})
+      </if>
+      <if test="itemNum != null">
+        AND (ITEM_NUM = #{itemNum})
+      </if>
+      <if test="payAmount != null">
+        AND (PAY_AMOUNT = #{payAmount})
+      </if>
+      <if test="commission != null">
+        AND (COMMISSION = #{commission})
+      </if>
+      <if test="commissionRate != null">
+        AND (COMMISSION_RATE = #{commissionRate})
+      </if>
+      <if test="tradeTime != null">
+        AND (TRADE_TIME = #{tradeTime})
+      </if>
+      <if test="earningTime != null">
+        AND (EARNING_TIME = #{earningTime})
+      </if>
+      <if test="tradeStatus != null">
+        AND (TRADE_STATUS = #{tradeStatus})
+      </if>
+      <if test="tradeType != null and tradeType.trim().length() != 0">
+        AND (TRADE_TYPE = #{tradeType})
+      </if>
+      <if test="incomeRate != null and incomeRate.trim().length() != 0">
+        AND (INCOME_RATE = #{incomeRate})
+      </if>
+      <if test="subsidyRate != null and subsidyRate.trim().length() != 0">
+        AND (SUBSIDY_RATE = #{subsidyRate})
+      </if>
+      <if test="rerminalType != null and rerminalType.trim().length() != 0">
+        AND (RERMINAL_TYPE = #{rerminalType})
+      </if>
+      <if test="alipayTotalPrice != null">
+        AND (ALIPAY_TOTAL_PRICE = #{alipayTotalPrice})
+      </if>
+      <if test="totalCommissionRate != null and totalCommissionRate.trim().length() != 0">
+        AND (TOTAL_COMMISSION_RATE = #{totalCommissionRate})
+      </if>
+      <if test="totalCommissionFee != null and totalCommissionFee.trim().length() != 0">
+        AND (TOTAL_COMMISSION_FEE = #{totalCommissionFee})
+      </if>
+      <if test="subsidyFee != null and subsidyFee.trim().length() != 0">
+        AND (SUBSIDY_FEE = #{subsidyFee})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_order 
+    <if test="fuzzy">
+      <include refid="t_tbk_order_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_order_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_order ( 
+    ID,USER_ID,PID,ITEM_IMAGE,ITEM_TITLE,ITEM_PRICE,SELLER_NAME,TRADE_ID,ITEM_NUM,PAY_AMOUNT,COMMISSION,COMMISSION_RATE,TRADE_TIME,EARNING_TIME,TRADE_STATUS,TRADE_TYPE,INCOME_RATE,SUBSIDY_RATE,RERMINAL_TYPE,ALIPAY_TOTAL_PRICE,TOTAL_COMMISSION_RATE,TOTAL_COMMISSION_FEE,SUBSIDY_FEE,UPDATE_TIME,CREATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.pid,jdbcType=VARCHAR},#{item.itemImage,jdbcType=VARCHAR},#{item.itemTitle,jdbcType=VARCHAR},#{item.itemPrice,jdbcType=DECIMAL},#{item.sellerName,jdbcType=VARCHAR},#{item.tradeId,jdbcType=BIGINT},#{item.itemNum,jdbcType=INTEGER},#{item.payAmount,jdbcType=DECIMAL},#{item.commission,jdbcType=DECIMAL},#{item.commissionRate,jdbcType=DECIMAL},#{item.tradeTime,jdbcType=TIMESTAMP},#{item.earningTime,jdbcType=TIMESTAMP},#{item.tradeStatus,jdbcType=INTEGER},#{item.tradeType,jdbcType=VARCHAR},#{item.incomeRate,jdbcType=VARCHAR},#{item.subsidyRate,jdbcType=VARCHAR},#{item.rerminalType,jdbcType=VARCHAR},#{item.alipayTotalPrice,jdbcType=DECIMAL},#{item.totalCommissionRate,jdbcType=VARCHAR},#{item.totalCommissionFee,jdbcType=VARCHAR},#{item.subsidyFee,jdbcType=VARCHAR},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_order 
+    <if test="fuzzy">
+      <include refid="t_tbk_order_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_order_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_order 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

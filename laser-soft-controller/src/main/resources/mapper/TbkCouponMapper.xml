@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkCouponMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkCoupon">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="PID" jdbcType="VARCHAR" property="pid" />
+    <result column="ITEM_ID" jdbcType="BIGINT" property="itemId" />
+    <result column="TKL" jdbcType="VARCHAR" property="tkl" />
+    <result column="INPUT_TKL" jdbcType="VARCHAR" property="inputTkl" />
+    <result column="ITEM_IMAGE" jdbcType="VARCHAR" property="itemImage" />
+    <result column="ITEM_TITLE" jdbcType="VARCHAR" property="itemTitle" />
+    <result column="ITEM_PRICE" jdbcType="DECIMAL" property="itemPrice" />
+    <result column="COMMISSION" jdbcType="DECIMAL" property="commission" />
+    <result column="COUPON_EXIST" jdbcType="CHAR" property="couponExist" />
+    <result column="COUPON_AMOUT" jdbcType="DECIMAL" property="couponAmout" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USER_ID, PID, ITEM_ID, TKL, INPUT_TKL, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, COMMISSION, 
+    COUPON_EXIST, COUPON_AMOUT, STATUS, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <sql id="t_tbk_coupon_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="pid != null and pid.trim().length() != 0">
+         AND (PID like concat('%',#{pid},'%')) 
+      </if>
+      <if test="itemId != null">
+        AND (ITEM_ID = #{itemId})
+      </if>
+      <if test="tkl != null and tkl.trim().length() != 0">
+         AND (TKL like concat('%',#{tkl},'%')) 
+      </if>
+      <if test="inputTkl != null and inputTkl.trim().length() != 0">
+         AND (INPUT_TKL like concat('%',#{inputTkl},'%')) 
+      </if>
+      <if test="itemImage != null and itemImage.trim().length() != 0">
+         AND (ITEM_IMAGE like concat('%',#{itemImage},'%')) 
+      </if>
+      <if test="itemTitle != null and itemTitle.trim().length() != 0">
+         AND (ITEM_TITLE like concat('%',#{itemTitle},'%')) 
+      </if>
+      <if test="itemPrice != null">
+        AND (ITEM_PRICE = #{itemPrice})
+      </if>
+      <if test="commission != null">
+        AND (COMMISSION = #{commission})
+      </if>
+      <if test="couponExist != null">
+        AND (COUPON_EXIST = #{couponExist})
+      </if>
+      <if test="couponAmout != null">
+        AND (COUPON_AMOUT = #{couponAmout})
+      </if>
+      <if test="status != null">
+        AND (STATUS = #{status})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_coupon_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="pid != null and pid.trim().length() != 0">
+        AND (PID = #{pid})
+      </if>
+      <if test="itemId != null">
+        AND (ITEM_ID = #{itemId})
+      </if>
+      <if test="tkl != null and tkl.trim().length() != 0">
+        AND (TKL = #{tkl})
+      </if>
+      <if test="inputTkl != null and inputTkl.trim().length() != 0">
+        AND (INPUT_TKL = #{inputTkl})
+      </if>
+      <if test="itemImage != null and itemImage.trim().length() != 0">
+        AND (ITEM_IMAGE = #{itemImage})
+      </if>
+      <if test="itemTitle != null and itemTitle.trim().length() != 0">
+        AND (ITEM_TITLE = #{itemTitle})
+      </if>
+      <if test="itemPrice != null">
+        AND (ITEM_PRICE = #{itemPrice})
+      </if>
+      <if test="commission != null">
+        AND (COMMISSION = #{commission})
+      </if>
+      <if test="couponExist != null">
+        AND (COUPON_EXIST = #{couponExist})
+      </if>
+      <if test="couponAmout != null">
+        AND (COUPON_AMOUT = #{couponAmout})
+      </if>
+      <if test="status != null">
+        AND (STATUS = #{status})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_coupon 
+    <if test="fuzzy">
+      <include refid="t_tbk_coupon_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_coupon_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_coupon ( 
+    ID,USER_ID,PID,ITEM_ID,TKL,INPUT_TKL,ITEM_IMAGE,ITEM_TITLE,ITEM_PRICE,COMMISSION,COUPON_EXIST,COUPON_AMOUT,STATUS,CREATE_TIME,UPDATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.pid,jdbcType=VARCHAR},#{item.itemId,jdbcType=BIGINT},#{item.tkl,jdbcType=VARCHAR},#{item.inputTkl,jdbcType=VARCHAR},#{item.itemImage,jdbcType=VARCHAR},#{item.itemTitle,jdbcType=VARCHAR},#{item.itemPrice,jdbcType=DECIMAL},#{item.commission,jdbcType=DECIMAL},#{item.couponExist,jdbcType=CHAR},#{item.couponAmout,jdbcType=DECIMAL},#{item.status,jdbcType=INTEGER},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_coupon 
+    <if test="fuzzy">
+      <include refid="t_tbk_coupon_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_coupon_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_coupon 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

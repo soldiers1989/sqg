@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkQrcodeMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkQrcode">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="QR_URL" jdbcType="VARCHAR" property="qrUrl" />
+    <result column="QR_TYPE" jdbcType="CHAR" property="qrType" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USER_ID, QR_URL, QR_TYPE, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <sql id="t_tbk_qrcode_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="qrUrl != null and qrUrl.trim().length() != 0">
+         AND (QR_URL like concat('%',#{qrUrl},'%')) 
+      </if>
+      <if test="qrType != null">
+        AND (QR_TYPE = #{qrType})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_qrcode_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="qrUrl != null and qrUrl.trim().length() != 0">
+        AND (QR_URL = #{qrUrl})
+      </if>
+      <if test="qrType != null">
+        AND (QR_TYPE = #{qrType})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_qrcode 
+    <if test="fuzzy">
+      <include refid="t_tbk_qrcode_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_qrcode_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_qrcode ( 
+    ID,USER_ID,QR_URL,QR_TYPE,CREATE_TIME,UPDATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.qrUrl,jdbcType=VARCHAR},#{item.qrType,jdbcType=CHAR},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_qrcode 
+    <if test="fuzzy">
+      <include refid="t_tbk_qrcode_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_qrcode_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_qrcode 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

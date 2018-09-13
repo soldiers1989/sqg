@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.soft.sh.core.redis.IRedisClientKValue;
-import com.soft.tbk.model.MmMbuser;
-import com.soft.tbk.service.MmMbuserService;
+import com.soft.tbk.model.TbkUser;
+import com.soft.tbk.service.TbkUserService;
 
 @RestController
 @RequestMapping("/backReturn")
@@ -21,14 +21,11 @@ public class TestController {
     IRedisClientKValue<String> redisClient;
 
     @Autowired
-    MmMbuserService mmMbuserService;
+    TbkUserService tbkUserService;
     
     @RequestMapping("/test")
     public String test() {
 
-        MmMbuser user = new MmMbuser();
-        user.setMbuserName("扎实");
-        mmMbuserService.save(user);
         return "hello test!";
     }
 

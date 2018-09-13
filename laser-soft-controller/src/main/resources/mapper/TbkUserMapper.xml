@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkUserMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="PARENT_ID_PATH" jdbcType="VARCHAR" property="parentIdPath" />
+    <result column="USER_NICKNAME" jdbcType="VARCHAR" property="userNickname" />
+    <result column="USER_RELNAME" jdbcType="VARCHAR" property="userRelname" />
+    <result column="USER_EMIAL" jdbcType="VARCHAR" property="userEmial" />
+    <result column="USER_PHONE" jdbcType="VARCHAR" property="userPhone" />
+    <result column="USER_QQ" jdbcType="VARCHAR" property="userQq" />
+    <result column="USER_PWSSWD" jdbcType="VARCHAR" property="userPwsswd" />
+    <result column="USER_PYPW" jdbcType="VARCHAR" property="userPypw" />
+    <result column="USER_TYPE" jdbcType="INTEGER" property="userType" />
+    <result column="USER_MSG" jdbcType="VARCHAR" property="userMsg" />
+    <result column="USER_LEVEL" jdbcType="VARCHAR" property="userLevel" />
+    <result column="USER_IMGURL" jdbcType="VARCHAR" property="userImgurl" />
+    <result column="MEMO" jdbcType="VARCHAR" property="memo" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="USER_OPENID" jdbcType="VARCHAR" property="userOpenid" />
+    <result column="USER_ALIPAY_ACCOUNT" jdbcType="VARCHAR" property="userAlipayAccount" />
+    <result column="AGENT_FLAG" jdbcType="INTEGER" property="agentFlag" />
+    <result column="AGENT_AREA" jdbcType="VARCHAR" property="agentArea" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, PARENT_ID, PARENT_ID_PATH, USER_NICKNAME, USER_RELNAME, USER_EMIAL, USER_PHONE, 
+    USER_QQ, USER_PWSSWD, USER_PYPW, USER_TYPE, USER_MSG, USER_LEVEL, USER_IMGURL, MEMO, 
+    STATUS, USER_OPENID, USER_ALIPAY_ACCOUNT, AGENT_FLAG, AGENT_AREA, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <sql id="t_tbk_user_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="parentId != null">
+        AND (PARENT_ID = #{parentId})
+      </if>
+      <if test="parentIdPath != null and parentIdPath.trim().length() != 0">
+         AND (PARENT_ID_PATH like concat('%',#{parentIdPath},'%')) 
+      </if>
+      <if test="userNickname != null and userNickname.trim().length() != 0">
+         AND (USER_NICKNAME like concat('%',#{userNickname},'%')) 
+      </if>
+      <if test="userRelname != null and userRelname.trim().length() != 0">
+         AND (USER_RELNAME like concat('%',#{userRelname},'%')) 
+      </if>
+      <if test="userEmial != null and userEmial.trim().length() != 0">
+         AND (USER_EMIAL like concat('%',#{userEmial},'%')) 
+      </if>
+      <if test="userPhone != null and userPhone.trim().length() != 0">
+         AND (USER_PHONE like concat('%',#{userPhone},'%')) 
+      </if>
+      <if test="userQq != null and userQq.trim().length() != 0">
+         AND (USER_QQ like concat('%',#{userQq},'%')) 
+      </if>
+      <if test="userPwsswd != null and userPwsswd.trim().length() != 0">
+         AND (USER_PWSSWD like concat('%',#{userPwsswd},'%')) 
+      </if>
+      <if test="userPypw != null and userPypw.trim().length() != 0">
+         AND (USER_PYPW like concat('%',#{userPypw},'%')) 
+      </if>
+      <if test="userType != null">
+        AND (USER_TYPE = #{userType})
+      </if>
+      <if test="userMsg != null and userMsg.trim().length() != 0">
+         AND (USER_MSG like concat('%',#{userMsg},'%')) 
+      </if>
+      <if test="userLevel != null and userLevel.trim().length() != 0">
+         AND (USER_LEVEL like concat('%',#{userLevel},'%')) 
+      </if>
+      <if test="userImgurl != null and userImgurl.trim().length() != 0">
+         AND (USER_IMGURL like concat('%',#{userImgurl},'%')) 
+      </if>
+      <if test="memo != null and memo.trim().length() != 0">
+         AND (MEMO like concat('%',#{memo},'%')) 
+      </if>
+      <if test="status != null">
+        AND (STATUS = #{status})
+      </if>
+      <if test="userOpenid != null and userOpenid.trim().length() != 0">
+         AND (USER_OPENID like concat('%',#{userOpenid},'%')) 
+      </if>
+      <if test="userAlipayAccount != null and userAlipayAccount.trim().length() != 0">
+         AND (USER_ALIPAY_ACCOUNT like concat('%',#{userAlipayAccount},'%')) 
+      </if>
+      <if test="agentFlag != null">
+        AND (AGENT_FLAG = #{agentFlag})
+      </if>
+      <if test="agentArea != null and agentArea.trim().length() != 0">
+         AND (AGENT_AREA like concat('%',#{agentArea},'%')) 
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_user_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="parentId != null">
+        AND (PARENT_ID = #{parentId})
+      </if>
+      <if test="parentIdPath != null and parentIdPath.trim().length() != 0">
+        AND (PARENT_ID_PATH = #{parentIdPath})
+      </if>
+      <if test="userNickname != null and userNickname.trim().length() != 0">
+        AND (USER_NICKNAME = #{userNickname})
+      </if>
+      <if test="userRelname != null and userRelname.trim().length() != 0">
+        AND (USER_RELNAME = #{userRelname})
+      </if>
+      <if test="userEmial != null and userEmial.trim().length() != 0">
+        AND (USER_EMIAL = #{userEmial})
+      </if>
+      <if test="userPhone != null and userPhone.trim().length() != 0">
+        AND (USER_PHONE = #{userPhone})
+      </if>
+      <if test="userQq != null and userQq.trim().length() != 0">
+        AND (USER_QQ = #{userQq})
+      </if>
+      <if test="userPwsswd != null and userPwsswd.trim().length() != 0">
+        AND (USER_PWSSWD = #{userPwsswd})
+      </if>
+      <if test="userPypw != null and userPypw.trim().length() != 0">
+        AND (USER_PYPW = #{userPypw})
+      </if>
+      <if test="userType != null">
+        AND (USER_TYPE = #{userType})
+      </if>
+      <if test="userMsg != null and userMsg.trim().length() != 0">
+        AND (USER_MSG = #{userMsg})
+      </if>
+      <if test="userLevel != null and userLevel.trim().length() != 0">
+        AND (USER_LEVEL = #{userLevel})
+      </if>
+      <if test="userImgurl != null and userImgurl.trim().length() != 0">
+        AND (USER_IMGURL = #{userImgurl})
+      </if>
+      <if test="memo != null and memo.trim().length() != 0">
+        AND (MEMO = #{memo})
+      </if>
+      <if test="status != null">
+        AND (STATUS = #{status})
+      </if>
+      <if test="userOpenid != null and userOpenid.trim().length() != 0">
+        AND (USER_OPENID = #{userOpenid})
+      </if>
+      <if test="userAlipayAccount != null and userAlipayAccount.trim().length() != 0">
+        AND (USER_ALIPAY_ACCOUNT = #{userAlipayAccount})
+      </if>
+      <if test="agentFlag != null">
+        AND (AGENT_FLAG = #{agentFlag})
+      </if>
+      <if test="agentArea != null and agentArea.trim().length() != 0">
+        AND (AGENT_AREA = #{agentArea})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_user 
+    <if test="fuzzy">
+      <include refid="t_tbk_user_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_user_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_user ( 
+    ID,PARENT_ID,PARENT_ID_PATH,USER_NICKNAME,USER_RELNAME,USER_EMIAL,USER_PHONE,USER_QQ,USER_PWSSWD,USER_PYPW,USER_TYPE,USER_MSG,USER_LEVEL,USER_IMGURL,MEMO,STATUS,USER_OPENID,USER_ALIPAY_ACCOUNT,AGENT_FLAG,AGENT_AREA,CREATE_TIME,UPDATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.parentId,jdbcType=INTEGER},#{item.parentIdPath,jdbcType=VARCHAR},#{item.userNickname,jdbcType=VARCHAR},#{item.userRelname,jdbcType=VARCHAR},#{item.userEmial,jdbcType=VARCHAR},#{item.userPhone,jdbcType=VARCHAR},#{item.userQq,jdbcType=VARCHAR},#{item.userPwsswd,jdbcType=VARCHAR},#{item.userPypw,jdbcType=VARCHAR},#{item.userType,jdbcType=INTEGER},#{item.userMsg,jdbcType=VARCHAR},#{item.userLevel,jdbcType=VARCHAR},#{item.userImgurl,jdbcType=VARCHAR},#{item.memo,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},#{item.userOpenid,jdbcType=VARCHAR},#{item.userAlipayAccount,jdbcType=VARCHAR},#{item.agentFlag,jdbcType=INTEGER},#{item.agentArea,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_user 
+    <if test="fuzzy">
+      <include refid="t_tbk_user_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_user_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_user 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkRateMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkRate">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_LEVEL" jdbcType="VARCHAR" property="userLevel" />
+    <result column="RATE_VALUE" jdbcType="DECIMAL" property="rateValue" />
+    <result column="RATE_LEVEL" jdbcType="INTEGER" property="rateLevel" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USER_LEVEL, RATE_VALUE, RATE_LEVEL, UPDATE_TIME, CREATE_TIME
+  </sql>
+  <sql id="t_tbk_rate_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userLevel != null and userLevel.trim().length() != 0">
+         AND (USER_LEVEL like concat('%',#{userLevel},'%')) 
+      </if>
+      <if test="rateValue != null">
+        AND (RATE_VALUE = #{rateValue})
+      </if>
+      <if test="rateLevel != null">
+        AND (RATE_LEVEL = #{rateLevel})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_rate_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userLevel != null and userLevel.trim().length() != 0">
+        AND (USER_LEVEL = #{userLevel})
+      </if>
+      <if test="rateValue != null">
+        AND (RATE_VALUE = #{rateValue})
+      </if>
+      <if test="rateLevel != null">
+        AND (RATE_LEVEL = #{rateLevel})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_rate 
+    <if test="fuzzy">
+      <include refid="t_tbk_rate_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_rate_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_rate ( 
+    ID,USER_LEVEL,RATE_VALUE,RATE_LEVEL,UPDATE_TIME,CREATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.userLevel,jdbcType=VARCHAR},#{item.rateValue,jdbcType=DECIMAL},#{item.rateLevel,jdbcType=INTEGER},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_rate 
+    <if test="fuzzy">
+      <include refid="t_tbk_rate_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_rate_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_rate 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

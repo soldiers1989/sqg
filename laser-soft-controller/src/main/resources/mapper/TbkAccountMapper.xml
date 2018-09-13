@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkAccountMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkAccount">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="ACCOUNT_AMOUNT" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="ACCOUNT_AMOUNT_A" jdbcType="DECIMAL" property="accountAmountA" />
+    <result column="ACCOUNT_AMOUNT_F" jdbcType="DECIMAL" property="accountAmountF" />
+    <result column="ACCOUNT_AMOUNT_E" jdbcType="DECIMAL" property="accountAmountE" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, USER_ID, ACCOUNT_AMOUNT, ACCOUNT_AMOUNT_A, ACCOUNT_AMOUNT_F, ACCOUNT_AMOUNT_E, 
+    UPDATE_TIME, CREATE_TIME
+  </sql>
+  <sql id="t_tbk_account_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="accountAmount != null">
+        AND (ACCOUNT_AMOUNT = #{accountAmount})
+      </if>
+      <if test="accountAmountA != null">
+        AND (ACCOUNT_AMOUNT_A = #{accountAmountA})
+      </if>
+      <if test="accountAmountF != null">
+        AND (ACCOUNT_AMOUNT_F = #{accountAmountF})
+      </if>
+      <if test="accountAmountE != null">
+        AND (ACCOUNT_AMOUNT_E = #{accountAmountE})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_account_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="accountAmount != null">
+        AND (ACCOUNT_AMOUNT = #{accountAmount})
+      </if>
+      <if test="accountAmountA != null">
+        AND (ACCOUNT_AMOUNT_A = #{accountAmountA})
+      </if>
+      <if test="accountAmountF != null">
+        AND (ACCOUNT_AMOUNT_F = #{accountAmountF})
+      </if>
+      <if test="accountAmountE != null">
+        AND (ACCOUNT_AMOUNT_E = #{accountAmountE})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_account 
+    <if test="fuzzy">
+      <include refid="t_tbk_account_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_account_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_account ( 
+    ID,USER_ID,ACCOUNT_AMOUNT,ACCOUNT_AMOUNT_A,ACCOUNT_AMOUNT_F,ACCOUNT_AMOUNT_E,UPDATE_TIME,CREATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.accountAmount,jdbcType=DECIMAL},#{item.accountAmountA,jdbcType=DECIMAL},#{item.accountAmountF,jdbcType=DECIMAL},#{item.accountAmountE,jdbcType=DECIMAL},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_account 
+    <if test="fuzzy">
+      <include refid="t_tbk_account_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_account_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_account 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

@@ -6,25 +6,25 @@ import java.util.Map;
 import com.soft.tbk.base.BaseService;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
-import com.soft.tbk.model.TbkUser;
+import com.soft.tbk.model.TbkPid;
 
 
-public interface TbkUserService extends BaseService{
+public interface TbkPidService extends BaseService{
     
 
 
     /**
      * 
-     * @param tbkUser
+     * @param tbkPid
      * @return
      */
-    public TbkUser saveTbkUser(TbkUser tbkUser) throws ApiException;
+    public TbkPid saveTbkPid(TbkPid tbkPid) throws ApiException;
 
     /**
      * 
-     * @param tbkUser
+     * @param tbkPid
      */
-    public boolean updateTbkUser(TbkUser tbkUser) throws ApiException;
+    public boolean updateTbkPid(TbkPid tbkPid) throws ApiException;
 
     /**
      * 刪除
@@ -32,7 +32,7 @@ public interface TbkUserService extends BaseService{
      * @param id
      * @return
      */
-    public boolean deleteTbkUser(Integer id);
+    public boolean deleteTbkPid(Integer id);
 
     /**
      * 根據ID獲取
@@ -40,7 +40,7 @@ public interface TbkUserService extends BaseService{
      * @param id
      * @return
      */
-    public TbkUser getTbkUser(Integer id);
+    public TbkPid getTbkPid(Integer id);
 
     /**
      * 查询
@@ -48,9 +48,9 @@ public interface TbkUserService extends BaseService{
      * @param map
      * @return
      */
-    QueryResult<TbkUser> queryTbkUser(Map<String, Object> map);
+    QueryResult<TbkPid> queryTbkPid(Map<String, Object> map);
 
     
-    public void insertBatch(List<TbkUser> tbkUserList);
+    public void insertBatch(List<TbkPid> tbkPidList);
 
 }

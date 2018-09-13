@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkCommissionMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkCommission">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_ID" jdbcType="INTEGER" property="orderId" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="RELATION_USER_ID" jdbcType="INTEGER" property="relationUserId" />
+    <result column="COMMISSION" jdbcType="DECIMAL" property="commission" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="COMMISSION_TYPE" jdbcType="VARCHAR" property="commissionType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, ORDER_ID, USER_ID, RELATION_USER_ID, COMMISSION, CREATE_TIME, UPDATE_TIME, COMMISSION_TYPE
+  </sql>
+  <sql id="t_tbk_commission_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="orderId != null">
+        AND (ORDER_ID = #{orderId})
+      </if>
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="relationUserId != null">
+        AND (RELATION_USER_ID = #{relationUserId})
+      </if>
+      <if test="commission != null">
+        AND (COMMISSION = #{commission})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="commissionType != null and commissionType.trim().length() != 0">
+         AND (COMMISSION_TYPE like concat('%',#{commissionType},'%')) 
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_commission_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="orderId != null">
+        AND (ORDER_ID = #{orderId})
+      </if>
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="relationUserId != null">
+        AND (RELATION_USER_ID = #{relationUserId})
+      </if>
+      <if test="commission != null">
+        AND (COMMISSION = #{commission})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+      <if test="commissionType != null and commissionType.trim().length() != 0">
+        AND (COMMISSION_TYPE = #{commissionType})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_commission 
+    <if test="fuzzy">
+      <include refid="t_tbk_commission_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_commission_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_commission ( 
+    ID,ORDER_ID,USER_ID,RELATION_USER_ID,COMMISSION,CREATE_TIME,UPDATE_TIME,COMMISSION_TYPE ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.orderId,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.relationUserId,jdbcType=INTEGER},#{item.commission,jdbcType=DECIMAL},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP},#{item.commissionType,jdbcType=VARCHAR} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_commission 
+    <if test="fuzzy">
+      <include refid="t_tbk_commission_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_commission_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_commission 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>

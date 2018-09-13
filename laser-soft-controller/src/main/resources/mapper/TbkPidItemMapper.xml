@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soft.tbk.dao.TbkPidItemMapper">
+  <resultMap id="BaseResultMap" type="com.soft.tbk.model.TbkPidItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ITEM_ID" jdbcType="BIGINT" property="itemId" />
+    <result column="PID" jdbcType="VARCHAR" property="pid" />
+    <result column="NEXT_PID" jdbcType="VARCHAR" property="nextPid" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    ID, ITEM_ID, PID, NEXT_PID, USER_ID, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <sql id="t_tbk_pid_item_query_fuzzy_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="itemId != null">
+        AND (ITEM_ID = #{itemId})
+      </if>
+      <if test="pid != null and pid.trim().length() != 0">
+         AND (PID like concat('%',#{pid},'%')) 
+      </if>
+      <if test="nextPid != null and nextPid.trim().length() != 0">
+         AND (NEXT_PID like concat('%',#{nextPid},'%')) 
+      </if>
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <sql id="t_tbk_pid_item_query_condition">
+    <trim prefix="WHERE" prefixOverrides="AND |OR ">
+      <if test="itemId != null">
+        AND (ITEM_ID = #{itemId})
+      </if>
+      <if test="pid != null and pid.trim().length() != 0">
+        AND (PID = #{pid})
+      </if>
+      <if test="nextPid != null and nextPid.trim().length() != 0">
+        AND (NEXT_PID = #{nextPid})
+      </if>
+      <if test="userId != null">
+        AND (USER_ID = #{userId})
+      </if>
+      <if test="createTime != null">
+        AND (CREATE_TIME = #{createTime})
+      </if>
+      <if test="updateTime != null">
+        AND (UPDATE_TIME = #{updateTime})
+      </if>
+    </trim>
+  </sql>
+  <select id="query" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from t_tbk_pid_item 
+    <if test="fuzzy">
+      <include refid="t_tbk_pid_item_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_pid_item_query_condition" />
+    </if>
+    <if test="order and orderStr == null">
+      order by CREATE_TIME desc
+    </if>
+    <if test="order and orderStr != null and orderStr.trim().length() != 0">
+      order by ${orderStr}
+    </if>
+  </select>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into t_tbk_pid_item ( 
+    ID,ITEM_ID,PID,NEXT_PID,USER_ID,CREATE_TIME,UPDATE_TIME ) values 
+    <foreach collection="list" index="index" item="item" separator=",">
+       ( #{item.id,jdbcType=INTEGER},#{item.itemId,jdbcType=BIGINT},#{item.pid,jdbcType=VARCHAR},#{item.nextPid,jdbcType=VARCHAR},#{item.userId,jdbcType=INTEGER},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP} ) 
+    </foreach>
+  </insert>
+  <select id="count" resultType="int">
+    select count(*) from t_tbk_pid_item 
+    <if test="fuzzy">
+      <include refid="t_tbk_pid_item_query_fuzzy_condition" />
+    </if>
+    <if test="!fuzzy">
+      <include refid="t_tbk_pid_item_query_condition" />
+    </if>
+  </select>
+  <select id="selectSysDate" resultType="java.util.Date">
+     SELECT NOW() 
+  </select>
+  <update id="updateStateByPrimaryKey" parameterType="Map">
+    update t_tbk_pid_item 
+     set DATA_STATE = #{dataState,jdbcType=INTEGER},UPDATE_TIME=SYSDATE() 
+    where  ID = #{id,jdbcType=INTEGER}
+    <if test="oldDataState != null">
+       and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
+    </if>
+  </update>
+</mapper>
