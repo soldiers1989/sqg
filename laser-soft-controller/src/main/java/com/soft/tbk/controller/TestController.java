@@ -1,4 +1,4 @@
-package com.soft.sh.test;
+package com.soft.tbk.controller;
 
 import java.util.LinkedHashMap;
 
@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.soft.sh.core.redis.IRedisClientKValue;
-import com.soft.tbk.model.TbkUser;
+import com.soft.tbk.core.cache.IRedisClientKValue;
 import com.soft.tbk.service.TbkUserService;
 
 @RestController

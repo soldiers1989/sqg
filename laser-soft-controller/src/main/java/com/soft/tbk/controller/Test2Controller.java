@@ -1,4 +1,4 @@
-package com.soft.sh.test;
+package com.soft.tbk.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

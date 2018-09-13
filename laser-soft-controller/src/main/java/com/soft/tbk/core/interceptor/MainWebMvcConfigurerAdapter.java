@@ -1,3 +1,4 @@
+package com.soft.tbk.core.interceptor;
 /*package com.soft.sh.core.interceptor;
 
 import org.springframework.context.annotation.Configuration;

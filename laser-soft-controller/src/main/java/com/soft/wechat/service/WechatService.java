@@ -30,6 +30,7 @@ public class WechatService {
 
     private static Logger logger = LoggerFactory.getLogger(WechatService.class);
 
+    @SuppressWarnings("unused")
     public String processRequest(HttpServletRequest request, String tenantCode) {
 
         Map<String, String> map = WechatMessageUtil.xmlToMap(request);

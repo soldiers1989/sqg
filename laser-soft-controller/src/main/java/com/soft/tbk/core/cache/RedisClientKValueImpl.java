@@ -1,4 +1,4 @@
-package com.soft.sh.core.redis.inpl;
+package com.soft.tbk.core.cache;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
-import com.soft.sh.core.redis.IRedisClientKValue;
 
 @Component
 public class RedisClientKValueImpl<V> implements IRedisClientKValue<V> {

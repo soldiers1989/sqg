@@ -314,6 +314,7 @@ public class WechatApi {
         return output.getPath();
     }
 
+    @SuppressWarnings("resource")
     public String genqrCode() {
 
         String url = conf.get("API_qrcode_img") + session.getUuid();
