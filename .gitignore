@@ -1,0 +1,12 @@
+.settings
+.project
+.classpath
+.idea
+*.iml
+*.iws
+*.imi
+*.log
+target
+pim-eureka
+log.txt
+*.gitignore
