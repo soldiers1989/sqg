@@ -182,7 +182,7 @@ public class Coupon {
 
     public static void main(String[] args) {
 
-        System.out.println(getHighObject("￥GRqAbePyslP￥"));
+        System.out.println(getHighObject("￥vIVobe9gcvv￥"));
         
 //        getunuland("http://zmnxbc.com/s/cXpHV?tm=bc501b");
     }

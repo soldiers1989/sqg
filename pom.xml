@@ -35,6 +35,10 @@
 		<com.aliyun.oss.version>2.8.2</com.aliyun.oss.version>
 		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<groovy.version>2.4.9</groovy.version>
+        <mysql.version>5.1.43</mysql.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
+		<junit.version>4.12</junit.version>
 	</properties>
 	<dependencies>
 		<!-- mybatis 相关 -->
