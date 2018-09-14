@@ -17,6 +17,7 @@ import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
 import com.soft.wechat.model.TextMessage;
 import com.soft.wechat.robot.TulingRobot;
+import com.soft.wechat.util.Coupon;
 import com.soft.wechat.util.MapUtil;
 import com.soft.wechat.util.WechatMessageUtil;
 
@@ -92,7 +93,7 @@ public class WechatService {
             msgType = "text";
         }
 
-        String returnContent = businessService.getReturnContent(wechatMsgDomain);
+        String returnContent = Coupon.getReturnContent(content);
         if (StringUtils.isEmpty(returnContent)) {
             returnContent = new TulingRobot(tenantCode).getResult(content);
         }

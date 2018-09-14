@@ -18,7 +18,7 @@ import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.service.TbkCouponService;
 
 @Service
-public class TbkCouponServiceImpl extends BaseServiceImpl implements TbkCouponService{
+public class TbkCouponServiceImpl extends BaseServiceImpl implements TbkCouponService {
 
     private static final String SYS_CODE = "TbkCouponSerciceImpl";
 
@@ -29,6 +29,7 @@ public class TbkCouponServiceImpl extends BaseServiceImpl implements TbkCouponSe
 
     @Override
     public TbkCoupon saveTbkCoupon(TbkCoupon tbkCoupon) throws ApiException {
+
         //1.check
         check(tbkCoupon);
         //3.set default
@@ -39,11 +40,12 @@ public class TbkCouponServiceImpl extends BaseServiceImpl implements TbkCouponSe
         return tbkCoupon;
     }
 
-
     private void setDefault(TbkCoupon tbkCoupon) {
+
         if (tbkCoupon == null) {
             return;
         }
+        tbkCoupon.setStatus(1);// 默认有效
         tbkCoupon.setCreateTime(new Date());
         tbkCoupon.setUpdateTime(new Date());
     }
@@ -53,7 +55,7 @@ public class TbkCouponServiceImpl extends BaseServiceImpl implements TbkCouponSe
         if (null == tbkCoupon) {
             throw new ApiException(SYS_CODE + ".saveTbkCoupon", "数据不能为空");
         }
-        
+
     }
 
     @Override
@@ -110,7 +112,6 @@ public class TbkCouponServiceImpl extends BaseServiceImpl implements TbkCouponSe
         return list;
 
     }
-
 
     private void saveTbkCouponModel(TbkCoupon tbkCoupon) {
 
