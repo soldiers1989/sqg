@@ -1,6 +1,8 @@
 package com.soft.wechat.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -9,8 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.soft.tbk.TbkConstants;
+import com.soft.tbk.model.TbkCommission;
 import com.soft.tbk.model.TbkCoupon;
+import com.soft.tbk.model.TbkUser;
+import com.soft.tbk.service.TbkCommissionService;
 import com.soft.tbk.service.TbkCouponService;
+import com.soft.tbk.service.TbkRateService;
+import com.soft.tbk.service.TbkUserService;
 import com.soft.wechat.domain.WechatMsgDomain;
 
 @Service
@@ -20,6 +28,15 @@ public class BusinessService {
 
     @Autowired
     TbkCouponService tbkCouponService;
+
+    @Autowired
+    TbkUserService tbkUserService;
+
+    @Autowired
+    TbkRateService tbkRateService;
+
+    @Autowired
+    TbkCommissionService tbkCommissionService;
 
     private void saveMsg(WechatMsgDomain wechatMsgDomain, String returnContent) {
 
@@ -64,4 +81,63 @@ public class BusinessService {
             logger.error(e.getMessage(), e);
         }
     }
+
+    /**
+     * 封装佣金记录
+     * 
+     * @param amount 总佣金
+     * @param userId 用户id
+     */
+    public void saveCommissionList(BigDecimal amount, Integer userId) {
+
+        try {
+            List<TbkCommission> list = new ArrayList<>();
+            list.add(makeCommission(amount, userId, TbkConstants.RATE_LEVEL_0));// 自己的佣金
+            TbkUser tbkUser = tbkUserService.getTbkUser(userId);
+            if (tbkUser != null && StringUtils.isNotBlank(tbkUser.getParentIdPath())) {
+                String parentIdPath = tbkUser.getParentIdPath();
+                String[] userIds = parentIdPath.split(",");
+                if (userIds.length > 2) {
+                    logger.error("分佣级别有误，请查看用户id:" + userId);
+                } else {
+                    if (userIds.length == 1) {
+                        // 一级佣金
+                        TbkCommission tbkCommission = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_1);
+                        tbkCommission.setRelationUserId(userId);
+                        list.add(tbkCommission);
+                    }
+                    if (userIds.length == 2) {
+                        // 二级佣金
+                        TbkCommission tbkCommission2 = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_2);
+                        tbkCommission2.setRelationUserId(userId);
+                        list.add(tbkCommission2);
+                        TbkCommission tbkCommission1 = makeCommission(amount, Integer.parseInt(userIds[1]), TbkConstants.RATE_LEVEL_1);
+                        tbkCommission1.setRelationUserId(userId);
+                        list.add(tbkCommission1);
+                    }
+                }
+            }
+            tbkCommissionService.insertBatch(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    private TbkCommission makeCommission(BigDecimal amount, Integer userId, Integer rateLevel) {
+
+        TbkUser tbkUser = tbkUserService.getTbkUser(userId);
+        if (tbkUser == null)
+            return null;
+        String userLevel = tbkUser.getUserLevel();
+        if (StringUtils.isBlank(userLevel)) {
+            userLevel = "A";// 默认
+        }
+        BigDecimal rate = tbkRateService.getRateByLevel(userLevel, rateLevel);
+        TbkCommission tbkCommission = new TbkCommission();
+        tbkCommission.setCommissionType(rateLevel.toString());
+        tbkCommission.setUserId(userId);
+        tbkCommission.setCommission(amount.multiply(rate).divide(new BigDecimal(100), 2));
+        return tbkCommission;
+    }
+
 }

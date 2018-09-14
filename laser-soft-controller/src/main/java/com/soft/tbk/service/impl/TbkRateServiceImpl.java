@@ -1,6 +1,8 @@
 package com.soft.tbk.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,7 @@ import com.soft.tbk.model.TbkRate;
 import com.soft.tbk.service.TbkRateService;
 
 @Service
-public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateService{
+public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateService {
 
     private static final String SYS_CODE = "TbkRateSerciceImpl";
 
@@ -29,6 +31,7 @@ public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateServic
 
     @Override
     public TbkRate saveTbkRate(TbkRate tbkRate) throws ApiException {
+
         //1.check
         check(tbkRate);
         //3.set default
@@ -39,8 +42,8 @@ public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateServic
         return tbkRate;
     }
 
-
     private void setDefault(TbkRate tbkRate) {
+
         if (tbkRate == null) {
             return;
         }
@@ -53,7 +56,7 @@ public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateServic
         if (null == tbkRate) {
             throw new ApiException(SYS_CODE + ".saveTbkRate", "数据不能为空");
         }
-        
+
     }
 
     @Override
@@ -110,7 +113,6 @@ public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateServic
         return list;
 
     }
-
 
     private void saveTbkRateModel(TbkRate tbkRate) {
 
@@ -171,6 +173,19 @@ public class TbkRateServiceImpl extends BaseServiceImpl implements TbkRateServic
             logger.error(e.getMessage(), e);
             throw new ApiException(SYS_CODE + ".insertBatch", "插入失败");
         }
+    }
+
+    @Override
+    public BigDecimal getRateByLevel(String userLevel, Integer rateLevel) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userLevel", userLevel);
+        map.put("rateLevel", rateLevel);
+        List<TbkRate> list = queryTbkRatesModel(map);
+        if (list != null && !list.isEmpty()) {
+            return list.get(0).getRateValue();
+        }
+        return null;
     }
 
 }
