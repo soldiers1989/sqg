@@ -15,6 +15,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- quartz -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-quartz</artifactId>
+		</dependency>
 		<!--引入Spring Boot 的单元测试依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
