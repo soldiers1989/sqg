@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.util.StringUtils;
+import com.soft.tbk.model.TbkCoupon;
+import com.soft.tbk.service.TbkCouponService;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
@@ -27,6 +29,9 @@ public class WechatService {
     @Autowired
     private BusinessService businessService;
 
+    @Autowired
+    private TbkCouponService tbkCouponService;
+    
     public static final String SYS_CODE = "WechatService.";
 
     private static Logger logger = LoggerFactory.getLogger(WechatService.class);
@@ -93,7 +98,16 @@ public class WechatService {
             msgType = "text";
         }
 
-        String returnContent = Coupon.getReturnContent(content);
+        TbkCoupon tbkCoupon = Coupon.getHighObject(content);
+        
+        //异步
+        try {
+            tbkCouponService.saveTbkCoupon(tbkCoupon);
+        } catch (Exception e) {
+        }
+        
+        String returnContent = tbkCoupon.getTkl();
+        
         if (StringUtils.isEmpty(returnContent)) {
             returnContent = new TulingRobot(tenantCode).getResult(content);
         }
