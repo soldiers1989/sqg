@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.util.StringUtils;
 import com.soft.tbk.model.TbkCoupon;
-import com.soft.tbk.service.TbkCouponService;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
@@ -29,9 +28,6 @@ public class WechatService {
     @Autowired
     private BusinessService businessService;
 
-    @Autowired
-    private TbkCouponService tbkCouponService;
-    
     public static final String SYS_CODE = "WechatService.";
 
     private static Logger logger = LoggerFactory.getLogger(WechatService.class);
@@ -70,14 +66,18 @@ public class WechatService {
         wechatMsgDomain.setMsgType(msgType);
         wechatMsgDomain.setToUserName(toUserName);
         wechatMsgDomain.setMsgId(msgId);
+
+        String returnContent = "";
         // 对消息进行处理
         if (MessageTypeEnum.MESSAGE_TEXT.getCode().equals(msgType)) {
             // 文本
-            // 保存接收消息
-            //businessCon.saveImsg(MessageTypeEnum.MESSAGE_TEXT.getKey(), fromUserName, fromUserName, toUserName, toUserName, "微信公众号",content, tenantCode);
-            // 获取微信关键字的处理配置
-            newcontent = content + "&" + fromUserName + "&" + toUserName + "&" + userNickname;
-
+            TbkCoupon tbkCoupon = Coupon.getHighObject(content);
+            //异步
+            businessService.executor(tbkCoupon);
+            returnContent = tbkCoupon.getTkl();
+            if (StringUtils.isEmpty(returnContent)) {
+                returnContent = new TulingRobot(tenantCode).getResult(content);
+            }
         } else if (MessageTypeEnum.MESSAGE_EVENT.getCode().equals(msgType)) {//事件推送消息
 
             logger.info("获取到的XML参数：" + map.toString());
@@ -96,20 +96,6 @@ public class WechatService {
             }
             newcontent = content + "#" + fromUserName;
             msgType = "text";
-        }
-
-        TbkCoupon tbkCoupon = Coupon.getHighObject(content);
-        
-        //异步
-        try {
-            tbkCouponService.saveTbkCoupon(tbkCoupon);
-        } catch (Exception e) {
-        }
-        
-        String returnContent = tbkCoupon.getTkl();
-        
-        if (StringUtils.isEmpty(returnContent)) {
-            returnContent = new TulingRobot(tenantCode).getResult(content);
         }
         if (StringUtils.isEmpty(returnContent)) {
             return responseMessage;

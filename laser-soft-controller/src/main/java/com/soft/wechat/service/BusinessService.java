@@ -3,6 +3,8 @@ package com.soft.wechat.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +21,6 @@ import com.soft.tbk.service.TbkCommissionService;
 import com.soft.tbk.service.TbkCouponService;
 import com.soft.tbk.service.TbkRateService;
 import com.soft.tbk.service.TbkUserService;
-import com.soft.wechat.domain.WechatMsgDomain;
 
 @Service
 public class BusinessService {
@@ -37,11 +38,6 @@ public class BusinessService {
 
     @Autowired
     TbkCommissionService tbkCommissionService;
-
-    private void saveMsg(WechatMsgDomain wechatMsgDomain, String returnContent) {
-
-        // TODO 保存入库
-    }
 
     /**
      * 封装转券
@@ -140,4 +136,20 @@ public class BusinessService {
         return tbkCommission;
     }
 
+    private ExecutorService executor = Executors.newCachedThreadPool();
+
+    public void executor(TbkCoupon tbkCoupon) {
+
+        executor.submit(new Runnable() {
+
+            public void run() {
+
+                try {
+                    tbkCouponService.saveTbkCoupon(tbkCoupon);
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        });
+    }
 }

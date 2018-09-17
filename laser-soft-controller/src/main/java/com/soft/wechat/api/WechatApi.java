@@ -314,18 +314,17 @@ public class WechatApi {
         return output.getPath();
     }
 
-    @SuppressWarnings("resource")
     public String genqrCode() {
 
         String url = conf.get("API_qrcode_img") + session.getUuid();
         HttpGet httpget = new HttpGet(url);
         log.info("获取二维码：Executing request " + httpget.getURI());
         FileOutputStream fos;
-        String path = this.iamgeImg + "/wechatLogin.jpg";
+        String path = this.iamgeImg + "/static/wechatLogin.jpg";
         try {
             HttpResponse response = https.execute(httpget);
             InputStream inputStream = response.getEntity().getContent();
-            File file = new File(this.iamgeImg);
+            File file = new File(this.iamgeImg + "/static");
             if (!file.exists()) {
                 file.mkdirs();
             }
@@ -340,7 +339,7 @@ public class WechatApi {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "\\wechatLogin.jpg";
+        return "/static/wechatLogin.jpg";
     }
 
     /**

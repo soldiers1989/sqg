@@ -66,8 +66,7 @@ public class WeChatController {
 
     @ResponseBody
     @RequestMapping(value = "/wechat/{tenantCode}",method = RequestMethod.POST)
-    public void wechatServicePost(HttpServletRequest request, HttpServletResponse response,
-                    @PathVariable("tenantCode") String tenantCode) {
+    public void wechatServicePost(HttpServletRequest request, HttpServletResponse response, @PathVariable("tenantCode") String tenantCode) {
 
         try {
             response.setCharacterEncoding("utf-8");
@@ -110,7 +109,7 @@ public class WeChatController {
         StartUI startUI = new StartUI(environment);
         startUI.setTenantCode(tenantCode);
         startUI.setBusinessCon(businessCon);
-        startUI.setIamgeImg(request.getSession().getServletContext().getRealPath(""));
+        startUI.setIamgeImg(request.getSession().getServletContext().getRealPath("/"));
         syncStart(startUI);
         String path = "";
         while (true) {
