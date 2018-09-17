@@ -6,13 +6,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.druid.util.StringUtils;
 import com.soft.tbk.model.TbkCoupon;
+import com.soft.tbk.model.TbkUser;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
@@ -73,33 +74,30 @@ public class WechatService {
             // 文本
             TbkCoupon tbkCoupon = Coupon.getHighObject(content);
             //异步
-            businessService.executor(tbkCoupon);
+            businessService.executorCounpon(tbkCoupon);
             returnContent = tbkCoupon.getTkl();
             if (StringUtils.isEmpty(returnContent)) {
                 returnContent = new TulingRobot(tenantCode).getResult(content);
             }
         } else if (MessageTypeEnum.MESSAGE_EVENT.getCode().equals(msgType)) {//事件推送消息
 
-            logger.info("获取到的XML参数：" + map.toString());
             String eventKey = map.get("EventKey");
-            //businessCon.saveImsg(MessageTypeEnum.MESSAGE_EVENT.getKey(), fromUserName, fromUserName, toUserName, toUserName, "微信公众号","内容为：" + event + "|" + eventKey, tenantCode);
-            logger.info("事件推送消息");
-            if (EventEnum.EVENT_SUBSCRIBE.getCode().equals(event)) {//扫码[未关注]
-                String s = "qrscene_";
-                if (eventKey.contains(s)) {
-                    content = eventKey.replace(s, "");
+            if (EventEnum.EVENT_SUBSCRIBE.getCode().equals(event)) {//扫码/非扫码[未关注]
+                eventKey = eventKey.replace("qrscene_", "");
+                TbkUser tbkUser = new TbkUser();
+                tbkUser.setUserOpenid(fromUserName);
+                if (StringUtils.isNotBlank(eventKey)) {
+                    // 参数
+                    tbkUser.setParentId(Integer.parseInt(eventKey));
                 }
+                businessService.executorUser(tbkUser);
             } else if (EventEnum.EVENT_SCAN.getCode().equals(event)) {//扫码[已关注]
-                content = eventKey;
-            } else {
-
             }
-            newcontent = content + "#" + fromUserName;
-            msgType = "text";
         }
         if (StringUtils.isEmpty(returnContent)) {
             return responseMessage;
         }
+
         TextMessage textMessage = new TextMessage();
         textMessage.setMsgType(msgType);
         textMessage.setToUserName(fromUserName);

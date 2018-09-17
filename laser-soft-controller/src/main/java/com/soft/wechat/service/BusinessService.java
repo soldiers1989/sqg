@@ -138,7 +138,7 @@ public class BusinessService {
 
     private ExecutorService executor = Executors.newCachedThreadPool();
 
-    public void executor(TbkCoupon tbkCoupon) {
+    public void executorCounpon(TbkCoupon tbkCoupon) {
 
         executor.submit(new Runnable() {
 
@@ -146,6 +146,23 @@ public class BusinessService {
 
                 try {
                     tbkCouponService.saveTbkCoupon(tbkCoupon);
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        });
+    }
+
+    private ExecutorService executor1 = Executors.newCachedThreadPool();
+
+    public void executorUser(TbkUser tbkUser) {
+
+        executor1.submit(new Runnable() {
+
+            public void run() {
+
+                try {
+                    tbkUserService.saveTbkUserWithOpenId(tbkUser);
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 }

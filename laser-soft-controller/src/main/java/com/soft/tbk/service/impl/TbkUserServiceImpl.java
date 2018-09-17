@@ -1,9 +1,11 @@
 package com.soft.tbk.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import com.soft.tbk.model.TbkUser;
 import com.soft.tbk.service.TbkUserService;
 
 @Service
-public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserService{
+public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserService {
 
     private static final String SYS_CODE = "TbkUserSerciceImpl";
 
@@ -28,7 +30,33 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
     private TbkUserMapper tbkUserMapper;
 
     @Override
+    public TbkUser saveTbkUserWithOpenId(TbkUser tbkUser) throws ApiException {
+
+        if (tbkUser == null || StringUtils.isBlank(tbkUser.getUserOpenid())) {
+            return null;
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("userOpenid", tbkUser.getUserOpenid());
+        List<TbkUser> list = queryTbkUsersModel(map);
+        if (list != null && !list.isEmpty()) {
+            return null;
+        }
+        Integer parentId = tbkUser.getParentId();
+        if (parentId != null) {
+            TbkUser parentUser = getTbkUser(parentId);
+            String parentIdPath = parentId + "";
+            if (parentUser != null && parentUser.getParentId() != null) {
+                // 2级
+                parentIdPath = parentUser.getParentId() + "," + parentId;
+            }
+            tbkUser.setParentIdPath(parentIdPath);
+        }
+        return saveTbkUser(tbkUser);
+    }
+
+    @Override
     public TbkUser saveTbkUser(TbkUser tbkUser) throws ApiException {
+
         //1.check
         check(tbkUser);
         //3.set default
@@ -39,8 +67,8 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         return tbkUser;
     }
 
-
     private void setDefault(TbkUser tbkUser) {
+
         if (tbkUser == null) {
             return;
         }
@@ -53,7 +81,7 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         if (null == tbkUser) {
             throw new ApiException(SYS_CODE + ".saveTbkUser", "数据不能为空");
         }
-        
+
     }
 
     @Override
@@ -110,7 +138,6 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         return list;
 
     }
-
 
     private void saveTbkUserModel(TbkUser tbkUser) {
 

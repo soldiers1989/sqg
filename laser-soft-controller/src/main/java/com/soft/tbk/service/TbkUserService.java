@@ -8,10 +8,14 @@ import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
 import com.soft.tbk.model.TbkUser;
 
+public interface TbkUserService extends BaseService {
 
-public interface TbkUserService extends BaseService{
-    
-
+    /**
+     * 
+     * @param tbkUser
+     * @return
+     */
+    public TbkUser saveTbkUserWithOpenId(TbkUser tbkUser) throws ApiException;
 
     /**
      * 
@@ -50,7 +54,6 @@ public interface TbkUserService extends BaseService{
      */
     QueryResult<TbkUser> queryTbkUser(Map<String, Object> map);
 
-    
     public void insertBatch(List<TbkUser> tbkUserList);
 
 }
