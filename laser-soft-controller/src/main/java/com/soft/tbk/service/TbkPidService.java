@@ -52,5 +52,7 @@ public interface TbkPidService extends BaseService{
 
     
     public void insertBatch(List<TbkPid> tbkPidList);
+    
+    public TbkPid getTbkPidByIndex(Integer index);
 
 }

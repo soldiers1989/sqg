@@ -8,12 +8,16 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.soft.tbk.TbkConstants;
 import com.soft.tbk.model.TbkCoupon;
+import com.soft.wechat.domain.CouponContext;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.TbkItemInfoGetRequest;
+import com.taobao.api.request.TbkTpwdCreateRequest;
 import com.taobao.api.response.TbkItemInfoGetResponse;
+import com.taobao.api.response.TbkTpwdCreateResponse;
 
 public class Coupon {
 
@@ -29,9 +33,10 @@ public class Coupon {
     public static TbkItemInfoGetResponse getItemDetail(String itemId) {
 
         TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "25073090", "4a0d538064e190a89ae4cfa10e5bf393");
+        
         TbkItemInfoGetRequest req = new TbkItemInfoGetRequest();
         req.setNumIids(itemId);
-        req.setPlatform(1L);
+        //req.setPlatform(1L);
         TbkItemInfoGetResponse rsp = null;
         try {
             rsp = client.execute(req);
@@ -97,13 +102,23 @@ public class Coupon {
 
     public static String getTKL(String title, String url, String image) {
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("link", url);
-        params.put("image", image);
-        params.put("text", title);
-        params.put("type", "B");
-        JSONObject object = new JSONObject();
+      TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "25073090", "4a0d538064e190a89ae4cfa10e5bf393");
+        
+       TbkTpwdCreateRequest request = new TbkTpwdCreateRequest();
+       request.setUrl(url);
+       request.setLogo(image);
+       request.setText(title);
         try {
+            TbkTpwdCreateResponse response = client.execute(request);
+            if (response != null) {
+                return response.getData().getModel();
+            }
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("link", url);
+            params.put("image", image);
+            params.put("text", title);
+            params.put("type", "B");
+            JSONObject object = new JSONObject();
             String result = WebUtils.doPost(tklGenURL, params);
             if (StringUtils.isNotBlank(result)) {
                 object = JSONObject.parseObject(result);
@@ -112,7 +127,7 @@ public class Coupon {
                 object = object.getJSONObject("data");
                 return object.getString("tkl");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
 
         }
         return null;
@@ -172,27 +187,50 @@ public class Coupon {
         return itemId;
     }
 
-    public static TbkCoupon getHighObject(String tkl) {
+    public static TbkCoupon getHighObject(String tkl, String pid) {
 
-        
         JSONObject object = Coupon.getTBKItemByToken(tkl);
         String itemId = parseItemId(object.getString("url"), tkl);
         
         TbkItemInfoGetResponse itemObject = getItemDetail(itemId);
         
-        String pid = "mm_47328993_112850356_23198400420";
+        TbkCoupon tbkCoupon = new TbkCoupon();
+
+        if (itemObject == null || !itemObject.isSuccess()) {
+            //未设置优惠券
+            tbkCoupon.setTkl("该商品暂不参与优惠活动◕╭╮◕试试其它商品，也许会有意外的惊喜哦！！~~");
+            return tbkCoupon;
+        }
+        
+        CouponContext context = new CouponContext();
+        context.setItemId(itemId);
+        context.setPid(pid);
+        context.setObject(object);
+        context.setTkl(tkl);
+        context.setItemObject(itemObject);
+        context.setTbkCoupon(tbkCoupon);
+        context.setUserRate(null);
+        
+        getHaveCouponItem(context);
+        
+        return tbkCoupon;
+    }
+
+    public static void getHaveCouponItem(CouponContext context) {
+        
+        
+        String tkl = context.getTkl();
+        String pid = context.getPid();
+        JSONObject object = context.getObject();
+        String itemId = context.getItemId();
+        TbkItemInfoGetResponse itemObject = context.getItemObject();
+        TbkCoupon tbkCoupon = context.getTbkCoupon();
+        
         object.put("itemId", itemId);
         object.put("pid", pid);
         JSONObject highObject = getHighTBK(itemId, pid);
 
-        TbkCoupon tbkCoupon = new TbkCoupon();
-
-        if (highObject == null) {
-            //未设置优惠券
-            return null;
-        }
-
-        String title = object.getString("content");
+        String title = itemObject.getResults().get(0).getTitle();
 
         String url = highObject.getString("coupon_click_url");
 
@@ -206,17 +244,29 @@ public class Coupon {
         
         BigDecimal rate = new BigDecimal(commissionRate);
         
-        BigDecimal jljMoney = new BigDecimal(itemObject.getResults().get(0).getZkFinalPrice()).multiply(rate).divide(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN);
         
         String content = title + "\n";
-        content = content + "[原价]" + itemObject.getResults().get(0).getZkFinalPrice() + "元\n";
+        content = content + "【原价】" + itemObject.getResults().get(0).getZkFinalPrice() + "元\n";
         String couponAmount = "0";
+        BigDecimal itemPrice = new BigDecimal(itemObject.getResults().get(0).getZkFinalPrice());
+        BigDecimal zkMoney = itemPrice;
         if (coupon_info != null) {
             couponAmount = coupon_info.substring(coupon_info.indexOf("减") + 1, coupon_info.lastIndexOf("元"));
-            content = content + "[优惠券]" + couponAmount + "元\n";
-            content = content + "[券后价]" + new BigDecimal(itemObject.getResults().get(0).getZkFinalPrice()).subtract(new BigDecimal(couponAmount)) + "元\n";
+            content = content + "【优惠券】" + couponAmount + "元\n";
+            zkMoney = itemPrice.subtract(new BigDecimal(couponAmount));
+            content = content + "【券后价】" + zkMoney + "元\n";
         }
-        content = content + "[预计成交奖励金]" + jljMoney + "元\n";
+        BigDecimal jljMoney = zkMoney.multiply(rate).divide(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        
+        BigDecimal userRate = context.getUserRate();
+        
+        if (userRate == null) {
+            userRate = TbkConstants.DEFAULT_RATE;
+        }
+        
+        BigDecimal userJljMoney  = jljMoney.multiply(userRate).divide(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        
+        content = content + "【预计成交奖励金】" + userJljMoney + "元\n";
         content = content + "--------------------------\n";
         content = content + "复制这条信息，"+newtkl+"，打开【手机淘宝】即可查看";
 
@@ -227,9 +277,10 @@ public class Coupon {
             tbkCoupon.setItemImage(image);
             tbkCoupon.setInputTkl(tkl);
             tbkCoupon.setTkl(content);
-            tbkCoupon.setItemPrice(new BigDecimal(itemObject.getResults().get(0).getZkFinalPrice()));// 商品价格 TODO
-            tbkCoupon.setCommission(jljMoney);// 预计佣金 TODO
-            tbkCoupon.setCouponAmout(new BigDecimal(couponAmount));// 优惠券金额 TODO
+            tbkCoupon.setItemPrice(new BigDecimal(itemObject.getResults().get(0).getZkFinalPrice())); 
+            tbkCoupon.setMaxCommission(jljMoney);
+            tbkCoupon.setCommission(userJljMoney); 
+            tbkCoupon.setCouponAmout(new BigDecimal(couponAmount)); 
             
             if (tbkCoupon.getCouponAmout().compareTo(BigDecimal.ZERO) > 0) {
                 tbkCoupon.setCouponExist("1");
@@ -237,16 +288,51 @@ public class Coupon {
                 tbkCoupon.setCouponExist("0");
             }
         }
-        
-        return tbkCoupon;
     }
     
     
     
     public static void main(String[] args) {
 
-        System.out.println(getHighObject("€o4xubedQU1k€").getTkl());
+        System.out.println(getHighObject("￥dHJvbVbORt8￥","mm_47328993_112850356_23198400420").getTkl());
 
+        
+      //TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "25073090", "4a0d538064e190a89ae4cfa10e5bf393");
+     
+/*     TbkItemGetRequest req = new TbkItemGetRequest();
+
+     req.setQ("武夷山特级正山小种红茶散装正山小种红茶桂圆香正品新茶500g");
+     req.setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick");
+     
+     TbkItemGetResponse rsp = null;
+     
+     TbkCouponGetRequest r = new TbkCouponGetRequest();
+     try {
+         rsp = client.execute(req);
+         System.out.println(rsp);
+     } catch (ApiException e) {
+
+     }*/
+    /* TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
+     req.setAdzoneId(23198400420L);
+     req.setPlatform(1L);
+     req.setCat("16,18");
+     req.setPageSize(1L);
+     req.setQ("女装");
+     req.setPageNo(1L);
+     
+     try {
+         TbkDgItemCouponGetResponse rsp = client.execute(req);
+         System.out.println(rsp.getBody());
+         //req.setQ("正山小种红茶茶叶浓香型正宗武夷山桐木关2018春茶散装罐装礼袋装");
+         req.setAdzoneId(23198400420L);
+         
+         rsp = client.execute(req);
+         System.out.println(rsp);
+     } catch (ApiException e) {
+
+     }*/
+     
     }
 
     public static Map<String, String> URLRequest(String URL) {

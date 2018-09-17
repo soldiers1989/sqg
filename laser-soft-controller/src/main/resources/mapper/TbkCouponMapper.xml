@@ -15,6 +15,7 @@
     <result column="ITEM_TITLE" jdbcType="VARCHAR" property="itemTitle" />
     <result column="ITEM_PRICE" jdbcType="DECIMAL" property="itemPrice" />
     <result column="COMMISSION" jdbcType="DECIMAL" property="commission" />
+    <result column="MAX_COMMISSION" jdbcType="DECIMAL" property="maxCommission" />
     <result column="COUPON_EXIST" jdbcType="CHAR" property="couponExist" />
     <result column="COUPON_AMOUT" jdbcType="DECIMAL" property="couponAmout" />
     <result column="STATUS" jdbcType="INTEGER" property="status" />
@@ -25,7 +26,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, USER_ID, PID, ITEM_ID, TKL, INPUT_TKL, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, COMMISSION, 
+    ID, USER_ID, PID, ITEM_ID, TKL, INPUT_TKL, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, COMMISSION, MAX_COMMISSION
     COUPON_EXIST, COUPON_AMOUT, STATUS, CREATE_TIME, UPDATE_TIME
   </sql>
   <sql id="t_tbk_coupon_query_fuzzy_condition">

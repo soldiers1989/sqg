@@ -39,6 +39,19 @@ public class TbkPid {
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
 
+    
+    @Column(name = "ORDER_INDEX")
+    private Integer orderIndex;
+
+    
+    public Integer getOrderIndex() {
+        return orderIndex;
+    }
+
+    public void setOrderIndex(Integer orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
     /**
      * @return ID
      */

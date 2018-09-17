@@ -173,4 +173,10 @@ public class TbkPidServiceImpl extends BaseServiceImpl implements TbkPidService{
         }
     }
 
+
+    @Override
+    public TbkPid getTbkPidByIndex(Integer index) {
+        return tbkPidMapper.getPidByIndex(getQueryParamMap("orderIndex", index));
+    }
+
 }

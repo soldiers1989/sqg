@@ -12,14 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkUser;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
 import com.soft.wechat.model.TextMessage;
 import com.soft.wechat.robot.TulingRobot;
-import com.soft.wechat.util.Coupon;
 import com.soft.wechat.util.MapUtil;
 import com.soft.wechat.util.WechatMessageUtil;
 
@@ -72,10 +70,8 @@ public class WechatService {
         // 对消息进行处理
         if (MessageTypeEnum.MESSAGE_TEXT.getCode().equals(msgType)) {
             // 文本
-            TbkCoupon tbkCoupon = Coupon.getHighObject(content);
-            //异步
-            businessService.executorCounpon(tbkCoupon);
-            returnContent = tbkCoupon.getTkl();
+            returnContent = businessService.returnTKL(content, fromUserName);
+
             if (StringUtils.isEmpty(returnContent)) {
                 returnContent = new TulingRobot(tenantCode).getResult(content);
             }
@@ -94,6 +90,9 @@ public class WechatService {
             } else if (EventEnum.EVENT_SCAN.getCode().equals(event)) {//扫码[已关注]
             }
         }
+        
+        // 如果是淘口令信息
+
         if (StringUtils.isEmpty(returnContent)) {
             return responseMessage;
         }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageInfo;
+import com.soft.tbk.TbkConstants;
 import com.soft.tbk.base.BaseServiceImpl;
 import com.soft.tbk.dao.TbkUserMapper;
 import com.soft.tbk.domain.QueryResult;
@@ -74,6 +75,7 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         }
         tbkUser.setCreateTime(new Date());
         tbkUser.setUpdateTime(new Date());
+        tbkUser.setUserLevel(TbkConstants.USER_LEVEL_1);
     }
 
     private void check(TbkUser tbkUser) {

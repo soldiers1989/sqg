@@ -1,5 +1,7 @@
 package com.soft.tbk;
 
+import java.math.BigDecimal;
+
 public class TbkConstants {
 
     /**
@@ -10,5 +12,26 @@ public class TbkConstants {
     public static final Integer RATE_LEVEL_1 = 1;// 1级分佣
 
     public static final Integer RATE_LEVEL_2 = 2;// 2级分佣
+    
+    public static final BigDecimal DEFAULT_RATE = new BigDecimal(40);
+    
+    public static final String USER_LEVEL_1 = "1";  //用户等级
+    
+    public static final String USER_LEVEL_2 = "2";  //用户等级
+    
+    public static final String USER_LEVEL_3 = "3";  //用户等级
+    
+    public static final String USER_LEVEL_4 = "4";  //用户等级
+    
+    public static final String USER_LEVEL_5 = "5";  //用户等级
+    
+    public static final String USER_LEVEL_6 = "6";  //用户等级
+    
+    public static final String USER_LEVEL_7 = "7";  //用户等级
+    
+    public static final String USER_LEVEL_8 = "8";  //用户等级
+    
+    public static final String USER_LEVEL_9 = "9";  //用户等级
+    
 
 }

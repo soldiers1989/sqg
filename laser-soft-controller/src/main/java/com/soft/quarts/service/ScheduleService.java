@@ -1,16 +1,9 @@
 package com.soft.quarts.service;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.soft.quarts.UploadTask;
 
 @Service
 public class ScheduleService {
@@ -20,7 +13,7 @@ public class ScheduleService {
 
     public void testScheduleTask() throws SchedulerException {
 
-        for (int i = 1; i < 3; i++) {
+        /*for (int i = 1; i < 3; i++) {
             JobDetail jobDetail = JobBuilder.newJob(UploadTask.class).withIdentity("updateMatch" + i, "updateMatch")
                             .withDescription("定时比赛Id为" + i).build();
             //cron表达式 表示每隔i秒执行
@@ -30,7 +23,7 @@ public class ScheduleService {
                             .withDescription("定时比赛Id为" + i).withSchedule(scheduleBuilder).startNow().build();
             scheduler.scheduleJob(jobDetail, cronTrigger);
 
-        }
+        }*/
 
     }
 }

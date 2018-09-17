@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.soft.tbk.TbkConstants;
 import com.soft.tbk.model.TbkCommission;
 import com.soft.tbk.model.TbkCoupon;
@@ -38,46 +37,25 @@ public class BusinessService {
 
     @Autowired
     TbkCommissionService tbkCommissionService;
+    
+    @Autowired
+    TbkCoreService tbkCoreService;
 
-    /**
-     * 封装转券
-     * 
-     * @param object
-     * @param highObject
-     * @param tkl
-     * @param newtkl
-     */
-    public void saveCoupon(JSONObject object, JSONObject highObject, String tkl, String newtkl) {
-
-        try {
-            TbkCoupon tbkCoupon = new TbkCoupon();
-            if (object != null) {
-                String title = object.getString("content");
-                String image = object.getString("pic_url");
-                String itemId = object.getString("itemId");
-                tbkCoupon.setPid(object.getString("pid"));
-                tbkCoupon.setItemId(StringUtils.isBlank(itemId) ? null : Long.parseLong(itemId));
-                tbkCoupon.setItemTitle(title);
-                tbkCoupon.setItemImage(image);
-                tbkCoupon.setInputTkl(tkl);
-                tbkCoupon.setTkl(newtkl);
-            }
-            if (highObject != null) {
-                tbkCoupon.setItemPrice(new BigDecimal("0"));// 商品价格 TODO
-                String max_commission_rate = highObject.getString("max_commission_rate");
-                tbkCoupon.setCommission(new BigDecimal("0"));// 预计佣金 TODO
-                tbkCoupon.setCouponAmout(new BigDecimal("0"));// 优惠券金额 TODO
-            }
-            if (tbkCoupon.getItemId() == null) {
-                logger.info("商品ID为空");
-                return;
-            }
-            tbkCouponService.saveTbkCoupon(tbkCoupon);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+    
+    public String returnTKL(String tkl, String openId) {
+        
+       
+        TbkUser tbkUser = tbkCoreService.loadTbkUserInfo(openId, null);
+        
+        if (tbkUser == null) {
+            logger.error(openId + "，获取用户信息失败");
         }
+        
+        TbkCoupon tbkCoupon = tbkCoreService.createTbkCoupon(tkl, tbkUser);
+        
+        return tbkCoupon.getTkl();
     }
-
+    
     /**
      * 封装佣金记录
      * 
@@ -99,17 +77,23 @@ public class BusinessService {
                     if (userIds.length == 1) {
                         // 一级佣金
                         TbkCommission tbkCommission = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_1);
-                        tbkCommission.setRelationUserId(userId);
-                        list.add(tbkCommission);
+                        if (tbkCommission != null) {
+                            tbkCommission.setRelationUserId(userId);
+                            list.add(tbkCommission);
+                        }
                     }
                     if (userIds.length == 2) {
                         // 二级佣金
                         TbkCommission tbkCommission2 = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_2);
-                        tbkCommission2.setRelationUserId(userId);
-                        list.add(tbkCommission2);
+                        if (tbkCommission2 != null) {
+                            tbkCommission2.setRelationUserId(userId);
+                            list.add(tbkCommission2);
+                        }
                         TbkCommission tbkCommission1 = makeCommission(amount, Integer.parseInt(userIds[1]), TbkConstants.RATE_LEVEL_1);
-                        tbkCommission1.setRelationUserId(userId);
-                        list.add(tbkCommission1);
+                        if (tbkCommission1 != null) {
+                            tbkCommission1.setRelationUserId(userId);
+                            list.add(tbkCommission1);
+                        }
                     }
                 }
             }
@@ -125,9 +109,15 @@ public class BusinessService {
         if (tbkUser == null)
             return null;
         String userLevel = tbkUser.getUserLevel();
+        
         if (StringUtils.isBlank(userLevel)) {
-            userLevel = "A";// 默认
+            userLevel = TbkConstants.USER_LEVEL_1;// 默认
         }
+        
+        if (TbkConstants.RATE_LEVEL_0.equals(rateLevel)) {
+            userLevel = TbkConstants.USER_LEVEL_1;
+        }
+        
         BigDecimal rate = tbkRateService.getRateByLevel(userLevel, rateLevel);
         TbkCommission tbkCommission = new TbkCommission();
         tbkCommission.setCommissionType(rateLevel.toString());

@@ -62,6 +62,12 @@ public class TbkCoupon {
     private BigDecimal commission;
 
     /**
+     * 预计佣金
+     */
+    @Column(name = "MAX_COMMISSION")
+    private BigDecimal maxCommission;
+
+    /**
      * 是否有优惠券
      */
     @Column(name = "COUPON_EXIST")
@@ -90,6 +96,14 @@ public class TbkCoupon {
      */
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
+
+    public BigDecimal getMaxCommission() {
+        return maxCommission;
+    }
+
+    public void setMaxCommission(BigDecimal maxCommission) {
+        this.maxCommission = maxCommission;
+    }
 
     /**
      * @return ID
@@ -131,7 +145,8 @@ public class TbkCoupon {
     /**
      * 设置推广位
      *
-     * @param pid 推广位
+     * @param pid
+     *            推广位
      */
     public void setPid(String pid) {
         this.pid = pid == null ? null : pid.trim();
@@ -149,7 +164,8 @@ public class TbkCoupon {
     /**
      * 设置商品ID
      *
-     * @param itemId 商品ID
+     * @param itemId
+     *            商品ID
      */
     public void setItemId(Long itemId) {
         this.itemId = itemId;
@@ -167,7 +183,8 @@ public class TbkCoupon {
     /**
      * 设置淘口令
      *
-     * @param tkl 淘口令
+     * @param tkl
+     *            淘口令
      */
     public void setTkl(String tkl) {
         this.tkl = tkl == null ? null : tkl.trim();
@@ -185,7 +202,8 @@ public class TbkCoupon {
     /**
      * 设置输入的淘口令
      *
-     * @param inputTkl 输入的淘口令
+     * @param inputTkl
+     *            输入的淘口令
      */
     public void setInputTkl(String inputTkl) {
         this.inputTkl = inputTkl == null ? null : inputTkl.trim();
@@ -203,7 +221,8 @@ public class TbkCoupon {
     /**
      * 设置商品图片
      *
-     * @param itemImage 商品图片
+     * @param itemImage
+     *            商品图片
      */
     public void setItemImage(String itemImage) {
         this.itemImage = itemImage == null ? null : itemImage.trim();
@@ -221,7 +240,8 @@ public class TbkCoupon {
     /**
      * 设置商品标题
      *
-     * @param itemTitle 商品标题
+     * @param itemTitle
+     *            商品标题
      */
     public void setItemTitle(String itemTitle) {
         this.itemTitle = itemTitle == null ? null : itemTitle.trim();
@@ -239,7 +259,8 @@ public class TbkCoupon {
     /**
      * 设置商品价格
      *
-     * @param itemPrice 商品价格
+     * @param itemPrice
+     *            商品价格
      */
     public void setItemPrice(BigDecimal itemPrice) {
         this.itemPrice = itemPrice;
@@ -257,7 +278,8 @@ public class TbkCoupon {
     /**
      * 设置预计佣金
      *
-     * @param commission 预计佣金
+     * @param commission
+     *            预计佣金
      */
     public void setCommission(BigDecimal commission) {
         this.commission = commission;
@@ -275,7 +297,8 @@ public class TbkCoupon {
     /**
      * 设置是否有优惠券
      *
-     * @param couponExist 是否有优惠券
+     * @param couponExist
+     *            是否有优惠券
      */
     public void setCouponExist(String couponExist) {
         this.couponExist = couponExist == null ? null : couponExist.trim();
@@ -293,7 +316,8 @@ public class TbkCoupon {
     /**
      * 设置优惠券金额
      *
-     * @param couponAmout 优惠券金额
+     * @param couponAmout
+     *            优惠券金额
      */
     public void setCouponAmout(BigDecimal couponAmout) {
         this.couponAmout = couponAmout;
@@ -311,7 +335,8 @@ public class TbkCoupon {
     /**
      * 设置状态
      *
-     * @param status 状态
+     * @param status
+     *            状态
      */
     public void setStatus(Integer status) {
         this.status = status;
@@ -329,7 +354,8 @@ public class TbkCoupon {
     /**
      * 设置创建时间
      *
-     * @param createTime 创建时间
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -347,7 +373,8 @@ public class TbkCoupon {
     /**
      * 设置更新时间
      *
-     * @param updateTime 更新时间
+     * @param updateTime
+     *            更新时间
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;

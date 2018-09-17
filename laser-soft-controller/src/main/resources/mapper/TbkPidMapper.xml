@@ -11,12 +11,14 @@
     <result column="ADZONE_ID" jdbcType="INTEGER" property="adzoneId" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="ORDER_INDEX" jdbcType="INTEGER" property="orderIndex" />
+    
   </resultMap>
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbg.generated
     -->
-    ID, PID, SITE_ID, ADZONE_ID, CREATE_TIME, UPDATE_TIME
+    ID, PID, SITE_ID, ADZONE_ID, CREATE_TIME, UPDATE_TIME, ORDER_INDEX
   </sql>
   <sql id="t_tbk_pid_query_fuzzy_condition">
     <trim prefix="WHERE" prefixOverrides="AND |OR ">
@@ -67,7 +69,7 @@
       <include refid="t_tbk_pid_query_condition" />
     </if>
     <if test="order and orderStr == null">
-      order by CREATE_TIME desc
+      order by ORDER_INDEX
     </if>
     <if test="order and orderStr != null and orderStr.trim().length() != 0">
       order by ${orderStr}
@@ -100,4 +102,14 @@
        and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
     </if>
   </update>
+  
+  
+  
+  <!--  -->
+   <select id="getPidByIndex" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from t_tbk_pid 
+	 where ORDER_INDEX &gt; #{orderIndex} ORDER BY ORDER_INDEX LIMIT 1 
+  </select>
 </mapper>

@@ -61,6 +61,8 @@ public class TbkPidItemServiceImpl extends BaseServiceImpl implements TbkPidItem
 
         check(tbkPidItem);
 
+        tbkPidItem.setUpdateTime(tbkPidItemMapper.selectSysDate());
+        
         return updataTbkPidItem(tbkPidItem);
 
     }
