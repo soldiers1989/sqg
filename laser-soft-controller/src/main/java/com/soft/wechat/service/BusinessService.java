@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
 import com.soft.tbk.model.TbkUser;
@@ -34,12 +35,11 @@ public class BusinessService {
 
     @Autowired
     TbkCommissionService tbkCommissionService;
-    
+
     @Autowired
     TbkCoreService tbkCoreService;
     
-
-    public void batchOrderList(List<TbkOrder> orderList) {
+   public void batchOrderList(List<TbkOrder> orderList) {
         
         if (ListUtil.isEmpty(orderList)) {
             return;
@@ -55,17 +55,17 @@ public class BusinessService {
         
     }
 
-    
+
     public String returnTKL(String tkl, String openId) {
-       
+
         TbkUser tbkUser = tbkCoreService.loadTbkUserInfo(openId, null);
-        
+
         if (tbkUser == null) {
             logger.error(openId + "，获取用户信息失败");
         }
-        
+
         TbkCoupon tbkCoupon = tbkCoreService.createTbkCoupon(tkl, tbkUser);
-        
+
         return tbkCoupon.getTkl();
     }
 
@@ -77,6 +77,7 @@ public class BusinessService {
 
             public void run() {
 
+                logger.info("executorCounpon: {}", JSONArray.toJSON(tbkCoupon));
                 try {
                     tbkCouponService.saveTbkCoupon(tbkCoupon);
                 } catch (Exception e) {
@@ -94,6 +95,7 @@ public class BusinessService {
 
             public void run() {
 
+                logger.info("executorUser: {}", JSONArray.toJSON(tbkUser));
                 try {
                     tbkUserService.saveTbkUserWithOpenId(tbkUser);
                 } catch (Exception e) {

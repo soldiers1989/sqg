@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.soft.tbk.TbkConstants;
+import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.wechat.domain.CouponContext;
 import com.taobao.api.ApiException;
