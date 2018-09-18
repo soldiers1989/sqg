@@ -9,8 +9,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.soft.tbk.TbkConstants;
 import com.soft.tbk.base.BaseServiceImpl;
+import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkPid;

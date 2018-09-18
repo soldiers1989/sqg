@@ -628,8 +628,6 @@ public abstract class WebUtils {
                 throw new IOException(e);
             }
             HttpsURLConnection connHttps = (HttpsURLConnection) url.openConnection();
-            connHttps.connect();
-
             connHttps.setSSLSocketFactory(ctx.getSocketFactory());
             connHttps.setHostnameVerifier(new HostnameVerifier() {
 

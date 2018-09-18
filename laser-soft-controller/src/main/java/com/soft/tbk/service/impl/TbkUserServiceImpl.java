@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageInfo;
-import com.soft.tbk.TbkConstants;
 import com.soft.tbk.base.BaseServiceImpl;
+import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.dao.TbkUserMapper;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;

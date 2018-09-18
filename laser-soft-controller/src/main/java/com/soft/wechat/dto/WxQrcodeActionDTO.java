@@ -2,9 +2,6 @@ package com.soft.wechat.dto;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRawValue;
-
 /**
  * describe:
  *
@@ -16,50 +13,46 @@ public class WxQrcodeActionDTO implements Serializable {
      */
     private static final long serialVersionUID = 5830852954689730214L;
 
-    @JsonProperty("expire_seconds")
-    private Integer expireSeconds;
+    private Integer expire_seconds;
 
-    @JsonProperty("action_name")
-    private String actionName;
+    private String action_name;
 
-    @JsonProperty("action_info")
-    @JsonRawValue
-    private String actionInfo;
+    private String action_info;
 
     @Override
     public String toString() {
 
-        return "WxQrcodeActionDTO{" + "expireSeconds=" + expireSeconds + ", actionName='" + actionName + '\'' + ", actionInfo='"
-                        + actionInfo + '\'' + '}';
+        return "{\"action_info\": " + action_info + ",\"expire_seconds\": " + expire_seconds + ", \"action_name\": \"" + action_name
+                        + "\" }";
     }
 
-    public Integer getExpireSeconds() {
+    public Integer getExpire_seconds() {
 
-        return expireSeconds;
+        return expire_seconds;
     }
 
-    public void setExpireSeconds(Integer expireSeconds) {
+    public void setExpire_seconds(Integer expire_seconds) {
 
-        this.expireSeconds = expireSeconds;
+        this.expire_seconds = expire_seconds;
     }
 
-    public String getActionName() {
+    public String getAction_name() {
 
-        return actionName;
+        return action_name;
     }
 
-    public void setActionName(String actionName) {
+    public void setAction_name(String action_name) {
 
-        this.actionName = actionName;
+        this.action_name = action_name;
     }
 
-    public String getActionInfo() {
+    public String getAction_info() {
 
-        return actionInfo;
+        return action_info;
     }
 
-    public void setActionInfo(String actionInfo) {
+    public void setAction_info(String action_info) {
 
-        this.actionInfo = actionInfo;
+        this.action_info = action_info;
     }
 }

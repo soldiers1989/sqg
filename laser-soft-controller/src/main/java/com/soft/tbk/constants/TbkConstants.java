@@ -1,4 +1,4 @@
-package com.soft.tbk;
+package com.soft.tbk.constants;
 
 import java.math.BigDecimal;
 

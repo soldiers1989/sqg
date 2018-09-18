@@ -87,10 +87,10 @@ public class WechatService {
                     tbkUser.setParentId(Integer.parseInt(eventKey));
                 }
                 businessService.executorUser(tbkUser);
-            } else if (EventEnum.EVENT_SCAN.getCode().equals(event)) {//扫码[已关注]
+            } else if (EventEnum.EVENT_UNSUBSCRIBE.getCode().equals(event)) {//取消关注
             }
         }
-        
+
         // 如果是淘口令信息
 
         if (StringUtils.isEmpty(returnContent)) {
