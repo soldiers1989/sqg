@@ -1,6 +1,7 @@
 package com.soft.wechat.service;
 
 import com.soft.tbk.model.TbkCoupon;
+import com.soft.tbk.model.TbkOrder;
 import com.soft.tbk.model.TbkUser;
 
 
@@ -17,4 +18,5 @@ public interface TbkCoreService {
     public TbkCoupon createTbkCoupon(String tkl, TbkUser tbkUser);
 
     
+    public void saveOrder(TbkOrder tbkOrder);
 }

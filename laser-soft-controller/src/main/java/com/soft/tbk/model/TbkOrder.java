@@ -2,6 +2,7 @@ package com.soft.tbk.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.*;
 
 @Table(name = "t_tbk_order")
@@ -21,6 +22,12 @@ public class TbkOrder {
      */
     @Column(name = "PID")
     private String pid;
+
+    /**
+     * 商品ID
+     */
+    @Column(name = "ITEM_ID")
+    private Long itemId;
 
     /**
      * 商品图片
@@ -599,4 +606,13 @@ public class TbkOrder {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+    
 }

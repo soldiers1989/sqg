@@ -11,6 +11,7 @@
     <result column="ITEM_IMAGE" jdbcType="VARCHAR" property="itemImage" />
     <result column="ITEM_TITLE" jdbcType="VARCHAR" property="itemTitle" />
     <result column="ITEM_PRICE" jdbcType="DECIMAL" property="itemPrice" />
+    <result column="ITEM_ID" jdbcType="BIGINT" property="itemId" />
     <result column="SELLER_NAME" jdbcType="VARCHAR" property="sellerName" />
     <result column="TRADE_ID" jdbcType="BIGINT" property="tradeId" />
     <result column="ITEM_NUM" jdbcType="INTEGER" property="itemNum" />
@@ -35,7 +36,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, USER_ID, PID, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, SELLER_NAME, TRADE_ID, ITEM_NUM, 
+    ID, USER_ID, PID, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, ITEM_ID, SELLER_NAME, TRADE_ID, ITEM_NUM, 
     PAY_AMOUNT, COMMISSION, COMMISSION_RATE, TRADE_TIME, EARNING_TIME, TRADE_STATUS, 
     TRADE_TYPE, INCOME_RATE, SUBSIDY_RATE, RERMINAL_TYPE, ALIPAY_TOTAL_PRICE, TOTAL_COMMISSION_RATE, 
     TOTAL_COMMISSION_FEE, SUBSIDY_FEE, UPDATE_TIME, CREATE_TIME
@@ -62,6 +63,9 @@
       </if>
       <if test="tradeId != null">
         AND (TRADE_ID = #{tradeId})
+      </if>
+      <if test="itemId != null">
+        AND (ITEM_ID = #{itemId})
       </if>
       <if test="itemNum != null">
         AND (ITEM_NUM = #{itemNum})
@@ -139,6 +143,9 @@
       <if test="tradeId != null">
         AND (TRADE_ID = #{tradeId})
       </if>
+      <if test="itemId != null">
+        AND (ITEM_ID = #{itemId})
+      </if>      
       <if test="itemNum != null">
         AND (ITEM_NUM = #{itemNum})
       </if>
@@ -211,9 +218,9 @@
   </select>
   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
     insert into t_tbk_order ( 
-    ID,USER_ID,PID,ITEM_IMAGE,ITEM_TITLE,ITEM_PRICE,SELLER_NAME,TRADE_ID,ITEM_NUM,PAY_AMOUNT,COMMISSION,COMMISSION_RATE,TRADE_TIME,EARNING_TIME,TRADE_STATUS,TRADE_TYPE,INCOME_RATE,SUBSIDY_RATE,RERMINAL_TYPE,ALIPAY_TOTAL_PRICE,TOTAL_COMMISSION_RATE,TOTAL_COMMISSION_FEE,SUBSIDY_FEE,UPDATE_TIME,CREATE_TIME ) values 
+    ID,USER_ID,PID,ITEM_IMAGE,ITEM_TITLE,ITEM_PRICE,ITEM_ID,SELLER_NAME,TRADE_ID,ITEM_NUM,PAY_AMOUNT,COMMISSION,COMMISSION_RATE,TRADE_TIME,EARNING_TIME,TRADE_STATUS,TRADE_TYPE,INCOME_RATE,SUBSIDY_RATE,RERMINAL_TYPE,ALIPAY_TOTAL_PRICE,TOTAL_COMMISSION_RATE,TOTAL_COMMISSION_FEE,SUBSIDY_FEE,UPDATE_TIME,CREATE_TIME ) values 
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.pid,jdbcType=VARCHAR},#{item.itemImage,jdbcType=VARCHAR},#{item.itemTitle,jdbcType=VARCHAR},#{item.itemPrice,jdbcType=DECIMAL},#{item.sellerName,jdbcType=VARCHAR},#{item.tradeId,jdbcType=BIGINT},#{item.itemNum,jdbcType=INTEGER},#{item.payAmount,jdbcType=DECIMAL},#{item.commission,jdbcType=DECIMAL},#{item.commissionRate,jdbcType=DECIMAL},#{item.tradeTime,jdbcType=TIMESTAMP},#{item.earningTime,jdbcType=TIMESTAMP},#{item.tradeStatus,jdbcType=INTEGER},#{item.tradeType,jdbcType=VARCHAR},#{item.incomeRate,jdbcType=VARCHAR},#{item.subsidyRate,jdbcType=VARCHAR},#{item.rerminalType,jdbcType=VARCHAR},#{item.alipayTotalPrice,jdbcType=DECIMAL},#{item.totalCommissionRate,jdbcType=VARCHAR},#{item.totalCommissionFee,jdbcType=VARCHAR},#{item.subsidyFee,jdbcType=VARCHAR},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.pid,jdbcType=VARCHAR},#{item.itemImage,jdbcType=VARCHAR},#{item.itemTitle,jdbcType=VARCHAR},#{item.itemPrice,jdbcType=DECIMAL},#{item.itemId,jdbcType=BIGINT},#{item.sellerName,jdbcType=VARCHAR},#{item.tradeId,jdbcType=BIGINT},#{item.itemNum,jdbcType=INTEGER},#{item.payAmount,jdbcType=DECIMAL},#{item.commission,jdbcType=DECIMAL},#{item.commissionRate,jdbcType=DECIMAL},#{item.tradeTime,jdbcType=TIMESTAMP},#{item.earningTime,jdbcType=TIMESTAMP},#{item.tradeStatus,jdbcType=INTEGER},#{item.tradeType,jdbcType=VARCHAR},#{item.incomeRate,jdbcType=VARCHAR},#{item.subsidyRate,jdbcType=VARCHAR},#{item.rerminalType,jdbcType=VARCHAR},#{item.alipayTotalPrice,jdbcType=DECIMAL},#{item.totalCommissionRate,jdbcType=VARCHAR},#{item.totalCommissionFee,jdbcType=VARCHAR},#{item.subsidyFee,jdbcType=VARCHAR},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
     </foreach>
   </insert>
   <select id="count" resultType="int">
