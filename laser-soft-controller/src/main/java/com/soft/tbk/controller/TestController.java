@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.soft.tbk.core.cache.IRedisClientKValue;
+import com.soft.tbk.model.TbkUser;
 import com.soft.tbk.service.TbkUserService;
 
 @RestController
@@ -17,14 +17,15 @@ import com.soft.tbk.service.TbkUserService;
 public class TestController {
 
     @Autowired
-    IRedisClientKValue<String> redisClient;
-
-    @Autowired
     TbkUserService tbkUserService;
-    
+
     @RequestMapping("/test")
     public String test() {
 
+        TbkUser user = new TbkUser();
+        user.setParentId(10);
+        user.setUserOpenid("o01fz1P6fq6U7HO5kBNY7PK2Fsi0");
+        tbkUserService.saveTbkUserWithOpenId(user);
         return "hello test!";
     }
 

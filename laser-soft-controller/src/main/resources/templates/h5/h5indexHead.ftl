@@ -9,20 +9,20 @@
 	
 	<title></title>
 	<link rel="shortcut icon" href="" />
-	<link rel="stylesheet" href="${sysContextPath}/static/css/weui.min.css" />
-	<link rel="stylesheet" href="${sysContextPath}/static/css/jquery-weui.min.css" />
-	<link rel="stylesheet" href="${sysContextPath}/static/css/style.css" />
-	<script type="text/javascript" src="${sysContextPath}/static/js/jquery-2.1.4.js"></script>
-	<script src="${sysContextPath}/static/js/fastclick.js"></script>
+	<link rel="stylesheet" href="../../static/css/weui.min.css" />
+	<link rel="stylesheet" href="../../static/css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="../../static/css/style.css" />
+	<script type="text/javascript" src="../../static/js/jquery-2.1.4.js"></script>
+	<script src="../../static/js/fastclick.js"></script>
 		
-	<script type="text/javascript" src="${sysContextPath}/static/js/jquery-weui.min.js"></script>
-	<script type="text/javascript" src="${sysContextPath}/static/js/swiper.min.js"></script>
-	<script type="text/javascript" src="${sysContextPath}/static/js/style.js"></script>
-	<script type="text/javascript" src="${sysContextPath}/static/js/city-picker.min.js" ></script>
+	<script type="text/javascript" src="../../static/js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="../../static/js/swiper.min.js"></script>
+	<script type="text/javascript" src="../../static/js/style.js"></script>
+	<script type="text/javascript" src="../../static/js/city-picker.min.js" ></script>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>
 	
-	<script src="${sysContextPath}/static/js/jquery.form.js"></script>
-	<script src="${sysContextPath}/static/js/common.js"></script>
+	<script src="../../static/js/jquery.form.js"></script>
+	<script src="../../static/js/common.js"></script>
 	<style type="text/css">
 	body{
 		 	background-color: #ededed;

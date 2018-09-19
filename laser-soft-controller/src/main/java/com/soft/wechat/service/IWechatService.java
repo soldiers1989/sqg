@@ -14,10 +14,29 @@ public interface IWechatService {
      * 
      * @return
      */
-    String getWeChartUrl(String redirectUri, String state);
+    public String getWeChartUrl(String redirectUri, String state);
 
     /**
      * 获取返回授权码
      */
-    String getauthcode(HttpServletRequest request);
+    public String getauthcode(HttpServletRequest request);
+
+    /**
+     * 参数
+     * 
+     * @param code
+     * @return
+     */
+    public String createQrcode(String code);
+
+    /**
+     * 创建菜单
+     */
+    public String createMenu(String menuJson);
+
+    /**
+     * 删除菜单
+     */
+    public String deleteMenu();
+
 }

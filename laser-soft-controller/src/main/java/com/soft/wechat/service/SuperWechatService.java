@@ -22,15 +22,31 @@ public class SuperWechatService {
      */
     protected final static String QR_STR_SCENE = "QR_STR_SCENE";
 
+    /**
+     * 生成二维码
+     */
     protected final static String QRCODE_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=";
 
+    /**
+     * 获取二维码
+     */
     protected final static String QRCODE_SHOW = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=";
 
     protected static final int THIRTY_DAY = 2_592_000;// 最长有效期
 
     protected static final int SCENE_STR_MAX_LENGTH = 64;
 
+    //获取token
     protected final static String token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
+
+    //创建菜单
+    protected final static String MENU_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";
+
+    //查询菜单
+    protected final static String MENU_GET_URL = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=";
+
+    //删除菜单
+    protected final static String MENU_DELETE_URL = "https://api.weixin.qq.com/cgi-bin/delete/get?access_token=";
 
     protected static final long TOKEN_TIME_OUT = 2 * 60 * 60 * 1000L;
 
