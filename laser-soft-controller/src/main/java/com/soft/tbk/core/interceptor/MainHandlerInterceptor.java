@@ -5,12 +5,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.soft.tbk.domain.UserSession;
+import com.soft.wechat.service.IWechatService;
+
+@Component
 public class MainHandlerInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(MainHandlerInterceptor.class);
+
+    @Autowired
+    private IWechatService wechatService;
 
     /**
      * 在请求处理之前进行调用（Controller方法调用之前）
@@ -18,12 +27,21 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        UserSession userSession = (UserSession) request.getSession().getAttribute("userSession");
         String requestPath = getRequestservice(request);
         String contentPath = request.getServletContext().getContextPath();
-        String path = request.getServletPath();
-        String url = requestPath + contentPath + path;
+        String url = request.getServletPath();
+        if (userSession == null) {
+            if ("/web/account/index".equals(url)) {
+                // 暂时就个人中心
+                wechatService.requestAuth(request, response, contentPath, url);
+            } else {
+                // TODO
+                //                logger.info("没有登录");
+                //                return false;
+            }
+        }
         request.setAttribute("sysContextPath", requestPath + contentPath);
-        logger.info(url);
         return true;
     }
 

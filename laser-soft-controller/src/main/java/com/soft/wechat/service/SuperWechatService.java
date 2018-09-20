@@ -36,7 +36,16 @@ public class SuperWechatService {
 
     protected static final int SCENE_STR_MAX_LENGTH = 64;
 
-    //获取token
+    // 授权登录连接
+    protected final static String oauth_token_url = "https://open.weixin.qq.com/connect/oauth2/authorize";
+
+    // 授权登录token获取
+    protected final static String sns_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token";
+
+    // 获取用户信息
+    protected final static String userinfo_url = "https://api.weixin.qq.com/cgi-bin/user/info";
+
+    //全局获取token
     protected final static String token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
 
     //创建菜单
@@ -55,6 +64,9 @@ public class SuperWechatService {
 
     @Value("${weixin.appsecret}")
     protected String secret;
+
+    @Value("${tbk.domain.name}")
+    protected String domainName;
 
     @Autowired
     protected IRedisJsonStringService redisJsonStringService;

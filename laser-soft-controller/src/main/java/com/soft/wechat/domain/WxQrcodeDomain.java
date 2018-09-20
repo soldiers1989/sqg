@@ -1,4 +1,4 @@
-package com.soft.wechat.dto;
+package com.soft.wechat.domain;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  * describe:
  *
  */
-public class WxQrcodeActionDTO implements Serializable {
+public class WxQrcodeDomain implements Serializable {
 
     /**
      * 

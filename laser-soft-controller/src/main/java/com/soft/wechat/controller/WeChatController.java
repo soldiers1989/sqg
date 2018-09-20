@@ -124,6 +124,6 @@ public class WeChatController {
             break;
         }
         request.setAttribute("path", "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + path);
-        return "index";
+        return "wxjqr";
     }
 }

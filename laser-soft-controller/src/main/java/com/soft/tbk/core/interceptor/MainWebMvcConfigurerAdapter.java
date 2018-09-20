@@ -3,6 +3,7 @@ package com.soft.tbk.core.interceptor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -21,7 +22,7 @@ public class MainWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        InterceptorRegistration addInterceptor = registry.addInterceptor(new MainHandlerInterceptor());
+        InterceptorRegistration addInterceptor = registry.addInterceptor(myAuthInterceptor());
         addInterceptor.excludePathPatterns("/error");
         addInterceptor.excludePathPatterns("/static");
         addInterceptor.excludePathPatterns("/laserDirect");
@@ -55,6 +56,12 @@ public class MainWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
         fastConverter.setSupportedMediaTypes(fastMediaTypes);
         fastConverter.setFastJsonConfig(fastJsonConfig);
         converters.add(fastConverter);
+    }
+
+    @Bean
+    public MainHandlerInterceptor myAuthInterceptor() {
+
+        return new MainHandlerInterceptor();
     }
 
 }

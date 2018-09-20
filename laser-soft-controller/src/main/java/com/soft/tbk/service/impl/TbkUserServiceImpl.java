@@ -19,6 +19,7 @@ import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
 import com.soft.tbk.model.TbkUser;
 import com.soft.tbk.service.TbkUserService;
+import com.soft.tbk.utils.BeanUtils;
 
 @Service
 public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserService {
@@ -40,17 +41,23 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         map.put("userOpenid", tbkUser.getUserOpenid());
         List<TbkUser> list = queryTbkUsersModel(map);
         if (list != null && !list.isEmpty()) {
-            return null;
-        }
-        Integer parentId = tbkUser.getParentId();
-        if (parentId != null) {
-            TbkUser parentUser = getTbkUser(parentId);
-            String parentIdPath = parentId + "";
-            if (parentUser != null && parentUser.getParentId() != null) {
-                // 2级
-                parentIdPath = parentUser.getParentId() + "," + parentId;
+            TbkUser oldtbkUser = list.get(0);
+            try {
+                BeanUtils.copyAllPropertysNotNull(oldtbkUser, tbkUser);
+            } catch (Exception e) {}
+            updateTbkUser(oldtbkUser);
+            return oldtbkUser;
+        } else {
+            Integer parentId = tbkUser.getParentId();
+            if (parentId != null) {
+                TbkUser parentUser = getTbkUser(parentId);
+                String parentIdPath = parentId + "";
+                if (parentUser != null && parentUser.getParentId() != null) {
+                    // 2级
+                    parentIdPath = parentUser.getParentId() + "," + parentId;
+                }
+                tbkUser.setParentIdPath(parentIdPath);
             }
-            tbkUser.setParentIdPath(parentIdPath);
         }
         return saveTbkUser(tbkUser);
     }

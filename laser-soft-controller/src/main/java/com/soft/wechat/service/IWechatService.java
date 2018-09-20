@@ -1,28 +1,27 @@
 package com.soft.wechat.service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public interface IWechatService {
 
-    public String getAccessTokenCache();
-
     /**
-     * 获取授权请求地址
+     * 获取全局token
      * 
      * @return
      */
-    public String getWeChartUrl(String redirectUri, String state);
+    public String getAccessTokenCache();
 
     /**
-     * 获取返回授权码
+     * 微信授权登录
      */
-    public String getauthcode(HttpServletRequest request);
+    public boolean requestAuth(HttpServletRequest request, HttpServletResponse response, String contextPath, String url);
 
     /**
-     * 参数
+     * 创建二维码
      * 
      * @param code
      * @return

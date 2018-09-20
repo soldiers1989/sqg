@@ -2,11 +2,9 @@ package com.soft.tbk.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -788,6 +786,12 @@ public class BeanUtils {
         return obj;
     }
 
+    /**
+     * 
+     * @param arg0 目标数据
+     * @param arg1 源数据
+     * @throws Exception
+     */
     public static void copyAllPropertysNotNull(Object arg0, Object arg1) throws Exception {
 
         if (null != arg0 && null != arg1) {
@@ -830,6 +834,5 @@ public class BeanUtils {
         }
         return fieldList;
     }
-
 
 }
