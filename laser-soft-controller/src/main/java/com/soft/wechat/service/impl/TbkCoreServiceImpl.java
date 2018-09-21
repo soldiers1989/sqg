@@ -38,13 +38,13 @@ import com.soft.wechat.util.Coupon;
 import com.taobao.api.response.TbkItemInfoGetResponse;
 
 @Service
-public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreService{
+public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private TbkUserService tbkUserService;
-    
+
     @Autowired
     private TbkPidItemService tbkPidItemService;
 
@@ -56,34 +56,32 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
 
     @Autowired
     private TbkCouponService tbkCouponService;
-    
+
     @Autowired
     private TbkRateService tbkRateService;
 
     @Autowired
     private TbkCommissionService tbkCommissionService;
 
-
-    
     @Override
     public TbkUser loadTbkUserInfo(String openid, Integer parentUserId) {
 
         Map<String, Object> map = new HashMap<String, Object>();
-        
+
         map.put("userOpenid", openid);
-        
+
         QueryResult<TbkUser> queryResult = tbkUserService.queryTbkUser(map);
-        
+
         if (queryResult != null && queryResult.getList() != null && !queryResult.getList().isEmpty()) {
             return queryResult.getList().get(0);
         }
-        
+
         TbkUser tbkUser = new TbkUser();
         tbkUser.setParentId(parentUserId);
         tbkUser.setUserOpenid(openid);
-        
+
         tbkUser = tbkUserService.saveTbkUser(tbkUser);
-        
+
         return tbkUser;
     }
 
@@ -91,11 +89,11 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
     public TbkCoupon createTbkCoupon(String tkl, TbkUser tbkUser) {
 
         JSONObject object = Coupon.getTBKItemByToken(tkl);
-        
+
         String itemId = Coupon.parseItemId(object.getString("url"), tkl);
-        
+
         TbkItemInfoGetResponse itemObject = Coupon.getItemDetail(itemId);
-        
+
         TbkCoupon tbkCoupon = new TbkCoupon();
 
         if (itemObject == null || !itemObject.isSuccess()) {
@@ -103,11 +101,11 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
             tbkCoupon.setTkl("该商品暂不参与优惠活动◕╭╮◕试试其它商品，也许会有意外的惊喜哦！！~~");
             return tbkCoupon;
         }
-        
+
         Integer userId = tbkUser.getId();
-        
+
         String pid = loadAvailablePid(userId, itemId);
-        
+
         CouponContext context = new CouponContext();
         context.setItemId(itemId);
         context.setPid(pid);
@@ -115,52 +113,52 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         context.setTkl(tkl);
         context.setItemObject(itemObject);
         context.setTbkCoupon(tbkCoupon);
-        
+
         BigDecimal userRate = tbkRateService.getRateByLevel(TbkConstants.USER_LEVEL_1, TbkConstants.RATE_LEVEL_0);
-        
+
         context.setUserRate(userRate);
-        
+
         Coupon.getHaveCouponItem(context);
-        
+
         tbkCoupon.setUserId(userId);
         tbkCouponService.saveTbkCoupon(tbkCoupon);
-        
+
         return tbkCoupon;
     }
 
     private String loadAvailablePid(Integer userId, String itemId) {
-        
+
         TbkPidItem tbkPidItem = getPidItemByItemId(itemId, null, userId, null);
-        
+
         if (tbkPidItem == null) {
             tbkPidItem = getPidItemByItemId(itemId, null, null, null);
-        }else {
+        } else {
             return tbkPidItem.getPid();
         }
-        
+
         String pid = "";
         String nextPid = "";
         TbkPid tbkPid = null;
         if (tbkPidItem != null) {
             pid = tbkPidItem.getNextPid();
             tbkPid = getTbkPidByPid(pid);
-        }else {
-            tbkPid  = tbkPidService.getTbkPidByIndex(0);
+        } else {
+            tbkPid = tbkPidService.getTbkPidByIndex(0);
         }
-        TbkPid nextTbkPid  = tbkPidService.getTbkPidByIndex(tbkPid.getOrderIndex());
-        
+        TbkPid nextTbkPid = tbkPidService.getTbkPidByIndex(tbkPid.getOrderIndex());
+
         TbkPidItem userTbkPidItem = null;
         //无可用推广位
         if (nextTbkPid == null) {
             String orderStr = "UPDATE_TIME ASC";
             userTbkPidItem = getPidItemByItemId(itemId, null, null, orderStr);
         }
-        
+
         try {
             if (userTbkPidItem != null) {
                 userTbkPidItem.setUserId(userId);
                 tbkPidItemService.updateTbkPidItem(userTbkPidItem);
-            }else {
+            } else {
                 userTbkPidItem = new TbkPidItem();
                 pid = tbkPid.getPid();
                 nextPid = nextTbkPid.getPid();
@@ -179,6 +177,7 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
     }
 
     private TbkPidItem getPidItemByItemId(String itemId, String pid, Integer userId, String orderStr) {
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("itemId", Long.valueOf(itemId));
         if (userId != null) {
@@ -198,8 +197,9 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         }
         return tbkPidItem;
     }
-    
+
     private TbkPid getTbkPidByPid(String pid) {
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("pid", pid);
         QueryResult<TbkPid> queryReuslt = tbkPidService.queryTbkPid(map);
@@ -212,35 +212,35 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
 
     @Override
     public void saveOrder(TbkOrder tbkOrder) {
-        
-        if (tbkOrder == null) 
+
+        if (tbkOrder == null)
             return;
-        
+
         QueryResult<TbkOrder> queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeId", tbkOrder.getTradeId()));
-        
+
         if (queryReulst != null && ListUtil.isNotEmpty(queryReulst.getList())) {
             return;
         }
-        
+
         TbkPidItem tbkPidItem = getPidItemByItemId(tbkOrder.getItemId().toString(), tbkOrder.getPid(), null, null);
-        
+
         if (tbkPidItem != null) {
-            
+
             tbkOrder.setUserId(tbkPidItem.getUserId());
-            
+
         }
-        
+
         tbkOrderService.saveTbkOrder(tbkOrder);
-        
+
     }
-    
-    
+
     /**
      * 封装佣金记录
      * 
      * @param amount 总佣金
      * @param userId 用户id
      */
+    @Override
     public void saveCommissionList(BigDecimal amount, Integer userId, Integer orderId) {
 
         try {
@@ -255,7 +255,8 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
                 } else {
                     if (userIds.length == 1) {
                         // 一级佣金
-                        TbkCommission tbkCommission = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_1, orderId);
+                        TbkCommission tbkCommission = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_1,
+                                        orderId);
                         if (tbkCommission != null) {
                             tbkCommission.setRelationUserId(userId);
                             list.add(tbkCommission);
@@ -263,12 +264,14 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
                     }
                     if (userIds.length == 2) {
                         // 二级佣金
-                        TbkCommission tbkCommission2 = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_2, orderId);
+                        TbkCommission tbkCommission2 = makeCommission(amount, Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_2,
+                                        orderId);
                         if (tbkCommission2 != null) {
                             tbkCommission2.setRelationUserId(userId);
                             list.add(tbkCommission2);
                         }
-                        TbkCommission tbkCommission1 = makeCommission(amount, Integer.parseInt(userIds[1]), TbkConstants.RATE_LEVEL_1, orderId);
+                        TbkCommission tbkCommission1 = makeCommission(amount, Integer.parseInt(userIds[1]), TbkConstants.RATE_LEVEL_1,
+                                        orderId);
                         if (tbkCommission1 != null) {
                             tbkCommission1.setRelationUserId(userId);
                             list.add(tbkCommission1);
@@ -288,15 +291,15 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         if (tbkUser == null)
             return null;
         String userLevel = tbkUser.getUserLevel();
-        
+
         if (StringUtils.isBlank(userLevel)) {
             userLevel = TbkConstants.USER_LEVEL_1;// 默认
         }
-        
+
         if (TbkConstants.RATE_LEVEL_0.equals(rateLevel)) {
             userLevel = TbkConstants.USER_LEVEL_1;
         }
-        
+
         BigDecimal rate = tbkRateService.getRateByLevel(userLevel, rateLevel);
         TbkCommission tbkCommission = new TbkCommission();
         tbkCommission.setCommissionType(rateLevel.toString());

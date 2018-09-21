@@ -907,19 +907,32 @@ public class DateUtil {
         return cal.getTime();
     }
 
+    public static String getLastDayOfMonth(int year, int month) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DATE));
+        return new SimpleDateFormat("yyyy-MM-dd ").format(cal.getTime());
+    }
+
+    public static String getFirstDayOfMonth(int year, int month) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getMinimum(Calendar.DATE));
+        return new SimpleDateFormat("yyyy-MM-dd ").format(cal.getTime());
+    }
+
     public static void main(String[] args) throws Exception {
-        // Date pprice =new Date();
 
-        // System.out.println(pprice);
-        // System.out.println(pprice.getTime());
-        // Long a=pprice.getTime()+480000;
-        // System.out.println(a);
-        // System.out.println(new Date(a));
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        System.out.println(getDateStr(DateUtil.DATESHOWFORMAT));
-
+        Date date = new Date();
+        int year = getYear(date);
+        int month = getMonth(date) - 1;
+        String lastDay = getLastDayOfMonth(year, month);
+        String firstDay = getFirstDayOfMonth(year, month);
+        System.out.println(firstDay);
+        System.out.println(lastDay);
     }
 }

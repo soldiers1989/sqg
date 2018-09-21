@@ -79,8 +79,11 @@
       <if test="commissionRate != null">
         AND (COMMISSION_RATE = #{commissionRate})
       </if>
-      <if test="tradeTime != null">
-        AND (TRADE_TIME = #{tradeTime})
+      <if test="startDate != null and startDate.trim().length() != 0">
+         AND (TRADE_TIME &gt;= #{startDate}) 
+      </if>
+      <if test="endDate != null and endDate.trim().length() != 0">
+         AND (TRADE_TIME &lt;= #{endDate}) 
       </if>
       <if test="earningTime != null">
         AND (EARNING_TIME = #{earningTime})
@@ -158,8 +161,11 @@
       <if test="commissionRate != null">
         AND (COMMISSION_RATE = #{commissionRate})
       </if>
-      <if test="tradeTime != null">
-        AND (TRADE_TIME = #{tradeTime})
+      <if test="startDate != null and startDate.trim().length() != 0">
+         AND (TRADE_TIME &gt;= #{startDate}) 
+      </if>
+      <if test="endDate != null and endDate.trim().length() != 0">
+         AND (TRADE_TIME &lt;= #{endDate}) 
       </if>
       <if test="earningTime != null">
         AND (EARNING_TIME = #{earningTime})
