@@ -16,6 +16,7 @@ import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
 import com.soft.tbk.model.TbkAccount;
 import com.soft.tbk.service.TbkAccountService;
+import com.soft.tbk.utils.ListUtil;
 
 @Service
 public class TbkAccountServiceImpl extends BaseServiceImpl implements TbkAccountService{
@@ -171,6 +172,17 @@ public class TbkAccountServiceImpl extends BaseServiceImpl implements TbkAccount
             logger.error(e.getMessage(), e);
             throw new ApiException(SYS_CODE + ".insertBatch", "插入失败");
         }
+    }
+
+
+    @Override
+    public TbkAccount getTbkAccountByUserId(Integer userId) {
+
+        List<TbkAccount> result = queryTbkAccountsModel(getQueryParamMap("userId", userId));
+        if (ListUtil.isNotEmpty(result)) {
+            return result.get(0);
+        }
+        return null;
     }
 
 }

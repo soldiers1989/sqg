@@ -34,7 +34,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
         if (userSession == null) {
             if ("/web/account/index".equals(url)) {
                 // 暂时就个人中心
-                wechatService.requestAuth(request, response, contentPath, url);
+                //wechatService.requestAuth(request, response, contentPath, url);
             } else {
                 // TODO
                 //                logger.info("没有登录");

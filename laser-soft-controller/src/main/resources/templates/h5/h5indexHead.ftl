@@ -20,6 +20,7 @@
 	<script type="text/javascript" src="../../static/js/style.js"></script>
 	<script type="text/javascript" src="../../static/js/city-picker.min.js" ></script>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" ></script>
+	<script type="text/javascript" src="../../static/js/clipboard.min.js" ></script>
 	
 	<script src="../../static/js/jquery.form.js"></script>
 	<script src="../../static/js/common.js"></script>

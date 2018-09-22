@@ -1,6 +1,7 @@
 package com.soft.tbk.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +15,11 @@ import com.soft.tbk.base.BaseServiceImpl;
 import com.soft.tbk.dao.TbkOrderMapper;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
+import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
+import com.soft.tbk.service.TbkCouponService;
 import com.soft.tbk.service.TbkOrderService;
+import com.soft.tbk.utils.ListUtil;
 
 @Service
 public class TbkOrderServiceImpl extends BaseServiceImpl implements TbkOrderService{
@@ -26,6 +30,9 @@ public class TbkOrderServiceImpl extends BaseServiceImpl implements TbkOrderServ
 
     @Autowired
     private TbkOrderMapper tbkOrderMapper;
+    
+    @Autowired
+    private TbkCouponService tbkCouponService;
 
     @Override
     public TbkOrder saveTbkOrder(TbkOrder tbkOrder) throws ApiException {
@@ -46,6 +53,15 @@ public class TbkOrderServiceImpl extends BaseServiceImpl implements TbkOrderServ
         }
         tbkOrder.setCreateTime(new Date());
         tbkOrder.setUpdateTime(new Date());
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("itemId", tbkOrder.getItemId());
+        map.put("pageNum", 1);
+        map.put("pageSize", 1);
+        QueryResult<TbkCoupon> queryResult = tbkCouponService.queryTbkCoupon(map);
+        if (queryResult != null && ListUtil.isNotEmpty(queryResult.getList())) {
+            tbkOrder.setItemImage(queryResult.getList().get(0).getItemImage());
+        }
     }
 
     private void check(TbkOrder tbkOrder) {

@@ -957,7 +957,7 @@ input.panel_check[type=checkbox]:checked:before{
     flex-wrap:wrap;
 }
 .shopcart_price{
-	width: 60%;
+	/* width: 60%; */
 	font-size: 12px;
 	color: #999999;
 }
@@ -967,7 +967,7 @@ input.panel_check[type=checkbox]:checked:before{
 	font-size: 16px;
 }
 .shopcart_number{
-	width: 40%;
+	/* width: 40%; */
 	text-align: right;
 }
 .shopcart_function{
@@ -1169,28 +1169,28 @@ input.custom_radio[type=radio]:checked:before {
 /*我的*/
 .account_bg{
 	position: relative;
-	height: 151px;
+	height: 100px;
 	width: 100%;
 	background-size: 100% 100%;
 }
 .user_info{
-	padding: 30px 15px;
-	text-align: center;
-	 background: -webkit-linear-gradient(left top, #bee3bf ,#85d489); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(bottom right, #bee3bf ,#85d489); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(bottom right, #bee3bf ,#85d489); /* Firefox 3.6 - 15 */
-	background: linear-gradient(to bottom right, #bee3bf ,#85d489 );
+	padding: 20px 15px;
+	background: -webkit-linear-gradient(left top, #FFE7BA ,#9ACD32); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(bottom right, #FFE7BA ,#9ACD32); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(bottom right, #FFE7BA ,#9ACD32); /* Firefox 3.6 - 15 */
+	background: linear-gradient(to bottom right, #FFE7BA ,#9ACD32 );
 }
 .content .weui-cells{
 	margin:0px 0px 10px 0px;
 }
 
 .user_pic{
-	display: inline-block;
 	width: 66px;
 	height: 66px;
 	border: 3px solid rgba(255,255,255,0.4);
 	border-radius: 50%;
+	display:inline-block;
+	float: left;
 }
 .user_pic img{
 	width: 60px;
@@ -1198,9 +1198,22 @@ input.custom_radio[type=radio]:checked:before {
 	border-radius: 50%;
 }
 .user_text{
+	height: 60px;
 	color: white;
-	font-size: 18px;
-	line-height: 25px;
+	font-size: 12px;
+	display:inline-block;
+    padding-left: 10px;
+    padding-top: 15px;
+}
+.vip_span{
+	border-radius: 5px;
+	color: #FFFFFF;
+	font-size: 14px;
+	background-color: #FFD700;
+	text-align: center;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-family: "微软雅黑";
 }
 .round_icon{
 	display: inline-block;
@@ -1433,7 +1446,7 @@ a.weui-media-box.bankcard_add{
 }
 /*我的订单*/
 .content-padded{
-	padding-top: 30px;
+	padding-top: 5px;
 	padding-bottom: 10px;
 }
 .content-padded .weui-panel__hd{
@@ -1469,8 +1482,8 @@ a.weui-panel__hd,a.weui-panel__bd{
 	background-color: #f5f5f5;
 }
 .order_btn{
-	padding: 10px 15px;
-	text-align: right;
+	padding: 2px 15px;
+	text-align: left;
 }
 .order_btn .weui-btn{
 	margin: 5px;
@@ -1523,6 +1536,7 @@ a.weui-panel__hd,a.weui-panel__bd{
 .order_state_preview__bd .weui-form-preview__item:last-child{
 	border-top: 1px solid #E7E7E7;
 }
+
 /*新闻*/
 .news_list_item .weui-cell__bd{
 	width: 88%;

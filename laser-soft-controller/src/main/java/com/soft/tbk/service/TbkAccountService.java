@@ -43,6 +43,14 @@ public interface TbkAccountService extends BaseService{
     public TbkAccount getTbkAccount(Integer id);
 
     /**
+     * 根據ID獲取
+     * 
+     * @param id
+     * @return
+     */
+    public TbkAccount getTbkAccountByUserId(Integer userId);
+
+    /**
      * 查询
      * 
      * @param map

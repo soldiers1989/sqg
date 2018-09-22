@@ -55,6 +55,22 @@ public class BusinessService {
         
     }
 
+   public void batchSettleOrderList(List<TbkOrder> orderList) {
+       
+       if (ListUtil.isEmpty(orderList)) {
+           return;
+       }
+       
+       for (TbkOrder tbkOrder : orderList) {
+           try {
+               tbkCoreService.saveOrder(tbkOrder);         
+           } catch (Exception e) {
+               logger.error("BusinessService.batchOrderList", e);
+           }
+       }
+       
+   }
+
 
     public String returnTKL(String tkl, String openId) {
 
