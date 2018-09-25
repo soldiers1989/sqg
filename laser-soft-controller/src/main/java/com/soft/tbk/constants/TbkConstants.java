@@ -33,5 +33,12 @@ public class TbkConstants {
     
     public static final String USER_LEVEL_9 = "9";  //用户等级
     
+    
+    public static final Integer COMMSION_STATUS_0 = 0;//付款预估
 
+    
+    public static final Integer COMMSION_STATUS_1 = 1;//结算预估
+
+
+    public static final Integer COMMSION_STATUS_2 = 2;//失效
 }

@@ -63,7 +63,7 @@ public class BusinessService {
        
        for (TbkOrder tbkOrder : orderList) {
            try {
-               tbkCoreService.saveOrder(tbkOrder);         
+               tbkCoreService.settleOrder(tbkOrder);         
            } catch (Exception e) {
                logger.error("BusinessService.batchOrderList", e);
            }

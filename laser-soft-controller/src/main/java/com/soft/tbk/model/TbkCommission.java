@@ -51,6 +51,26 @@ public class TbkCommission {
      */
     @Column(name = "COMMISSION_TYPE")
     private String commissionType;
+    
+    /**
+     * 创建时间
+     */
+    @Column(name = "SETTLE_TIME")
+    private Date settleTime;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "TRADE_TIME")
+    private Date tradeTime;
+
+    /**
+     * 佣金状态
+     */
+    @Column(name = "COMMISSION_STATUS")
+    private Integer commissionStatus;
+
+    
 
     /**
      * @return ID
@@ -191,4 +211,30 @@ public class TbkCommission {
     public void setCommissionType(String commissionType) {
         this.commissionType = commissionType == null ? null : commissionType.trim();
     }
+
+    public Date getSettleTime() {
+        return settleTime;
+    }
+
+    public Date getTradeTime() {
+        return tradeTime;
+    }
+
+    public Integer getCommissionStatus() {
+        return commissionStatus;
+    }
+
+    public void setSettleTime(Date settleTime) {
+        this.settleTime = settleTime;
+    }
+
+    public void setTradeTime(Date tradeTime) {
+        this.tradeTime = tradeTime;
+    }
+
+    public void setCommissionStatus(Integer commissionStatus) {
+        this.commissionStatus = commissionStatus;
+    }
+    
+    
 }

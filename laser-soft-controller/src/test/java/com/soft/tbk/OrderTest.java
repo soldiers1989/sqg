@@ -1,5 +1,7 @@
 package com.soft.tbk;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class OrderTest {
         tbkOrder.setTradeStatus(3);
         tbkOrder.setUserId(5);
         tbkOrder.setItemId(549239069755L);
+        tbkOrder.setTradeTime(new Date());
+        tbkOrder.setEarningTime(new Date());
         tbkCoreService.settleOrder(tbkOrder);
     }
 }

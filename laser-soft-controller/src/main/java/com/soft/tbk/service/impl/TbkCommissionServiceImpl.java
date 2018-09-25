@@ -173,4 +173,18 @@ public class TbkCommissionServiceImpl extends BaseServiceImpl implements TbkComm
         }
     }
 
+
+    @Override
+    public boolean updateCommissionStatus(Integer orderId, Integer commissionStatus, Date settleDate) throws ApiException {
+        try {
+            int rows = tbkCommissionMapper.updateStatusByOrderId(getQueryParamMap("orderId,commissionStatus,settleDate", orderId, commissionStatus, settleDate));
+            if (rows > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.soft.tbk.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,5 +53,14 @@ public interface TbkCommissionService extends BaseService{
 
     
     public void insertBatch(List<TbkCommission> tbkCommissionList);
+    
+    
+    /**
+     * 
+     * @param tbkCommission
+     */
+    public boolean updateCommissionStatus(Integer orderId, Integer commissionStatus, Date settleDate) throws ApiException;
+
+
 
 }

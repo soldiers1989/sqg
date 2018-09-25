@@ -13,12 +13,16 @@
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="COMMISSION_TYPE" jdbcType="VARCHAR" property="commissionType" />
+    <result column="SETTLE_TIME" jdbcType="TIMESTAMP" property="settleTime" />
+    <result column="TRADE_TIME" jdbcType="TIMESTAMP" property="tradeTime" />
+    <result column="COMMISSION_STATUS" jdbcType="INTEGER" property="commissionStatus" />
+    
   </resultMap>
   <sql id="Base_Column_List">
     <!--
       WARNING - @mbg.generated
     -->
-    ID, ORDER_ID, USER_ID, RELATION_USER_ID, COMMISSION, CREATE_TIME, UPDATE_TIME, COMMISSION_TYPE
+    ID, ORDER_ID, USER_ID, RELATION_USER_ID, COMMISSION, CREATE_TIME, UPDATE_TIME, COMMISSION_TYPE, SETTLE_TIME, TRADE_TIME, COMMISSION_STATUS
   </sql>
   <sql id="t_tbk_commission_query_fuzzy_condition">
     <trim prefix="WHERE" prefixOverrides="AND |OR ">
@@ -89,9 +93,9 @@
   </select>
   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
     insert into t_tbk_commission ( 
-    ID,ORDER_ID,USER_ID,RELATION_USER_ID,COMMISSION,CREATE_TIME,UPDATE_TIME,COMMISSION_TYPE ) values 
+    ID,ORDER_ID,USER_ID,RELATION_USER_ID,COMMISSION,CREATE_TIME,UPDATE_TIME,COMMISSION_TYPE,SETTLE_TIME, TRADE_TIME, COMMISSION_STATUS ) values 
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=INTEGER},#{item.orderId,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.relationUserId,jdbcType=INTEGER},#{item.commission,jdbcType=DECIMAL},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP},#{item.commissionType,jdbcType=VARCHAR} ) 
+       ( #{item.id,jdbcType=INTEGER},#{item.orderId,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.relationUserId,jdbcType=INTEGER},#{item.commission,jdbcType=DECIMAL},#{item.createTime,jdbcType=TIMESTAMP},#{item.updateTime,jdbcType=TIMESTAMP},#{item.commissionType,jdbcType=VARCHAR},#{item.settleTime,jdbcType=TIMESTAMP},#{item.tradeTime,jdbcType=TIMESTAMP},#{item.commissionStatus,jdbcType=INTEGER} ) 
     </foreach>
   </insert>
   <select id="count" resultType="int">
@@ -114,4 +118,12 @@
        and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
     </if>
   </update>
+  <update id="updateStatusByOrderId" parameterType="Map">
+    update t_tbk_commission 
+     set COMMISSION_STATUS = #{commissionStatus,jdbcType=INTEGER},UPDATE_TIME=SYSDATE(),SETTLE_TIME=#{settleDate,jdbcType=TIMESTAMP}
+    where ORDER_ID = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+  
+  
 </mapper>

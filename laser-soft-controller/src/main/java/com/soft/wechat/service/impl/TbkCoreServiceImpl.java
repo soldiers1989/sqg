@@ -232,6 +232,10 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
 
         tbkOrderService.saveTbkOrder(tbkOrder);
 
+        if (tbkOrder.getUserId() != null) {
+            saveCommissionList(new BigDecimal(tbkOrder.getTotalCommissionFee()), tbkOrder.getUserId(), tbkOrder);
+        }
+ 
     }
 
     /**
@@ -240,14 +244,16 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
      * @param amount 总佣金
      * @param userId 用户id
      */
-    public void saveCommissionList(BigDecimal amount, Integer userId, Integer orderId) {
+    public void saveCommissionList(BigDecimal amount, Integer userId, TbkOrder tbkOrder) {
 
         try {
             List<TbkCommission> list = new ArrayList<>();
-            TbkCommission topTbkCommission = makeCommission(amount, userId, TbkConstants.RATE_LEVEL_0, orderId);
-            
+            TbkCommission topTbkCommission = makeCommission(amount, userId, TbkConstants.RATE_LEVEL_0, tbkOrder);
+            topTbkCommission.setTradeTime(tbkOrder.getTradeTime());
             list.add(topTbkCommission);// 自己的佣金
+            
             TbkUser tbkUser = tbkUserService.getTbkUser(userId);
+            
             if (tbkUser != null && StringUtils.isNotBlank(tbkUser.getParentIdPath())) {
                 String parentIdPath = tbkUser.getParentIdPath();
                 String[] userIds = parentIdPath.split(",");
@@ -256,7 +262,8 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
                 } else {
                     if (userIds.length == 1) {
                         // 一级佣金
-                        TbkCommission tbkCommission = makeCommission(topTbkCommission.getCommission(), Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_1, orderId);
+                        TbkCommission tbkCommission = makeCommission(topTbkCommission.getCommission(), Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_1, tbkOrder);
+
                         if (tbkCommission != null) {
                             tbkCommission.setRelationUserId(userId);
                             list.add(tbkCommission);
@@ -264,13 +271,13 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
                     }
                     if (userIds.length == 2) {
                         
-                        TbkCommission tbkCommission1 = makeCommission(topTbkCommission.getCommission(), Integer.parseInt(userIds[1]), TbkConstants.RATE_LEVEL_1, orderId);
+                        TbkCommission tbkCommission1 = makeCommission(topTbkCommission.getCommission(), Integer.parseInt(userIds[1]), TbkConstants.RATE_LEVEL_1, tbkOrder);
                         if (tbkCommission1 != null) {
                             tbkCommission1.setRelationUserId(userId);
                             list.add(tbkCommission1);
                         }
                         // 二级佣金
-                        TbkCommission tbkCommission2 = makeCommission(topTbkCommission.getCommission(), Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_2, orderId);
+                        TbkCommission tbkCommission2 = makeCommission(topTbkCommission.getCommission(), Integer.parseInt(userIds[0]), TbkConstants.RATE_LEVEL_2, tbkOrder);
                         if (tbkCommission2 != null) {
                             tbkCommission2.setRelationUserId(userId);
                             list.add(tbkCommission2);
@@ -284,7 +291,7 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         }
     }
 
-    private TbkCommission makeCommission(BigDecimal amount, Integer userId, Integer rateLevel, Integer orderId) {
+    private TbkCommission makeCommission(BigDecimal amount, Integer userId, Integer rateLevel,  TbkOrder tbkOrder) {
 
         TbkUser tbkUser = tbkUserService.getTbkUser(userId);
         if (tbkUser == null)
@@ -298,15 +305,18 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         if (TbkConstants.RATE_LEVEL_0.equals(rateLevel)) {
             userLevel = TbkConstants.USER_LEVEL_1;
         }
-
+        
         BigDecimal rate = tbkRateService.getRateByLevel(userLevel, rateLevel);
         TbkCommission tbkCommission = new TbkCommission();
         tbkCommission.setCommissionType(rateLevel.toString());
-        tbkCommission.setOrderId(orderId);
+        tbkCommission.setOrderId(tbkOrder.getId());
         tbkCommission.setUserId(userId);
         tbkCommission.setCommission(amount.multiply(rate).divide(new BigDecimal(100), 2).setScale(2, BigDecimal.ROUND_HALF_DOWN));
         tbkCommission.setCreateTime(new Date());
         tbkCommission.setUpdateTime(new Date());
+        tbkCommission.setTradeTime(tbkOrder.getTradeTime());
+        tbkCommission.setCommissionStatus(TbkConstants.COMMSION_STATUS_0);
+        
         return tbkCommission;
     }
 
@@ -320,20 +330,22 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         
         if (queryReulst == null || ListUtil.isEmpty(queryReulst.getList())) {
             TbkPidItem tbkPidItem = getPidItemByItemId(tbkOrder.getItemId().toString(), tbkOrder.getPid(), null, null);
-            
             if (tbkPidItem != null) {
-                
                 tbkOrder.setUserId(tbkPidItem.getUserId());
-                
             }
             tbkOrderService.saveTbkOrder(tbkOrder);
+            
+            if (tbkOrder.getUserId() != null) {
+                saveCommissionList(new BigDecimal(tbkOrder.getTotalCommissionFee()), tbkOrder.getUserId(), tbkOrder);
+            }
+            
         }else {
             tbkOrder.setId(queryReulst.getList().get(0).getId());
             tbkOrderService.updateTbkOrder(tbkOrder);
         }
         
-        saveCommissionList(new BigDecimal(tbkOrder.getTotalCommissionFee()), tbkOrder.getUserId(), tbkOrder.getId());
-        
+        //更新佣金状态
+        tbkCommissionService.updateCommissionStatus(tbkOrder.getId(), TbkConstants.COMMSION_STATUS_1, tbkOrder.getEarningTime());
     }
 
 }

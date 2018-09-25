@@ -14,5 +14,7 @@ public interface TbkCommissionMapper extends BaseMapper<TbkCommission> {
 
     int updateStateByPrimaryKey(Map<String, Object> map);
 
+    int updateStatusByOrderId(Map<String, Object> map);
+
     void insertBatch(List<TbkCommission> list);
 }

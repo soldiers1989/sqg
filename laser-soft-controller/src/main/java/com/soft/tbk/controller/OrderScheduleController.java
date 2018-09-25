@@ -52,7 +52,7 @@ public class OrderScheduleController extends BaseController {
         orderMap.put("appkey", "1822410736221674");
         orderMap.put("appsecret", "1c6f031ac7bcf150ea983712fc413af2");
         orderMap.put("startTime", DateUtil.getDateString(now_10, DateUtil.DATETIMESHOWFORMAT));
-        orderMap.put("span", "60");
+        orderMap.put("span", "600");
         orderMap.put("pageNo", "1");
         orderMap.put("pageSize", "100");
         orderMap.put("tkStatus", "1");
@@ -119,7 +119,7 @@ public class OrderScheduleController extends BaseController {
         orderMap.put("appkey", "1822410736221674");
         orderMap.put("appsecret", "1c6f031ac7bcf150ea983712fc413af2");
         orderMap.put("startTime", DateUtil.getDateString(now_10, DateUtil.DATETIMESHOWFORMAT));
-        orderMap.put("span", "60");
+        orderMap.put("span", "600");
         orderMap.put("pageNo", "1");
         orderMap.put("pageSize", "100");
         orderMap.put("tkStatus", "1");
