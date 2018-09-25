@@ -55,7 +55,7 @@ public class SuperWechatService {
     protected final static String MENU_GET_URL = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=";
 
     //删除菜单
-    protected final static String MENU_DELETE_URL = "https://api.weixin.qq.com/cgi-bin/delete/get?access_token=";
+    protected final static String MENU_DELETE_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=";
 
     protected static final long TOKEN_TIME_OUT = 2 * 60 * 60 * 1000L;
 

@@ -24,7 +24,7 @@ import com.soft.wechat.service.SuperWechatService;
  *
  */
 @RestController
-@RequestMapping(value = "/web/wx",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/laserDirect/wx",produces = MediaType.APPLICATION_JSON_VALUE)
 public class WechatCon extends SuperWechatService {
 
     Logger logger = LoggerFactory.getLogger(WechatCon.class);
@@ -58,6 +58,19 @@ public class WechatCon extends SuperWechatService {
 
         String menuJson = json.toJSONString();
         String result = wechatService.createMenu(menuJson);
+        return new ResultResponse(result);
+    }
+
+    /**
+     * 查询菜单
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/menu/get")
+    public @ResponseBody ResultResponse getMenu(HttpServletRequest request) {
+
+        String result = wechatService.getMenu();
         return new ResultResponse(result);
     }
 

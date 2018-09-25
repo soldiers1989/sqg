@@ -182,6 +182,18 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     }
 
     @Override
+    public String getMenu() {
+
+        try {
+            String accessToken = getAccessTokenCache();
+            return WebUtils.doGet(MENU_GET_URL + accessToken, null);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    @Override
     public String deleteMenu() {
 
         try {
@@ -261,4 +273,5 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
             return openId.substring(openId.length() - 10);
         }
     }
+
 }

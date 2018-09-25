@@ -34,6 +34,11 @@ public interface IWechatService {
     public String createMenu(String menuJson);
 
     /**
+     * 查询菜单
+     */
+    public String getMenu();
+
+    /**
      * 删除菜单
      */
     public String deleteMenu();
