@@ -2,8 +2,6 @@ package com.soft.wechat.api;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +10,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -319,7 +315,8 @@ public class WechatApi {
         String url = conf.get("API_qrcode_img") + session.getUuid();
         HttpGet httpget = new HttpGet(url);
         log.info("获取二维码：Executing request " + httpget.getURI());
-        FileOutputStream fos;
+        return httpget.getURI().toString();
+        /*FileOutputStream fos;
         String path = this.iamgeImg + "/static/wechatLogin.jpg";
         try {
             HttpResponse response = https.execute(httpget);
@@ -339,7 +336,7 @@ public class WechatApi {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "/static/wechatLogin.jpg";
+        return "/static/wechatLogin.jpg";*/
     }
 
     /**

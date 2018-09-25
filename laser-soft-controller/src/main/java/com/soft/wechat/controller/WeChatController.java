@@ -1,5 +1,6 @@
 package com.soft.wechat.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -102,7 +103,7 @@ public class WeChatController {
      * @param response
      */
     @RequestMapping(value = "/wechatLogin/robot/{tenantCode}",method = RequestMethod.GET)
-    public String tulingLogin(HttpServletRequest request, HttpServletResponse response, @PathVariable("tenantCode") String tenantCode) {
+    public void tulingLogin(HttpServletRequest request, HttpServletResponse response, @PathVariable("tenantCode") String tenantCode) {
 
         System.setProperty("jsse.enableSNIExtension", "false");
         Environment environment = Environment.of("classpath:config.properties");
@@ -123,7 +124,12 @@ public class WeChatController {
             logger.info("二维码url==========>>> " + path);
             break;
         }
-        request.setAttribute("path", "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + path);
-        return "wxjqr";
+        try {
+            response.sendRedirect(path);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        //        request.setAttribute("path", "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + path);
+        //        return "wxjqr";
     }
 }
