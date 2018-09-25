@@ -35,7 +35,7 @@
            </div>
            <div class="weui-cell__ft">全部订单 </div>
          </a>
-	  <a class="weui-cell weui-cell_access" href="${sysContextPath}/web/trade/account/wallet">
+	  <a class="weui-cell weui-cell_access" href="${sysContextPath}/web/wallet/index">
            <div class="weui-cell__hd">
            		<span class="round_icon round_icon02"><i class="iconfont icon-qianbao-copy"></i></span>
            </div>
@@ -66,16 +66,21 @@
            <div class="weui-cell__ft"></div>
           </a>
         
-        	<a class="weui-cell weui-cell_access" href="">
+           <a class="weui-cell weui-cell_access" href="javascript:void(0);" onclick="about()">
            <div class="weui-cell__hd">
            		<span class="round_icon round_icon04"><i class="iconfont icon-gerenxinxi"></i></span>
            </div>
            <div class="weui-cell__bd">
              <p>关于我们</p>
            </div>
-           <div class="weui-cell__ft"></div>
           </a>
         </div>
 </div>
 </body>
 </html>
+<script>
+function about() {
+
+	$.alert("<p>逛淘宝、天猫你还在傻傻的直接买吗？淘宝购物省钱秘笈，不仅仅是大额优惠券，还可领取平台成交奖励现金。淘宝&天猫两大平台95%商品均可省</p><image src='${sysContextPath}/static/images/wx_logo.png'/><p>客服微信号：taotao12345</p><p>长按识别二维码</p>", "逛淘宝，上桃桃");
+}
+</script>

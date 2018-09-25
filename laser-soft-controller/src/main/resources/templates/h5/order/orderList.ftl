@@ -188,7 +188,7 @@ var tabNum = "${tabNum!'1'}";
 												"</div>"+
 											"</div>"+
 										"</a>";
-									html=html+"<div class='order_btn' style='font-size:13px'>订单日期<b>"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.tradeTime)) + "</div></div>"+
+									html=html+"<div class='order_btn' style='font-size:13px'>订单日期"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.tradeTime)) + "</div></div>"+
 											"</div>"+
 										"</div>"+
 									"</div>";
