@@ -2,7 +2,7 @@
 <body ontouchstart>
 		<!--底部固定按钮-->
 		<div class="function_block_btn">
-			<a href="javascript:void(0);" onclick="withdraw()" class="weui-btn  weui-btn_plain-primary">提 现</a>
+			<a href="${sysContextPath}/web/wallet/cash" onclick="" class="weui-btn  weui-btn_plain-primary">提 现</a>
 		</div>
 		<!--底部固定按钮  end-->
 		<!--content-->

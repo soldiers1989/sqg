@@ -3,6 +3,7 @@ package com.soft.wechat.service.impl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.soft.tbk.core.cache.CacheSync;
 import com.soft.tbk.domain.UserSession;
 import com.soft.tbk.service.TbkUserService;
@@ -272,6 +274,27 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         } else {
             return openId.substring(openId.length() - 10);
         }
+    }
+
+    @Override
+    public String sendMessage(Map<String, String> messageMap) {
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("touser", messageMap.get("userOpenId"));
+        paramMap.put("template_id", templateId);
+
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("first", "{\"value\":\"订单已生成\",\"color\":\"#173177\"}");
+        dataMap.put("keyword1", "{\"value\":\"" + messageMap.get("itemTitle") + "\",\"color\":\"#173177\"}");
+        dataMap.put("keyword2", "{\"value\":\"" + messageMap.get("itemPrice") + "\",\"color\":\"#173177\"}");
+        dataMap.put("keyword3", "{\"value\":\"" + messageMap.get("commission") + "\",\"color\":\"#173177\"}");
+        paramMap.put("data", JSONObject.toJSONString(dataMap));
+        try {
+            return WebUtils.doPostByJson(SEND_MESSAGE_URL + getAccessTokenCache(), paramMap, 0, 0);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
     }
 
 }

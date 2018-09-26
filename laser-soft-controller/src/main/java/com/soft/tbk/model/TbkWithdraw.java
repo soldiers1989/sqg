@@ -2,10 +2,14 @@ package com.soft.tbk.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "t_tbk_withdraw")
 public class TbkWithdraw {
+
     @Id
     @Column(name = "ID")
     private Integer id;
@@ -27,6 +31,12 @@ public class TbkWithdraw {
      */
     @Column(name = "AMOUNT")
     private BigDecimal amount;
+
+    /**
+     * 提现账号
+     */
+    @Column(name = "ACCOUNT")
+    private String account;
 
     /**
      * 提现说明
@@ -56,6 +66,7 @@ public class TbkWithdraw {
      * @return ID
      */
     public Integer getId() {
+
         return id;
     }
 
@@ -63,6 +74,7 @@ public class TbkWithdraw {
      * @param id
      */
     public void setId(Integer id) {
+
         this.id = id;
     }
 
@@ -72,6 +84,7 @@ public class TbkWithdraw {
      * @return USER_ID - 用户id
      */
     public Integer getUserId() {
+
         return userId;
     }
 
@@ -81,6 +94,7 @@ public class TbkWithdraw {
      * @param userId 用户id
      */
     public void setUserId(Integer userId) {
+
         this.userId = userId;
     }
 
@@ -90,6 +104,7 @@ public class TbkWithdraw {
      * @return CODE - 提现流水号
      */
     public String getCode() {
+
         return code;
     }
 
@@ -99,6 +114,7 @@ public class TbkWithdraw {
      * @param code 提现流水号
      */
     public void setCode(String code) {
+
         this.code = code == null ? null : code.trim();
     }
 
@@ -108,6 +124,7 @@ public class TbkWithdraw {
      * @return AMOUNT - 提现金额
      */
     public BigDecimal getAmount() {
+
         return amount;
     }
 
@@ -117,6 +134,7 @@ public class TbkWithdraw {
      * @param amount 提现金额
      */
     public void setAmount(BigDecimal amount) {
+
         this.amount = amount;
     }
 
@@ -126,6 +144,7 @@ public class TbkWithdraw {
      * @return REMARK - 提现说明
      */
     public String getRemark() {
+
         return remark;
     }
 
@@ -135,6 +154,7 @@ public class TbkWithdraw {
      * @param remark 提现说明
      */
     public void setRemark(String remark) {
+
         this.remark = remark == null ? null : remark.trim();
     }
 
@@ -144,6 +164,7 @@ public class TbkWithdraw {
      * @return STATUS - 提现状态
      */
     public Integer getStatus() {
+
         return status;
     }
 
@@ -153,6 +174,7 @@ public class TbkWithdraw {
      * @param status 提现状态
      */
     public void setStatus(Integer status) {
+
         this.status = status;
     }
 
@@ -162,6 +184,7 @@ public class TbkWithdraw {
      * @return UPDATE_TIME - 更新时间
      */
     public Date getUpdateTime() {
+
         return updateTime;
     }
 
@@ -171,6 +194,7 @@ public class TbkWithdraw {
      * @param updateTime 更新时间
      */
     public void setUpdateTime(Date updateTime) {
+
         this.updateTime = updateTime;
     }
 
@@ -180,6 +204,7 @@ public class TbkWithdraw {
      * @return CREATE_TIME - 创建时间
      */
     public Date getCreateTime() {
+
         return createTime;
     }
 
@@ -189,6 +214,17 @@ public class TbkWithdraw {
      * @param createTime 创建时间
      */
     public void setCreateTime(Date createTime) {
+
         this.createTime = createTime;
+    }
+
+    public String getAccount() {
+
+        return account;
+    }
+
+    public void setAccount(String account) {
+
+        this.account = account;
     }
 }

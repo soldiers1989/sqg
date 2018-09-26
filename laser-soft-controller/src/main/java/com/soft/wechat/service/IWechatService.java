@@ -1,5 +1,7 @@
 package com.soft.wechat.service;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,4 +45,8 @@ public interface IWechatService {
      */
     public String deleteMenu();
 
+    /**
+     * 发送模板消息
+     */
+    public String sendMessage(Map<String, String> messageMap);
 }

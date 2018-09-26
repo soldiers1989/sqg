@@ -9,6 +9,7 @@
     <result column="USER_ID" jdbcType="INTEGER" property="userId" />
     <result column="CODE" jdbcType="VARCHAR" property="code" />
     <result column="AMOUNT" jdbcType="DECIMAL" property="amount" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="STATUS" jdbcType="INTEGER" property="status" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
@@ -18,7 +19,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    ID, USER_ID, CODE, AMOUNT, REMARK, STATUS, UPDATE_TIME, CREATE_TIME
+    ID, USER_ID, CODE, AMOUNT,ACCOUNT, REMARK, STATUS, UPDATE_TIME, CREATE_TIME
   </sql>
   <sql id="t_tbk_withdraw_query_fuzzy_condition">
     <trim prefix="WHERE" prefixOverrides="AND |OR ">
@@ -30,6 +31,9 @@
       </if>
       <if test="amount != null">
         AND (AMOUNT = #{amount})
+      </if>
+      <if test="account != null and account.trim().length() != 0">
+         AND (ACCOUNT like concat('%',#{account},'%')) 
       </if>
       <if test="remark != null and remark.trim().length() != 0">
          AND (REMARK like concat('%',#{remark},'%')) 
@@ -55,6 +59,9 @@
       </if>
       <if test="amount != null">
         AND (AMOUNT = #{amount})
+      </if>
+      <if test="account != null and account.trim().length() != 0">
+        AND (ACCOUNT = #{account})
       </if>
       <if test="remark != null and remark.trim().length() != 0">
         AND (REMARK = #{remark})
@@ -89,9 +96,9 @@
   </select>
   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
     insert into t_tbk_withdraw ( 
-    ID,USER_ID,CODE,AMOUNT,REMARK,STATUS,UPDATE_TIME,CREATE_TIME ) values 
+    ID,USER_ID,CODE,AMOUNT,ACCOUNT,REMARK,STATUS,UPDATE_TIME,CREATE_TIME ) values 
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.code,jdbcType=VARCHAR},#{item.amount,jdbcType=DECIMAL},#{item.remark,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.code,jdbcType=VARCHAR},#{item.amount,jdbcType=DECIMAL},#{item.account,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
     </foreach>
   </insert>
   <select id="count" resultType="int">

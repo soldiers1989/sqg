@@ -57,6 +57,9 @@ public class SuperWechatService {
     //删除菜单
     protected final static String MENU_DELETE_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=";
 
+    //发送模板消息
+    protected final static String SEND_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
+
     protected static final long TOKEN_TIME_OUT = 2 * 60 * 60 * 1000L;
 
     @Value("${weixin.appID}")
@@ -67,6 +70,9 @@ public class SuperWechatService {
 
     @Value("${tbk.domain.name}")
     protected String domainName;
+
+    @Value("${weixin.templateId}")
+    protected String templateId;
 
     @Autowired
     protected IRedisJsonStringService redisJsonStringService;

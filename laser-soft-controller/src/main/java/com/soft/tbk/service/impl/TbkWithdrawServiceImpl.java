@@ -18,7 +18,7 @@ import com.soft.tbk.model.TbkWithdraw;
 import com.soft.tbk.service.TbkWithdrawService;
 
 @Service
-public class TbkWithdrawServiceImpl extends BaseServiceImpl implements TbkWithdrawService{
+public class TbkWithdrawServiceImpl extends BaseServiceImpl implements TbkWithdrawService {
 
     private static final String SYS_CODE = "TbkWithdrawSerciceImpl";
 
@@ -29,6 +29,7 @@ public class TbkWithdrawServiceImpl extends BaseServiceImpl implements TbkWithdr
 
     @Override
     public TbkWithdraw saveTbkWithdraw(TbkWithdraw tbkWithdraw) throws ApiException {
+
         //1.check
         check(tbkWithdraw);
         //3.set default
@@ -39,11 +40,12 @@ public class TbkWithdrawServiceImpl extends BaseServiceImpl implements TbkWithdr
         return tbkWithdraw;
     }
 
-
     private void setDefault(TbkWithdraw tbkWithdraw) {
+
         if (tbkWithdraw == null) {
             return;
         }
+        tbkWithdraw.setStatus(0);
         tbkWithdraw.setCreateTime(new Date());
         tbkWithdraw.setUpdateTime(new Date());
     }
@@ -53,7 +55,7 @@ public class TbkWithdrawServiceImpl extends BaseServiceImpl implements TbkWithdr
         if (null == tbkWithdraw) {
             throw new ApiException(SYS_CODE + ".saveTbkWithdraw", "数据不能为空");
         }
-        
+
     }
 
     @Override
@@ -110,7 +112,6 @@ public class TbkWithdrawServiceImpl extends BaseServiceImpl implements TbkWithdr
         return list;
 
     }
-
 
     private void saveTbkWithdrawModel(TbkWithdraw tbkWithdraw) {
 
