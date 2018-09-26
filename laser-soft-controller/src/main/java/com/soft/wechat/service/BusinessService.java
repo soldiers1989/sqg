@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.soft.tbk.base.BaseController;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
 import com.soft.tbk.model.TbkUser;
@@ -20,7 +21,7 @@ import com.soft.tbk.service.TbkUserService;
 import com.soft.tbk.utils.ListUtil;
 
 @Service
-public class BusinessService {
+public class BusinessService extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(BusinessService.class);
 

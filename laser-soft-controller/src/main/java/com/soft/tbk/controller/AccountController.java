@@ -13,10 +13,14 @@ import com.soft.tbk.base.BaseController;
 import com.soft.tbk.domain.UserSession;
 import com.soft.tbk.model.TbkAccount;
 import com.soft.tbk.service.TbkAccountService;
+import com.soft.wechat.service.IWechatService;
 
 @Controller
 @RequestMapping("/web/account")
 public class AccountController extends BaseController {
+
+    @Autowired
+    private IWechatService wechatService;
 
     @Autowired
     private TbkAccountService tbkAccountService;
@@ -36,6 +40,15 @@ public class AccountController extends BaseController {
         model.put("amount", abAmount);
 
         return "/h5/account/index";
+    }
+
+    @RequestMapping("/wxQrCode")
+    public String wxQrCode(ModelMap model, HttpServletRequest request) {
+
+        UserSession user = getUserSession(request);
+        String url = wechatService.createQrcode(user.getId().toString());
+        model.put("url", url);
+        return "/h5/account/wxQrCode";
     }
 
 }

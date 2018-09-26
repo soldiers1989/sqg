@@ -91,7 +91,7 @@ public class WechatService {
             } else if (EventEnum.EVENT_CLICK.getCode().equals(event)) {//点击菜单拉取消息时的事件推送
                 if ("share".equals(eventKey)) {
                     // 分享生成二维码
-                    returnContent = businessService.generateWxQrCode(fromUserName);
+                    //returnContent = businessService.generateWxQrCode(fromUserName);
                 }
             }
         }

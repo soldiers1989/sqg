@@ -32,7 +32,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
         String contentPath = request.getServletContext().getContextPath();
         String url = request.getServletPath();
         if (userSession == null) {
-            if ("/web/account/index".equals(url)) {
+            if (url.startsWith("/web/account")) {
                 // 暂时就个人中心
                 //wechatService.requestAuth(request, response, contentPath, url);
             } else {

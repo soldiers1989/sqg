@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.soft.tbk.base.BaseController;
 import com.soft.tbk.base.ResultResponse;
+import com.soft.tbk.domain.UserSession;
 import com.soft.wechat.service.IWechatService;
-import com.soft.wechat.service.SuperWechatService;
 
 /**
  * 微信二维码控制器
@@ -25,7 +26,7 @@ import com.soft.wechat.service.SuperWechatService;
  */
 @RestController
 @RequestMapping(value = "/laserDirect/wx",produces = MediaType.APPLICATION_JSON_VALUE)
-public class WechatCon extends SuperWechatService {
+public class WechatCon extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(WechatCon.class);
 
@@ -42,6 +43,10 @@ public class WechatCon extends SuperWechatService {
     @RequestMapping(value = "/generateWxQrCode/{code}")
     public @ResponseBody ResultResponse generateWxQrCode(HttpServletRequest request, @PathVariable("code") String code) {
 
+        UserSession userSession = getUserSession(request);
+        if (userSession != null) {
+            code = userSession.getId().toString();
+        }
         String url = wechatService.createQrcode(code);
         return new ResultResponse(url);
     }
