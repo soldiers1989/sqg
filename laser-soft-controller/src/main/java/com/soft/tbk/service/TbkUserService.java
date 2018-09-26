@@ -47,6 +47,14 @@ public interface TbkUserService extends BaseService {
     public TbkUser getTbkUser(Integer id);
 
     /**
+     * 根據ID獲取
+     * 
+     * @param id
+     * @return
+     */
+    public TbkUser getTbkUserByOpenid(String openId);
+
+    /**
      * 查询
      * 
      * @param map

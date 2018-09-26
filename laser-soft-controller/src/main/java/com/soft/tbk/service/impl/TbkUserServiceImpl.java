@@ -209,4 +209,16 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         }
     }
 
+    @Override
+    public TbkUser getTbkUserByOpenid(String openId) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userOpenid", openId);
+        List<TbkUser> list = queryTbkUsersModel(map);
+        if (list != null && !list.isEmpty()) {
+            return list.get(0);
+        }
+        return null;
+    }
+
 }

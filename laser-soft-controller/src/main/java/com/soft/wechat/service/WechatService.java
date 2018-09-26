@@ -88,6 +88,11 @@ public class WechatService {
                 }
                 businessService.executorUser(tbkUser);
             } else if (EventEnum.EVENT_UNSUBSCRIBE.getCode().equals(event)) {//取消关注
+            } else if (EventEnum.EVENT_CLICK.getCode().equals(event)) {//点击菜单拉取消息时的事件推送
+                if ("share".equals(eventKey)) {
+                    // 分享生成二维码
+                    returnContent = businessService.generateWxQrCode(fromUserName);
+                }
             }
         }
 

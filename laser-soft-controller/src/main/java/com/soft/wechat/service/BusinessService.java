@@ -38,39 +38,41 @@ public class BusinessService {
 
     @Autowired
     TbkCoreService tbkCoreService;
-    
-   public void batchOrderList(List<TbkOrder> orderList) {
-        
+
+    @Autowired
+    IWechatService wechatService;
+
+    public void batchOrderList(List<TbkOrder> orderList) {
+
         if (ListUtil.isEmpty(orderList)) {
             return;
         }
-        
+
         for (TbkOrder tbkOrder : orderList) {
             try {
-                tbkCoreService.saveOrder(tbkOrder);         
+                tbkCoreService.saveOrder(tbkOrder);
             } catch (Exception e) {
                 logger.error("BusinessService.batchOrderList", e);
             }
         }
-        
+
     }
 
-   public void batchSettleOrderList(List<TbkOrder> orderList) {
-       
-       if (ListUtil.isEmpty(orderList)) {
-           return;
-       }
-       
-       for (TbkOrder tbkOrder : orderList) {
-           try {
-               tbkCoreService.settleOrder(tbkOrder);         
-           } catch (Exception e) {
-               logger.error("BusinessService.batchOrderList", e);
-           }
-       }
-       
-   }
+    public void batchSettleOrderList(List<TbkOrder> orderList) {
 
+        if (ListUtil.isEmpty(orderList)) {
+            return;
+        }
+
+        for (TbkOrder tbkOrder : orderList) {
+            try {
+                tbkCoreService.settleOrder(tbkOrder);
+            } catch (Exception e) {
+                logger.error("BusinessService.batchOrderList", e);
+            }
+        }
+
+    }
 
     public String returnTKL(String tkl, String openId) {
 
@@ -119,5 +121,21 @@ public class BusinessService {
                 }
             }
         });
+    }
+
+    /**
+     * 微信生成生成分享二维码
+     * 
+     * @return
+     */
+    public String generateWxQrCode(String openId) {
+
+        String code = "";
+        TbkUser tbkUser = tbkUserService.getTbkUserByOpenid(openId);
+        if (tbkUser != null) {
+            code = tbkUser.getId().toString();
+        }
+        String url = wechatService.createQrcode(code);
+        return (url);
     }
 }
