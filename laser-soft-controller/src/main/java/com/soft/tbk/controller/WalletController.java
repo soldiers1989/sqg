@@ -1,6 +1,9 @@
 package com.soft.tbk.controller;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,8 +21,10 @@ import com.soft.tbk.model.TbkUser;
 import com.soft.tbk.model.TbkWithdraw;
 import com.soft.tbk.service.TbkAccountService;
 import com.soft.tbk.service.TbkCommissionService;
+import com.soft.tbk.service.TbkOrderService;
 import com.soft.tbk.service.TbkUserService;
 import com.soft.tbk.service.TbkWithdrawService;
+import com.soft.tbk.utils.DateUtil;
 
 @Controller
 @RequestMapping("/web/wallet")
@@ -33,6 +38,9 @@ public class WalletController extends BaseController {
 
     @Autowired
     private TbkCommissionService tbkCommissionService;
+
+    @Autowired
+    private TbkOrderService tbkOrderService;
 
     @Autowired
     private TbkWithdrawService tbkWithdrawService;
@@ -50,8 +58,41 @@ public class WalletController extends BaseController {
             abAmount = account.getAccountAmountA();
         }
         model.put("amount", abAmount);
+        
+        Map<String, Object> nowMap = tbkOrderService.sumCommsionAndCount(user.getId(), new Date());
+        if (!nowMap.containsKey("sumAmount")) {
+            nowMap.put("sumAmount", 0);
+        }
+        Map<String, Object> beforeMap = tbkOrderService.sumCommsionAndCount(user.getId(), new Date(System.currentTimeMillis()-(24 * 60 * 60 * 1000)));
+        if (!beforeMap.containsKey("sumAmount")) {
+            beforeMap.put("sumAmount", 0);
+        }
+        model.put("now", nowMap);
+        model.put("now_1", beforeMap);
+        
+        Map<String, Object> nowSumMap = tbkCommissionService.sumCommission(user.getId(), new Date());
+        if (!nowSumMap.containsKey("sumAmount")) {
+            nowSumMap.put("sumAmount", 0);
+        }
+
+        Map<String, Object> beforeSumMap = tbkCommissionService.sumCommission(user.getId(), getMonthDate(-1));
+        if (!beforeSumMap.containsKey("sumAmount")) {
+            beforeSumMap.put("sumAmount", 0);
+        }
+
+        model.put("nowSum", nowSumMap);
+        model.put("nowSum_1", beforeSumMap);
 
         return "/h5/wallet/index";
+    }
+
+    private Date getMonthDate(int month) {
+        Date date = new Date();//获取当前时间    
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, month);//当前时间前去一个月，即一个月前的时间    
+        //获取一年前的时间，或者一个月前的时间   
+        return calendar.getTime();
     }
 
     @RequestMapping("/cash")

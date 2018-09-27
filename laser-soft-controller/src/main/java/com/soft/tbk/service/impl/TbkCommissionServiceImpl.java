@@ -1,6 +1,7 @@
 package com.soft.tbk.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
 import com.soft.tbk.model.TbkCommission;
 import com.soft.tbk.service.TbkCommissionService;
+import com.soft.tbk.utils.DateUtil;
 
 @Service
 public class TbkCommissionServiceImpl extends BaseServiceImpl implements TbkCommissionService{
@@ -185,6 +187,19 @@ public class TbkCommissionServiceImpl extends BaseServiceImpl implements TbkComm
             logger.error(e.getMessage(), e);
         }
         return false;
+    }
+
+
+    @Override
+    public Map<String, Object> sumCommission(Integer userId, Date sumDate) {
+        
+        try {
+            return tbkCommissionMapper.sumCommission(getQueryParamMap("userId,sumDate", userId, DateUtil.getDateString(sumDate, "yyyyMM")));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        
+        return new HashMap<String, Object>();
     }
 
 }

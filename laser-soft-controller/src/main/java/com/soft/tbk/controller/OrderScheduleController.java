@@ -62,6 +62,8 @@ public class OrderScheduleController extends BaseController {
 
             String result = WebUtils.doGet(URL, orderMap);
 
+            logger.info(result);
+            
             JSONObject orderResult = JSONObject.parseObject(result);
 
             JSONArray orderList = orderResult.getJSONArray("data");
@@ -129,6 +131,8 @@ public class OrderScheduleController extends BaseController {
             
             String result = WebUtils.doGet(URL, orderMap);
             
+            logger.info(result);
+            
             JSONObject orderResult = JSONObject.parseObject(result);
             
             JSONArray orderList = orderResult.getJSONArray("data");
@@ -141,8 +145,8 @@ public class OrderScheduleController extends BaseController {
                     TbkOrder tbkOrder = new TbkOrder();
                     tbkOrder.setAlipayTotalPrice(orderJson.getBigDecimal("alipay_total_price"));
                     tbkOrder.setItemId(orderJson.getLong("num_iid"));
-                    tbkOrder.setCommission(orderJson.getBigDecimal("pub_share_pre_fee"));
-                    tbkOrder.setCommissionRate(orderJson.getBigDecimal("total_commission_rate"));
+                    tbkOrder.setCommission(orderJson.getBigDecimal("commission"));
+                    tbkOrder.setCommissionRate(orderJson.getBigDecimal("commission_rate"));
                     tbkOrder.setIncomeRate(orderJson.getString("income_rate"));
                     tbkOrder.setItemNum(orderJson.getInteger("item_num"));
                     tbkOrder.setItemPrice(orderJson.getBigDecimal("price"));
@@ -183,7 +187,7 @@ public class OrderScheduleController extends BaseController {
         Map<String, Object> orderMap = new HashMap<String, Object>();
         orderMap.put("appkey", "1822410736221674");
         orderMap.put("appsecret", "1c6f031ac7bcf150ea983712fc413af2");
-        orderMap.put("startTime", DateUtil.getDateString(now_10, DateUtil.DATETIMESHOWFORMAT));
+        orderMap.put("startTime", "2018-09-25 11:00:00");
         orderMap.put("span", "600");
         orderMap.put("pageNo", "1");
         orderMap.put("pageSize", "100");

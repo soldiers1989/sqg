@@ -124,6 +124,11 @@
     where ORDER_ID = #{orderId,jdbcType=INTEGER}
   </update>
   
+    <select id="sumCommission" resultType="java.util.HashMap"  parameterType="Map">
+     SELECT COUNT(1) as count, SUM(commission) as sumAmount FROM t_tbk_commission
+      where USER_ID = #{userId,jdbcType=INTEGER} and DATE_FORMAT(TRADE_TIME,'%Y%m') = #{sumDate,jdbcType=VARCHAR} and COMMISSION_STATUS in (0,1)
+  </select>
+  
   
   
 </mapper>

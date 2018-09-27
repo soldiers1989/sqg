@@ -2,8 +2,10 @@ package com.soft.tbk.dao;
 
 import com.soft.tbk.base.BaseMapper;
 import com.soft.tbk.model.TbkCommission;
+
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -17,4 +19,8 @@ public interface TbkCommissionMapper extends BaseMapper<TbkCommission> {
     int updateStatusByOrderId(Map<String, Object> map);
 
     void insertBatch(List<TbkCommission> list);
+    
+    Map<String, Object> sumCommission(Map<String, Object> map);
+
 }
+

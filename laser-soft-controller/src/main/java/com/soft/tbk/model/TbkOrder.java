@@ -144,7 +144,7 @@ public class TbkOrder {
     private String totalCommissionFee;
 
     /**
-     * 	补贴金额
+     * 补贴金额
      */
     @Column(name = "SUBSIDY_FEE")
     private String subsidyFee;
@@ -160,6 +160,34 @@ public class TbkOrder {
      */
     @Column(name = "CREATE_TIME")
     private Date createTime;
+
+    /**
+     * 预计付款佣金
+     */
+    @Column(name = "COMMISSION_AMOUNT")
+    private BigDecimal commissionAmount;
+
+    /**
+     * 预计结算佣金
+     */
+    @Column(name = "COMMISSION_SAMOUNT")
+    private BigDecimal commissionSamount;
+
+    public BigDecimal getCommissionAmount() {
+        return commissionAmount;
+    }
+
+    public BigDecimal getCommissionSamount() {
+        return commissionSamount;
+    }
+
+    public void setCommissionAmount(BigDecimal commissionAmount) {
+        this.commissionAmount = commissionAmount;
+    }
+
+    public void setCommissionSamount(BigDecimal commissionSamount) {
+        this.commissionSamount = commissionSamount;
+    }
 
     /**
      * @return ID
@@ -187,7 +215,8 @@ public class TbkOrder {
     /**
      * 设置用户ID
      *
-     * @param userId 用户ID
+     * @param userId
+     *            用户ID
      */
     public void setUserId(Integer userId) {
         this.userId = userId;
@@ -205,7 +234,8 @@ public class TbkOrder {
     /**
      * 设置PID
      *
-     * @param pid PID
+     * @param pid
+     *            PID
      */
     public void setPid(String pid) {
         this.pid = pid == null ? null : pid.trim();
@@ -223,7 +253,8 @@ public class TbkOrder {
     /**
      * 设置商品图片
      *
-     * @param itemImage 商品图片
+     * @param itemImage
+     *            商品图片
      */
     public void setItemImage(String itemImage) {
         this.itemImage = itemImage == null ? null : itemImage.trim();
@@ -241,7 +272,8 @@ public class TbkOrder {
     /**
      * 设置商品标题
      *
-     * @param itemTitle 商品标题
+     * @param itemTitle
+     *            商品标题
      */
     public void setItemTitle(String itemTitle) {
         this.itemTitle = itemTitle == null ? null : itemTitle.trim();
@@ -259,7 +291,8 @@ public class TbkOrder {
     /**
      * 设置商品价格
      *
-     * @param itemPrice 商品价格
+     * @param itemPrice
+     *            商品价格
      */
     public void setItemPrice(BigDecimal itemPrice) {
         this.itemPrice = itemPrice;
@@ -277,7 +310,8 @@ public class TbkOrder {
     /**
      * 设置卖家名称
      *
-     * @param sellerName 卖家名称
+     * @param sellerName
+     *            卖家名称
      */
     public void setSellerName(String sellerName) {
         this.sellerName = sellerName == null ? null : sellerName.trim();
@@ -295,7 +329,8 @@ public class TbkOrder {
     /**
      * 设置淘宝订单号ID
      *
-     * @param tradeId 淘宝订单号ID
+     * @param tradeId
+     *            淘宝订单号ID
      */
     public void setTradeId(Long tradeId) {
         this.tradeId = tradeId;
@@ -313,7 +348,8 @@ public class TbkOrder {
     /**
      * 设置商品数量
      *
-     * @param itemNum 商品数量
+     * @param itemNum
+     *            商品数量
      */
     public void setItemNum(Integer itemNum) {
         this.itemNum = itemNum;
@@ -331,7 +367,8 @@ public class TbkOrder {
     /**
      * 设置支付金额
      *
-     * @param payAmount 支付金额
+     * @param payAmount
+     *            支付金额
      */
     public void setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
@@ -349,7 +386,8 @@ public class TbkOrder {
     /**
      * 设置预计佣金
      *
-     * @param commission 预计佣金
+     * @param commission
+     *            预计佣金
      */
     public void setCommission(BigDecimal commission) {
         this.commission = commission;
@@ -367,7 +405,8 @@ public class TbkOrder {
     /**
      * 设置预计佣金比例
      *
-     * @param commissionRate 预计佣金比例
+     * @param commissionRate
+     *            预计佣金比例
      */
     public void setCommissionRate(BigDecimal commissionRate) {
         this.commissionRate = commissionRate;
@@ -385,7 +424,8 @@ public class TbkOrder {
     /**
      * 设置订单创建时间
      *
-     * @param tradeTime 订单创建时间
+     * @param tradeTime
+     *            订单创建时间
      */
     public void setTradeTime(Date tradeTime) {
         this.tradeTime = tradeTime;
@@ -403,7 +443,8 @@ public class TbkOrder {
     /**
      * 设置订单结算时间
      *
-     * @param earningTime 订单结算时间
+     * @param earningTime
+     *            订单结算时间
      */
     public void setEarningTime(Date earningTime) {
         this.earningTime = earningTime;
@@ -421,7 +462,8 @@ public class TbkOrder {
     /**
      * 设置订单状态
      *
-     * @param tradeStatus 订单状态
+     * @param tradeStatus
+     *            订单状态
      */
     public void setTradeStatus(Integer tradeStatus) {
         this.tradeStatus = tradeStatus;
@@ -439,7 +481,8 @@ public class TbkOrder {
     /**
      * 设置订单类型
      *
-     * @param tradeType 订单类型
+     * @param tradeType
+     *            订单类型
      */
     public void setTradeType(String tradeType) {
         this.tradeType = tradeType == null ? null : tradeType.trim();
@@ -457,7 +500,8 @@ public class TbkOrder {
     /**
      * 设置收入比率，卖家设置佣金比率+平台补贴比率
      *
-     * @param incomeRate 收入比率，卖家设置佣金比率+平台补贴比率
+     * @param incomeRate
+     *            收入比率，卖家设置佣金比率+平台补贴比率
      */
     public void setIncomeRate(String incomeRate) {
         this.incomeRate = incomeRate == null ? null : incomeRate.trim();
@@ -475,7 +519,8 @@ public class TbkOrder {
     /**
      * 设置补贴比率
      *
-     * @param subsidyRate 补贴比率
+     * @param subsidyRate
+     *            补贴比率
      */
     public void setSubsidyRate(String subsidyRate) {
         this.subsidyRate = subsidyRate == null ? null : subsidyRate.trim();
@@ -493,7 +538,8 @@ public class TbkOrder {
     /**
      * 设置成交平台，PC:1，无线:2平台
      *
-     * @param rerminalType 成交平台，PC:1，无线:2平台
+     * @param rerminalType
+     *            成交平台，PC:1，无线:2平台
      */
     public void setRerminalType(String rerminalType) {
         this.rerminalType = rerminalType == null ? null : rerminalType.trim();
@@ -511,7 +557,8 @@ public class TbkOrder {
     /**
      * 设置付款金额
      *
-     * @param alipayTotalPrice 付款金额
+     * @param alipayTotalPrice
+     *            付款金额
      */
     public void setAlipayTotalPrice(BigDecimal alipayTotalPrice) {
         this.alipayTotalPrice = alipayTotalPrice;
@@ -529,7 +576,8 @@ public class TbkOrder {
     /**
      * 设置佣金比率
      *
-     * @param totalCommissionRate 佣金比率
+     * @param totalCommissionRate
+     *            佣金比率
      */
     public void setTotalCommissionRate(String totalCommissionRate) {
         this.totalCommissionRate = totalCommissionRate == null ? null : totalCommissionRate.trim();
@@ -547,25 +595,27 @@ public class TbkOrder {
     /**
      * 设置佣金金额
      *
-     * @param totalCommissionFee 佣金金额
+     * @param totalCommissionFee
+     *            佣金金额
      */
     public void setTotalCommissionFee(String totalCommissionFee) {
         this.totalCommissionFee = totalCommissionFee == null ? null : totalCommissionFee.trim();
     }
 
     /**
-     * 获取	补贴金额
+     * 获取 补贴金额
      *
-     * @return SUBSIDY_FEE - 	补贴金额
+     * @return SUBSIDY_FEE - 补贴金额
      */
     public String getSubsidyFee() {
         return subsidyFee;
     }
 
     /**
-     * 设置	补贴金额
+     * 设置 补贴金额
      *
-     * @param subsidyFee 	补贴金额
+     * @param subsidyFee
+     *            补贴金额
      */
     public void setSubsidyFee(String subsidyFee) {
         this.subsidyFee = subsidyFee == null ? null : subsidyFee.trim();
@@ -583,7 +633,8 @@ public class TbkOrder {
     /**
      * 设置更新时间
      *
-     * @param updateTime 更新时间
+     * @param updateTime
+     *            更新时间
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
@@ -601,7 +652,8 @@ public class TbkOrder {
     /**
      * 设置创建时间
      *
-     * @param createTime 创建时间
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -614,5 +666,5 @@ public class TbkOrder {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
-    
+
 }

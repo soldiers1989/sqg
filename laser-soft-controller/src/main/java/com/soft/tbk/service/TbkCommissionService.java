@@ -62,5 +62,6 @@ public interface TbkCommissionService extends BaseService{
     public boolean updateCommissionStatus(Integer orderId, Integer commissionStatus, Date settleDate) throws ApiException;
 
 
-
+    
+    public Map<String, Object> sumCommission(Integer userId, Date sumDate);
 }

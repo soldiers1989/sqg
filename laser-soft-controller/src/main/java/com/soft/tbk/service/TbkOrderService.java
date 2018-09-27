@@ -1,5 +1,6 @@
 package com.soft.tbk.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,9 @@ public interface TbkOrderService extends BaseService{
 
     
     public void insertBatch(List<TbkOrder> tbkOrderList);
+    
+    
+    public Map<String, Object> sumCommsionAndCount(Integer userId, Date sumDate);
     
     
 }

@@ -1,5 +1,6 @@
 package com.soft.tbk;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Test;
@@ -25,13 +26,26 @@ public class OrderTest {
         
         
         TbkOrder tbkOrder = new TbkOrder();
-        tbkOrder.setTradeId(221981996150579004L);
+        tbkOrder.setTradeId(2221981996150579005L);
         tbkOrder.setTotalCommissionFee("3.54");
+        tbkOrder.setCommission(new BigDecimal("3.54"));
         tbkOrder.setTradeStatus(3);
         tbkOrder.setUserId(5);
-        tbkOrder.setItemId(549239069755L);
+        tbkOrder.setItemId(565532955150L);
+        tbkOrder.setTradeTime(new Date());
+        tbkOrder.setEarningTime(new Date());
+        tbkCoreService.saveOrder(tbkOrder);
+
+        tbkOrder = new TbkOrder();
+        tbkOrder.setTradeId(2221981996150579005L);
+        tbkOrder.setTotalCommissionFee("3.54");
+        tbkOrder.setCommission(new BigDecimal("3.54"));
+        tbkOrder.setTradeStatus(3);
+        tbkOrder.setUserId(5);
+        tbkOrder.setItemId(565532955150L);
         tbkOrder.setTradeTime(new Date());
         tbkOrder.setEarningTime(new Date());
         tbkCoreService.settleOrder(tbkOrder);
+
     }
 }

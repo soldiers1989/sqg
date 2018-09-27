@@ -15,4 +15,6 @@ public interface TbkOrderMapper extends BaseMapper<TbkOrder> {
     int updateStateByPrimaryKey(Map<String, Object> map);
 
     void insertBatch(List<TbkOrder> list);
+    
+    Map<String, Object> sumOrder(Map<String, Object> parameters);
 }

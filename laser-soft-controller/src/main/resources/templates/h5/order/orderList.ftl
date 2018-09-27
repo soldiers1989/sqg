@@ -149,11 +149,22 @@ var tabNum = "${tabNum!'1'}";
 						if(data!=null){
 							$.each(data,function(i,order){
 								var state=""; 	 
-								
+								var settelHtml = "";
 								if (order.tradeStatus == 12) {
 									state = "已付款";
 								}else if (order.tradeStatus == 3) {
 									state = "已结算";
+									settelHtml="<div class='shopcart_price'>"+
+															"结算金额 "+
+															"<b>￥"+  Number(order.alipayTotalPrice).toFixed(2) +"</b>"+
+														"</div>"+
+														"<div class='shopcart_number' >"+
+															"<div class='shopcart_price'>"+
+																"&nbsp;&nbsp;结算奖励金"+
+																"<b>￥"+ Number(order.commissionSamount).toFixed(2) +"</b>"+
+															"</div>"+
+														"</div>";
+									
 								}else if (order.tradeStatus == 13) {
 									state = "已失效";
 								}
@@ -181,9 +192,10 @@ var tabNum = "${tabNum!'1'}";
 														"<div class='shopcart_number' >"+
 															"<div class='shopcart_price'>"+
 																"&nbsp;&nbsp;预估奖励金"+
-																"<b>￥"+ 0.00 +"</b>"+
+																"<b>￥"+ Number(order.commissionAmount).toFixed(2) +"</b>"+
 															"</div>"+
 														"</div>"+
+														settelHtml +
 													"</div>"+
 												"</div>"+
 											"</div>"+

@@ -41,4 +41,6 @@ public class TbkConstants {
 
 
     public static final Integer COMMSION_STATUS_2 = 2;//失效
+    
+    public static final Integer TRADE_STATUS_13 = 13;//失效
 }

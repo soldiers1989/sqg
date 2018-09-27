@@ -19,6 +19,7 @@ import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
 import com.soft.tbk.service.TbkCouponService;
 import com.soft.tbk.service.TbkOrderService;
+import com.soft.tbk.utils.DateUtil;
 import com.soft.tbk.utils.ListUtil;
 
 @Service
@@ -187,6 +188,19 @@ public class TbkOrderServiceImpl extends BaseServiceImpl implements TbkOrderServ
             logger.error(e.getMessage(), e);
             throw new ApiException(SYS_CODE + ".insertBatch", "插入失败");
         }
+    }
+
+
+    @Override
+    public Map<String, Object> sumCommsionAndCount(Integer userId, Date sumDate) {
+        
+        try {
+            return tbkOrderMapper.sumOrder(getQueryParamMap("userId,sumDate", userId, DateUtil.getDateString(sumDate, DateUtil.DATESTOREFORMAT)));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        
+        return new HashMap<String, Object>();
     }
 
 }

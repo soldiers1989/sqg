@@ -31,6 +31,9 @@
     <result column="SUBSIDY_FEE" jdbcType="VARCHAR" property="subsidyFee" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="COMMISSION_AMOUNT" jdbcType="DECIMAL" property="commissionAmount" />
+    <result column="COMMISSION_SAMOUNT" jdbcType="DECIMAL" property="commissionSamount" />
+    
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -39,7 +42,7 @@
     ID, USER_ID, PID, ITEM_IMAGE, ITEM_TITLE, ITEM_PRICE, ITEM_ID, SELLER_NAME, TRADE_ID, ITEM_NUM, 
     PAY_AMOUNT, COMMISSION, COMMISSION_RATE, TRADE_TIME, EARNING_TIME, TRADE_STATUS, 
     TRADE_TYPE, INCOME_RATE, SUBSIDY_RATE, RERMINAL_TYPE, ALIPAY_TOTAL_PRICE, TOTAL_COMMISSION_RATE, 
-    TOTAL_COMMISSION_FEE, SUBSIDY_FEE, UPDATE_TIME, CREATE_TIME
+    TOTAL_COMMISSION_FEE, SUBSIDY_FEE, UPDATE_TIME, CREATE_TIME,COMMISSION_AMOUNT,COMMISSION_SAMOUNT
   </sql>
   <sql id="t_tbk_order_query_fuzzy_condition">
     <trim prefix="WHERE" prefixOverrides="AND |OR ">
@@ -224,9 +227,9 @@
   </select>
   <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
     insert into t_tbk_order ( 
-    ID,USER_ID,PID,ITEM_IMAGE,ITEM_TITLE,ITEM_PRICE,ITEM_ID,SELLER_NAME,TRADE_ID,ITEM_NUM,PAY_AMOUNT,COMMISSION,COMMISSION_RATE,TRADE_TIME,EARNING_TIME,TRADE_STATUS,TRADE_TYPE,INCOME_RATE,SUBSIDY_RATE,RERMINAL_TYPE,ALIPAY_TOTAL_PRICE,TOTAL_COMMISSION_RATE,TOTAL_COMMISSION_FEE,SUBSIDY_FEE,UPDATE_TIME,CREATE_TIME ) values 
+    ID,USER_ID,PID,ITEM_IMAGE,ITEM_TITLE,ITEM_PRICE,ITEM_ID,SELLER_NAME,TRADE_ID,ITEM_NUM,PAY_AMOUNT,COMMISSION,COMMISSION_RATE,TRADE_TIME,EARNING_TIME,TRADE_STATUS,TRADE_TYPE,INCOME_RATE,SUBSIDY_RATE,RERMINAL_TYPE,ALIPAY_TOTAL_PRICE,TOTAL_COMMISSION_RATE,TOTAL_COMMISSION_FEE,SUBSIDY_FEE,UPDATE_TIME,CREATE_TIME,COMMISSION_AMOUNT,COMMISSION_SAMOUNT) values 
     <foreach collection="list" index="index" item="item" separator=",">
-       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.pid,jdbcType=VARCHAR},#{item.itemImage,jdbcType=VARCHAR},#{item.itemTitle,jdbcType=VARCHAR},#{item.itemPrice,jdbcType=DECIMAL},#{item.itemId,jdbcType=BIGINT},#{item.sellerName,jdbcType=VARCHAR},#{item.tradeId,jdbcType=BIGINT},#{item.itemNum,jdbcType=INTEGER},#{item.payAmount,jdbcType=DECIMAL},#{item.commission,jdbcType=DECIMAL},#{item.commissionRate,jdbcType=DECIMAL},#{item.tradeTime,jdbcType=TIMESTAMP},#{item.earningTime,jdbcType=TIMESTAMP},#{item.tradeStatus,jdbcType=INTEGER},#{item.tradeType,jdbcType=VARCHAR},#{item.incomeRate,jdbcType=VARCHAR},#{item.subsidyRate,jdbcType=VARCHAR},#{item.rerminalType,jdbcType=VARCHAR},#{item.alipayTotalPrice,jdbcType=DECIMAL},#{item.totalCommissionRate,jdbcType=VARCHAR},#{item.totalCommissionFee,jdbcType=VARCHAR},#{item.subsidyFee,jdbcType=VARCHAR},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP} ) 
+       ( #{item.id,jdbcType=INTEGER},#{item.userId,jdbcType=INTEGER},#{item.pid,jdbcType=VARCHAR},#{item.itemImage,jdbcType=VARCHAR},#{item.itemTitle,jdbcType=VARCHAR},#{item.itemPrice,jdbcType=DECIMAL},#{item.itemId,jdbcType=BIGINT},#{item.sellerName,jdbcType=VARCHAR},#{item.tradeId,jdbcType=BIGINT},#{item.itemNum,jdbcType=INTEGER},#{item.payAmount,jdbcType=DECIMAL},#{item.commission,jdbcType=DECIMAL},#{item.commissionRate,jdbcType=DECIMAL},#{item.tradeTime,jdbcType=TIMESTAMP},#{item.earningTime,jdbcType=TIMESTAMP},#{item.tradeStatus,jdbcType=INTEGER},#{item.tradeType,jdbcType=VARCHAR},#{item.incomeRate,jdbcType=VARCHAR},#{item.subsidyRate,jdbcType=VARCHAR},#{item.rerminalType,jdbcType=VARCHAR},#{item.alipayTotalPrice,jdbcType=DECIMAL},#{item.totalCommissionRate,jdbcType=VARCHAR},#{item.totalCommissionFee,jdbcType=VARCHAR},#{item.subsidyFee,jdbcType=VARCHAR},#{item.updateTime,jdbcType=TIMESTAMP},#{item.createTime,jdbcType=TIMESTAMP},,#{item.commissionAmount,jdbcType=DECIMAL},,#{item.commissionSamount,jdbcType=DECIMAL}) 
     </foreach>
   </insert>
   <select id="count" resultType="int">
@@ -249,4 +252,10 @@
        and DATA_STATE = #{oldDataState,jdbcType=INTEGER} 
     </if>
   </update>
+  
+  <select id="sumOrder" resultType="java.util.HashMap"  parameterType="Map">
+     SELECT COUNT(1) as count, SUM(commission_amount) as sumAmount FROM t_tbk_order
+      where USER_ID = #{userId,jdbcType=INTEGER} and DATE_FORMAT(TRADE_TIME,'%Y%m%d') = #{sumDate,jdbcType=VARCHAR} and TRADE_STATUS in (3,12,14)
+  </select>
+  
 </mapper>
