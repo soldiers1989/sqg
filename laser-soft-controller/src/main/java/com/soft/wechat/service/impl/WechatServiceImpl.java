@@ -22,6 +22,7 @@ import com.soft.tbk.domain.UserSession;
 import com.soft.tbk.service.TbkUserService;
 import com.soft.wechat.domain.WeChartOpenIDBean;
 import com.soft.wechat.domain.WeChartUserInfoBean;
+import com.soft.wechat.domain.WechatMsgTemplateDomain;
 import com.soft.wechat.domain.WxQrcodeDomain;
 import com.soft.wechat.model.WxQrcode;
 import com.soft.wechat.service.IWechatService;
@@ -94,6 +95,7 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     private String getAccessToken() {
 
         try {
+            //String json = WebUtils.doGet(token_url + "&appid=wx3098f584368e8667&secret=58484bf41fbecf3a11541eadb50a5d22", null);
             String json = WebUtils.doGet(token_url + "&appid=" + appid + "&secret=" + secret, null);
             Map<String, Object> map = (Map<String, Object>) JSON.parse(json);
             if (map != null) {
@@ -277,18 +279,24 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     }
 
     @Override
-    public String sendMessage(Map<String, String> messageMap) {
+    public String sendMessage(WechatMsgTemplateDomain wechatMsgTemplateDomain) {
 
+        if (wechatMsgTemplateDomain == null)
+            return null;
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("touser", messageMap.get("userOpenId"));
+        paramMap.put("touser", wechatMsgTemplateDomain.getUserOpenId());
         paramMap.put("template_id", templateId);
 
-        Map<String, String> dataMap = new HashMap<>();
-        dataMap.put("first", "{\"value\":\"订单已生成\",\"color\":\"#173177\"}");
-        dataMap.put("keyword1", "{\"value\":\"" + messageMap.get("itemTitle") + "\",\"color\":\"#173177\"}");
-        dataMap.put("keyword2", "{\"value\":\"" + messageMap.get("itemPrice") + "\",\"color\":\"#173177\"}");
-        dataMap.put("keyword3", "{\"value\":\"" + messageMap.get("commission") + "\",\"color\":\"#173177\"}");
-        paramMap.put("data", JSONObject.toJSONString(dataMap));
+        String nikeName = wechatMsgTemplateDomain.getUserNikeName();
+        Map<String, Object> dataMap = new HashMap<>();
+        String title = "跟踪到您的一个新订单";
+        title = StringUtils.isBlank(nikeName) ? title : nikeName + "," + title;
+        dataMap.put("first", getMsgMap(title, "#173177"));
+        dataMap.put("keyword1", getMsgMap(wechatMsgTemplateDomain.getTradeId(), "#173177"));
+        dataMap.put("keyword2", getMsgMap(wechatMsgTemplateDomain.getItemPrice(), "#173177"));
+        dataMap.put("keyword3", getMsgMap(wechatMsgTemplateDomain.getCommission(), "#173177"));
+        dataMap.put("remark", getMsgMap("点击查看详情", null));
+        paramMap.put("data", dataMap);
         try {
             return WebUtils.doPostByJson(SEND_MESSAGE_URL + getAccessTokenCache(), paramMap, 0, 0);
         } catch (IOException e) {
@@ -297,4 +305,34 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         return null;
     }
 
+    private Map<String, Object> getMsgMap(Object value, Object color) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("value", value);
+        map.put("color", color);
+        return map;
+    }
+
+    public static void main(String[] args) {
+
+        String userOpenId = "o01fz1P6fq6U7HO5kBNY7PK2Fsi0";
+        String templateId = "Do6UCWQMSiRjJu21KNCdwLZ9QZ7zDxRChlLP30ZSxmc";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("touser", userOpenId);
+        paramMap.put("template_id", templateId);
+        paramMap.put("url", "http://www.baidu.com");
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("first", new WechatServiceImpl().getMsgMap("小调皮,跟踪到您的一个新订单", "#173177"));
+        dataMap.put("keyword1", new WechatServiceImpl().getMsgMap("123456678", "#173177"));
+        dataMap.put("keyword2", new WechatServiceImpl().getMsgMap("30", "#173177"));
+        dataMap.put("keyword3", new WechatServiceImpl().getMsgMap("1.02", "#173177"));
+        dataMap.put("remark", new WechatServiceImpl().getMsgMap("点击查看详情", null));
+        paramMap.put("data", dataMap);
+        System.out.println(JSONObject.toJSONString(paramMap));
+        try {
+            String a = WebUtils.doPostByJson(SEND_MESSAGE_URL + new WechatServiceImpl().getAccessToken(), paramMap, 0, 0);
+            System.out.println(a);
+        } catch (IOException e) {}
+    }
 }

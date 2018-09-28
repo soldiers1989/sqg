@@ -3,10 +3,13 @@ package com.soft.tbk.controller;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.soft.tbk.base.BaseController;
 import com.soft.tbk.base.ResultResponse;
+import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.domain.UserSession;
 import com.soft.tbk.model.TbkAccount;
 import com.soft.tbk.model.TbkUser;
@@ -24,7 +28,6 @@ import com.soft.tbk.service.TbkCommissionService;
 import com.soft.tbk.service.TbkOrderService;
 import com.soft.tbk.service.TbkUserService;
 import com.soft.tbk.service.TbkWithdrawService;
-import com.soft.tbk.utils.DateUtil;
 
 @Controller
 @RequestMapping("/web/wallet")
@@ -58,18 +61,19 @@ public class WalletController extends BaseController {
             abAmount = account.getAccountAmountA();
         }
         model.put("amount", abAmount);
-        
+
         Map<String, Object> nowMap = tbkOrderService.sumCommsionAndCount(user.getId(), new Date());
         if (!nowMap.containsKey("sumAmount")) {
             nowMap.put("sumAmount", 0);
         }
-        Map<String, Object> beforeMap = tbkOrderService.sumCommsionAndCount(user.getId(), new Date(System.currentTimeMillis()-(24 * 60 * 60 * 1000)));
+        Map<String, Object> beforeMap = tbkOrderService.sumCommsionAndCount(user.getId(),
+                        new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000)));
         if (!beforeMap.containsKey("sumAmount")) {
             beforeMap.put("sumAmount", 0);
         }
         model.put("now", nowMap);
         model.put("now_1", beforeMap);
-        
+
         Map<String, Object> nowSumMap = tbkCommissionService.sumCommission(user.getId(), new Date());
         if (!nowSumMap.containsKey("sumAmount")) {
             nowSumMap.put("sumAmount", 0);
@@ -87,6 +91,7 @@ public class WalletController extends BaseController {
     }
 
     private Date getMonthDate(int month) {
+
         Date date = new Date();//获取当前时间    
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -108,8 +113,36 @@ public class WalletController extends BaseController {
             abAmount = account.getAccountAmountA();
         }
         model.put("amount", abAmount);
-
         return "/h5/wallet/cash";
+    }
+
+    @ResponseBody
+    @RequestMapping("/list.json")
+    public List<TbkWithdraw> list(HttpServletRequest request) {
+
+        QueryResult<TbkWithdraw> queryResult = query(request);
+        return queryResult.getList();
+    }
+
+    private QueryResult<TbkWithdraw> query(HttpServletRequest request) {
+
+        UserSession userSession = getUserSession(request);
+        Integer userId = userSession.getId();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("userId", userId);
+        String pageNum = request.getParameter("pageNum");
+        if (StringUtils.isBlank(pageNum)) {
+            pageNum = "1";
+        }
+        String rows = request.getParameter("rows");
+        if (StringUtils.isBlank(rows)) {
+            rows = "8";
+        }
+        map.put("pageNum", Integer.valueOf(pageNum));
+        map.put("pageSize", Integer.valueOf(rows));
+        map.put("orderStr", "ID DESC");
+        map.put("order", true);
+        return tbkWithdrawService.queryTbkWithdraw(map);
     }
 
     @RequestMapping("/addAlipay")

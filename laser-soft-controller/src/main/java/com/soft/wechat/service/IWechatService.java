@@ -1,11 +1,11 @@
 package com.soft.wechat.service;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
+
+import com.soft.wechat.domain.WechatMsgTemplateDomain;
 
 @Service
 public interface IWechatService {
@@ -48,5 +48,5 @@ public interface IWechatService {
     /**
      * 发送模板消息
      */
-    public String sendMessage(Map<String, String> messageMap);
+    public String sendMessage(WechatMsgTemplateDomain wechatMsgTemplateDomain);
 }

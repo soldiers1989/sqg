@@ -26,7 +26,6 @@ public class MainWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
         addInterceptor.excludePathPatterns("/error");
         addInterceptor.excludePathPatterns("/static");
         addInterceptor.excludePathPatterns("/laserDirect");
-
         addInterceptor.addPathPatterns("/**");
         super.addInterceptors(registry);
     }
@@ -35,7 +34,7 @@ public class MainWebMvcConfigurerAdapter extends WebMvcConfigurationSupport {
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/laserDirect/**").addResourceLocations("classpath:/laserDirect/");
+        registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
         super.addResourceHandlers(registry);
     }
 
