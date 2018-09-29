@@ -135,7 +135,7 @@ public class WechatService {
         imageMessage.setFromUserName(wechatMsgDomain.getToUserName());
         imageMessage.setCreateTime(System.currentTimeMillis());
         imageMessage.setMediaMessage(mediaMessage);
-        return WechatMessageUtil.textMessageToXml(mediaMessage);
+        return WechatMessageUtil.textMessageToXml(imageMessage);
     }
 
     /**
