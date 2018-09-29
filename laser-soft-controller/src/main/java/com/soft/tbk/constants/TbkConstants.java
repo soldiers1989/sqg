@@ -15,6 +15,8 @@ public class TbkConstants {
     
     public static final BigDecimal DEFAULT_RATE = new BigDecimal(40);
     
+    public static final String USER_LEVEL_0 = "0";  //用户等级
+    
     public static final String USER_LEVEL_1 = "1";  //用户等级
     
     public static final String USER_LEVEL_2 = "2";  //用户等级

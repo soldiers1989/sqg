@@ -63,7 +63,7 @@
 		<!--引用 js-->
 		<script>
 			function withdraw() {
-					$.alert("<image src='${sysContextPath}/static/images/wx_logo.png'/><p>客服微信号：taotao12345</p><p>长按识别二维码</p>", "提现申请请联系客服");
+					$.alert("<image src='${domainName}/static/images/wx_logo.png'/><p>客服微信号：taotaokefuQ</p><p>长按识别二维码</p>", "提现申请请联系客服");
 			}
 		</script>
 	</body>

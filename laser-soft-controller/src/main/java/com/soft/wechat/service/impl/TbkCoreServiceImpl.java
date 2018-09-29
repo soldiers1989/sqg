@@ -114,7 +114,7 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         context.setItemObject(itemObject);
         context.setTbkCoupon(tbkCoupon);
 
-        BigDecimal userRate = tbkRateService.getRateByLevel(TbkConstants.USER_LEVEL_1, TbkConstants.RATE_LEVEL_0);
+        BigDecimal userRate = tbkRateService.getRateByLevel(TbkConstants.USER_LEVEL_0, TbkConstants.RATE_LEVEL_0);
 
         context.setUserRate(userRate);
 
@@ -318,11 +318,11 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         String userLevel = tbkUser.getUserLevel();
 
         if (StringUtils.isBlank(userLevel)) {
-            userLevel = TbkConstants.USER_LEVEL_1;// 默认
+            userLevel = TbkConstants.USER_LEVEL_0;// 默认
         }
 
         if (TbkConstants.RATE_LEVEL_0.equals(rateLevel)) {
-            userLevel = TbkConstants.USER_LEVEL_1;
+            userLevel = TbkConstants.USER_LEVEL_0;
         }
         
         BigDecimal rate = tbkRateService.getRateByLevel(userLevel, rateLevel);

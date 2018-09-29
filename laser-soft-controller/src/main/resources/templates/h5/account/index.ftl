@@ -17,7 +17,7 @@
 					<#else>
 						${userName?default('游客')}	
 					</#if>
-					<span class="vip_span">vip${user.userLevel!'1'}</span>
+					<#if user.userLevel != '0' ><span class="vip_span">VIP${user.userLevel!'1'}</span></#if>
 				</h2>
 				<div>
 					账户余额￥${(amount)?string('0.00')}
@@ -81,6 +81,6 @@
 <script>
 function about() {
 
-	$.alert("<p>逛淘宝、天猫你还在傻傻的直接买吗？淘宝购物省钱秘笈，不仅仅是大额优惠券，还可领取平台成交奖励现金。淘宝&天猫两大平台95%商品均可省</p><image src='${sysContextPath}/static/images/wx_logo.png'/><p>客服微信号：taotao12345</p><p>长按识别二维码</p>", "逛淘宝，上桃桃");
+	$.alert("<p>逛淘宝、天猫你还在傻傻的直接买吗？淘宝购物省钱秘笈，不仅仅是大额优惠券，还可领取平台成交奖励现金。淘宝&天猫两大平台95%商品均可省</p><image src='${domainName}/static/images/wx_logo.png'/><p>客服微信号：taotaokefuQ</p><p>长按识别二维码</p>", "逛淘宝，上桃桃");
 }
 </script>

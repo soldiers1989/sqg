@@ -82,7 +82,7 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         }
         tbkUser.setCreateTime(new Date());
         tbkUser.setUpdateTime(new Date());
-        tbkUser.setUserLevel(TbkConstants.USER_LEVEL_1);
+        tbkUser.setUserLevel(TbkConstants.USER_LEVEL_0);
     }
 
     private void check(TbkUser tbkUser) {

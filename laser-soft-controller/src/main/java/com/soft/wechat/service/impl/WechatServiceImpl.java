@@ -57,7 +57,7 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
 
         try {
 
-            String redirectUrl = request.getScheme() + "://" + domainName + contextPath + url;
+            String redirectUrl = domainName + contextPath + url;
             String code = getauthcode(request);
             if (StringUtils.isBlank(code)) {
                 response.sendRedirect(getWeChartUrl(redirectUrl));

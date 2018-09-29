@@ -13,7 +13,7 @@
 				<#if (user.userAlipayAccount)??>
 					<a class="weui-cell weui-cell_access" href="${sysContextPath}/web/wallet/editAlipay">
 						<div class="weui-cell__hd">
-							<img src="../../static/images/alipay_icon.png" class="bank_logo" />
+							<img src="${domainName}/static/images/alipay_icon.png" class="bank_logo" />
 						</div>
 						<div class="weui-cell__bd">
 							${user.userAlipayAccount!''}
