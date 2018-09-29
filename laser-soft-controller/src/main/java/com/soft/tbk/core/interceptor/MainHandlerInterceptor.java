@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +19,9 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(MainHandlerInterceptor.class);
 
+    @Value("${tbk.domain.name}")
+    protected String domainName;
+    
     @Autowired
     private IWechatService wechatService;
 
@@ -41,6 +45,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
                 //                return false;
             }
         }
+        request.setAttribute("domainName", domainName);
         request.setAttribute("sysContextPath", requestPath + contentPath);
         return true;
     }

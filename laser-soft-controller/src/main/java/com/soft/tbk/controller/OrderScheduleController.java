@@ -87,6 +87,7 @@ public class OrderScheduleController extends BaseController {
                     tbkOrder.setRerminalType(orderJson.getString("terminal_type"));
                     tbkOrder.setSellerName(orderJson.getString("seller_shop_title"));
                     tbkOrder.setTradeId(orderJson.getLong("trade_id"));
+                    tbkOrder.setTradeParentId(orderJson.getLong("trade_parent_id"));
                     // 订单状态，1: 全部订单(默认)，3：订单结算，12：订单付款， 13：订单失效，14：订单成功；
                     tbkOrder.setTradeStatus(orderJson.getInteger("tk_status"));
                     tbkOrder.setTradeTime(orderJson.getDate("create_time"));
@@ -156,6 +157,7 @@ public class OrderScheduleController extends BaseController {
                     tbkOrder.setRerminalType(orderJson.getString("terminal_type"));
                     tbkOrder.setSellerName(orderJson.getString("seller_shop_title"));
                     tbkOrder.setTradeId(orderJson.getLong("trade_id"));
+                    tbkOrder.setTradeParentId(orderJson.getLong("trade_parent_id"));
                     tbkOrder.setTradeStatus(orderJson.getInteger("tk_status"));
                     tbkOrder.setTradeTime(orderJson.getDate("create_time"));
                     tbkOrder.setTradeType(orderJson.getString("order_type"));

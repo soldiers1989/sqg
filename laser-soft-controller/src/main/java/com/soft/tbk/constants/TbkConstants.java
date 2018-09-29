@@ -43,4 +43,7 @@ public class TbkConstants {
     public static final Integer COMMSION_STATUS_2 = 2;//失效
     
     public static final Integer TRADE_STATUS_13 = 13;//失效
+    public static final Integer TRADE_STATUS_12 = 12;//付款
+    public static final Integer TRADE_STATUS_3 = 3;//结算
+    public static final Integer TRADE_STATUS_14 = 14;//订单成功
 }

@@ -58,6 +58,12 @@ public class TbkOrder {
      */
     @Column(name = "TRADE_ID")
     private Long tradeId;
+    
+    /**
+     * 淘宝订单号ID
+     */
+    @Column(name = "TRADE_PARENT_ID")
+    private Long tradeParentId;
 
     /**
      * 商品数量
@@ -666,5 +672,15 @@ public class TbkOrder {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
+
+    public Long getTradeParentId() {
+        return tradeParentId;
+    }
+
+    public void setTradeParentId(Long tradeParentId) {
+        this.tradeParentId = tradeParentId;
+    }
+    
+    
 
 }

@@ -345,7 +345,14 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         if (tbkOrder == null) 
             return;
         
-        QueryResult<TbkOrder> queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeId", tbkOrder.getTradeId()));
+        QueryResult<TbkOrder> queryReulst = null;
+        TbkOrder oldTbkOrder = null;
+        
+        if (tbkOrder.getTradeId() == null) {
+            queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeParentId", tbkOrder.getTradeParentId()));
+        }else {
+            queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeId", tbkOrder.getTradeId()));
+        }
         
         List<TbkCommission> list = null;
        
@@ -353,8 +360,20 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         if (tbkPidItem != null) {
             tbkOrder.setUserId(tbkPidItem.getUserId());
         }
+        if (queryReulst != null && ListUtil.isNotEmpty(queryReulst.getList())) {
+            if (queryReulst.getList().size() > 1) {
+                for (TbkOrder order : queryReulst.getList()) {
+                    if(tbkOrder.getItemPrice().compareTo(order.getItemPrice()) == 0 && tbkOrder.getItemNum().equals(order.getItemNum())) {
+                        oldTbkOrder = order;
+                        break;
+                    }
+                }
+            }else {
+                oldTbkOrder = queryReulst.getList().get(0);
+            }
+        }
         
-        if (queryReulst == null || ListUtil.isEmpty(queryReulst.getList())) {
+        if (oldTbkOrder == null) {
             
             tbkOrderService.saveTbkOrder(tbkOrder);
 
@@ -369,7 +388,8 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
             }
             
         }else {
-            tbkOrder.setId(queryReulst.getList().get(0).getId());
+            
+            tbkOrder.setId(oldTbkOrder.getId());
             
             QueryResult<TbkCommission> result = tbkCommissionService.queryTbkCommission(getQueryParamMap("orderId", tbkOrder.getId()));
             //查原始佣金， 与实际结算佣金比对，不一致做更新
@@ -387,13 +407,17 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
                     }
                 }
             }
-            tbkOrder.setCommissionSamount(list.get(0).getCommission());
+            if (tbkOrder.getUserId() != null) {
+                tbkOrder.setCommissionSamount(list.get(0).getCommission());
+            }
             tbkOrderService.updateTbkOrder(tbkOrder);
             
         }
         
         //更新佣金状态
-        tbkCommissionService.updateCommissionStatus(tbkOrder.getId(), TbkConstants.COMMSION_STATUS_1, tbkOrder.getEarningTime());
+        if (TbkConstants.TRADE_STATUS_3.equals(tbkOrder.getTradeStatus())) {
+            tbkCommissionService.updateCommissionStatus(tbkOrder.getId(), TbkConstants.COMMSION_STATUS_1, tbkOrder.getEarningTime());
+        }
     }
 
 }

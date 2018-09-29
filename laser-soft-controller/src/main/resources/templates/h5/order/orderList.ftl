@@ -150,6 +150,7 @@ var tabNum = "${tabNum!'1'}";
 							$.each(data,function(i,order){
 								var state=""; 	 
 								var settelHtml = "";
+								var settelDateHtml = "";
 								if (order.tradeStatus == 12) {
 									state = "已付款";
 								}else if (order.tradeStatus == 3) {
@@ -164,7 +165,8 @@ var tabNum = "${tabNum!'1'}";
 																"<b>￥"+ Number(order.commissionSamount).toFixed(2) +"</b>"+
 															"</div>"+
 														"</div>";
-									
+														
+									settelDateHtml = "<span style='float:right'>"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.earningTime)) + " 结算</span>";
 								}else if (order.tradeStatus == 13) {
 									state = "已失效";
 								}
@@ -200,7 +202,7 @@ var tabNum = "${tabNum!'1'}";
 												"</div>"+
 											"</div>"+
 										"</a>";
-									html=html+"<div class='order_btn' style='font-size:13px'>订单日期"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.tradeTime)) + "</div></div>"+
+									html=html+"<div class='order_btn' style='font-size:12px'><span>"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.tradeTime)) + " 创建</span>"+settelDateHtml+"</div></div>"+
 											"</div>"+
 										"</div>"+
 									"</div>";
