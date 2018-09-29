@@ -104,8 +104,8 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     private String getAccessToken() {
 
         try {
-            String json = WebUtils.doGet(token_url + "&appid=wx3098f584368e8667&secret=58484bf41fbecf3a11541eadb50a5d22", null);
-            //            String json = WebUtils.doGet(token_url + "&appid=" + appid + "&secret=" + secret, null);
+            //String json = WebUtils.doGet(token_url + "&appid=wx3098f584368e8667&secret=58484bf41fbecf3a11541eadb50a5d22", null);
+            String json = WebUtils.doGet(token_url + "&appid=" + appid + "&secret=" + secret, null);
             Map<String, Object> map = (Map<String, Object>) JSON.parse(json);
             if (map != null) {
                 if (map.containsKey("errmsg")) {
@@ -328,7 +328,7 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         BufferedReader reader = null;
         String result = null;
         try {
-            String url = UPLOAD_MEDIA_URL + getAccessToken() + "&type=" + type;
+            String url = UPLOAD_MEDIA_URL + getAccessTokenCache() + "&type=" + type;
             URL urlObj = new URL(url);
             //连接
             HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
