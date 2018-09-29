@@ -1,7 +1,16 @@
 package com.soft.wechat.service.impl;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.soft.tbk.core.cache.CacheSync;
 import com.soft.tbk.domain.UserSession;
 import com.soft.tbk.service.TbkUserService;
+import com.soft.tbk.utils.UuidUtil;
 import com.soft.wechat.domain.WeChartOpenIDBean;
 import com.soft.wechat.domain.WeChartUserInfoBean;
 import com.soft.wechat.domain.WechatMsgTemplateDomain;
@@ -95,8 +104,8 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     private String getAccessToken() {
 
         try {
-            //String json = WebUtils.doGet(token_url + "&appid=wx3098f584368e8667&secret=58484bf41fbecf3a11541eadb50a5d22", null);
-            String json = WebUtils.doGet(token_url + "&appid=" + appid + "&secret=" + secret, null);
+            String json = WebUtils.doGet(token_url + "&appid=wx3098f584368e8667&secret=58484bf41fbecf3a11541eadb50a5d22", null);
+            //            String json = WebUtils.doGet(token_url + "&appid=" + appid + "&secret=" + secret, null);
             Map<String, Object> map = (Map<String, Object>) JSON.parse(json);
             if (map != null) {
                 if (map.containsKey("errmsg")) {
@@ -313,15 +322,92 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         return map;
     }
 
+    @Override
+    public String uploadMedia(String type, String filePath) {
+
+        BufferedReader reader = null;
+        String result = null;
+        try {
+            String url = UPLOAD_MEDIA_URL + getAccessToken() + "&type=" + type;
+            URL urlObj = new URL(url);
+            //连接
+            HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setUseCaches(false);
+            //设置请求头信息
+            con.setRequestProperty("Connection", "Keep-Alive");
+            con.setRequestProperty("Charset", "UTF-8");
+            //设置边界
+            String BOUNDARY = "----------" + System.currentTimeMillis();
+            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+            StringBuilder sb = new StringBuilder();
+            sb.append("--");
+            sb.append(BOUNDARY);
+            sb.append("\r\n");
+            sb.append("Content-Disposition: form-data;name=\"file\";filename=\"" + UuidUtil.getUuid() + ".jpg\"\r\n");
+            sb.append("Content-Type:application/octet-stream\r\n\r\n");
+            byte[] head = sb.toString().getBytes("utf-8");
+            //获得输出流
+            OutputStream out = new DataOutputStream(con.getOutputStream());
+            //输出表头
+            out.write(head);
+            //文件正文部分
+            URL fileurl = new URL(filePath); // 打开连接       
+            URLConnection filecon = fileurl.openConnection(); // 输入流      
+            InputStream is = filecon.getInputStream(); //     
+            //把文件已流文件的方式 推入到url中
+            DataInputStream in = new DataInputStream(is);
+            int bytes = 0;
+            byte[] bufferOut = new byte[1024];
+            while ((bytes = in.read(bufferOut)) != -1) {
+                out.write(bufferOut, 0, bytes);
+            }
+            in.close();
+            //结尾部分
+            byte[] foot = ("\r\n--" + BOUNDARY + "--\r\n").getBytes("utf-8");//定义最后数据分隔线
+            out.write(foot);
+            out.flush();
+            out.close();
+            StringBuffer buffer = new StringBuffer();
+            //定义BufferedReader输入流来读取URL的响应
+            reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+            if (result == null) {
+                result = buffer.toString();
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+        logger.info("上传图片返回结果：" + result);
+        return result;
+    }
+
     public static void main(String[] args) {
 
-        String userOpenId = "o01fz1P6fq6U7HO5kBNY7PK2Fsi0";
+        WechatServiceImpl action = new WechatServiceImpl();
+        String a = action.uploadMedia("image",
+                        "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQFv8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyMmNCMXNHam5mUGsxUkRNbDFyY3MAAgRn461bAwQAjScA");
+        System.out.println(a);
+        /*String userOpenId = "o01fz1P6fq6U7HO5kBNY7PK2Fsi0";
         String templateId = "Do6UCWQMSiRjJu21KNCdwLZ9QZ7zDxRChlLP30ZSxmc";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("touser", userOpenId);
         paramMap.put("template_id", templateId);
         paramMap.put("url", "http://www.baidu.com");
-
+        
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("first", new WechatServiceImpl().getMsgMap("小调皮,跟踪到您的一个新订单", "#173177"));
         dataMap.put("keyword1", new WechatServiceImpl().getMsgMap("123456678", "#173177"));
@@ -333,6 +419,7 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         try {
             String a = WebUtils.doPostByJson(SEND_MESSAGE_URL + new WechatServiceImpl().getAccessToken(), paramMap, 0, 0);
             System.out.println(a);
-        } catch (IOException e) {}
+        } catch (IOException e) {}*/
     }
+
 }

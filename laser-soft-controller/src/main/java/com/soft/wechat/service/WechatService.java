@@ -16,6 +16,7 @@ import com.soft.tbk.model.TbkUser;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
+import com.soft.wechat.model.MediaMessage;
 import com.soft.wechat.model.TextMessage;
 import com.soft.wechat.robot.TulingRobot;
 import com.soft.wechat.util.MapUtil;
@@ -75,6 +76,18 @@ public class WechatService {
             if (StringUtils.isEmpty(returnContent)) {
                 returnContent = new TulingRobot(tenantCode).getResult(content);
             }
+            // 如果是淘口令信息
+            if (StringUtils.isEmpty(returnContent)) {
+                return responseMessage;
+            }
+            TextMessage textMessage = new TextMessage();
+            textMessage.setMsgType(msgType);
+            textMessage.setToUserName(fromUserName);
+            textMessage.setFromUserName(toUserName);
+            textMessage.setCreateTime(System.currentTimeMillis());
+            textMessage.setContent(returnContent);
+            responseMessage = WechatMessageUtil.textMessageToXml(textMessage);
+
         } else if (MessageTypeEnum.MESSAGE_EVENT.getCode().equals(msgType)) {//事件推送消息
 
             String eventKey = map.get("EventKey");
@@ -91,24 +104,17 @@ public class WechatService {
             } else if (EventEnum.EVENT_CLICK.getCode().equals(event)) {//点击菜单拉取消息时的事件推送
                 if ("share".equals(eventKey)) {
                     // 分享生成二维码
-                    //returnContent = businessService.generateWxQrCode(fromUserName);
+                    String mediaId = businessService.getMediaIdByShare(fromUserName);
+                    MediaMessage mediaMessage = new MediaMessage();
+                    mediaMessage.setMsgType(msgType);
+                    mediaMessage.setToUserName(fromUserName);
+                    mediaMessage.setFromUserName(toUserName);
+                    mediaMessage.setCreateTime(System.currentTimeMillis());
+                    mediaMessage.setMediaId(mediaId);
+                    responseMessage = WechatMessageUtil.textMessageToXml(mediaMessage);
                 }
             }
         }
-
-        // 如果是淘口令信息
-
-        if (StringUtils.isEmpty(returnContent)) {
-            return responseMessage;
-        }
-
-        TextMessage textMessage = new TextMessage();
-        textMessage.setMsgType(msgType);
-        textMessage.setToUserName(fromUserName);
-        textMessage.setFromUserName(toUserName);
-        textMessage.setCreateTime(System.currentTimeMillis());
-        textMessage.setContent(returnContent);
-        responseMessage = WechatMessageUtil.textMessageToXml(textMessage);
 
         return responseMessage;
     }

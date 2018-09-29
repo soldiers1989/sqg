@@ -60,6 +60,9 @@ public class SuperWechatService {
     //发送模板消息
     protected final static String SEND_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
+    //新增临时素材
+    protected final static String UPLOAD_MEDIA_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=";
+
     protected static final long TOKEN_TIME_OUT = 2 * 60 * 60 * 1000L;
 
     @Value("${weixin.appID}")

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.soft.tbk.base.BaseController;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
@@ -125,18 +126,26 @@ public class BusinessService extends BaseController {
     }
 
     /**
-     * 微信生成生成分享二维码
+     * 微信回复分享二维码,返回图片mediaId
      * 
      * @return
      */
-    public String generateWxQrCode(String openId) {
+    public String getMediaIdByShare(String openId) {
 
-        String code = "";
-        TbkUser tbkUser = tbkUserService.getTbkUserByOpenid(openId);
-        if (tbkUser != null) {
-            code = tbkUser.getId().toString();
+        String mediaId = "";
+        try {
+            String code = "";
+            TbkUser tbkUser = tbkUserService.getTbkUserByOpenid(openId);
+            if (tbkUser != null) {
+                code = tbkUser.getId().toString();
+            }
+            String url = wechatService.createQrcode(code);// 获取分享二维码
+            String result = wechatService.uploadMedia("image", url);// 上传临时图片
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            mediaId = jsonObject.getString("media_id");
+        } catch (Exception e) {
+            logger.error("微信回复分享二维码失败", e.getMessage());
         }
-        String url = wechatService.createQrcode(code);
-        return (url);
+        return mediaId;
     }
 }

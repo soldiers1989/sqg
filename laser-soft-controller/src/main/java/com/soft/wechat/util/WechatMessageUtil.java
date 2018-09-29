@@ -56,15 +56,16 @@ public class WechatMessageUtil {
      * @param textMessage
      * @return
      */
-    public static String textMessageToXml(TextMessage textMessage) {
+    public static String textMessageToXml(Object textMessage) {
 
         XStream xstream = new XStream();
         xstream.alias("xml", textMessage.getClass());
         return xstream.toXML(textMessage).replace(" ", "");
 
     }
-    
+
     public static void main(String[] args) {
+
         TextMessage textMessage = new TextMessage();
         textMessage.setContent("asdasd");
         System.out.println(textMessageToXml(textMessage));

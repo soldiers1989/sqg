@@ -31,6 +31,14 @@ public interface IWechatService {
     public String createQrcode(String code);
 
     /**
+     * 新增临时素材
+     * 
+     * @param type 图片（image）、语音（voice）、视频（video）和缩略图（thumb）
+     * @return
+     */
+    public String uploadMedia(String type, String filePath);
+
+    /**
      * 创建菜单
      */
     public String createMenu(String menuJson);
