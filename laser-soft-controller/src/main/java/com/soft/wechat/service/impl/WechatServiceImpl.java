@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.soft.tbk.core.cache.CacheSync;
 import com.soft.tbk.domain.UserSession;
+import com.soft.tbk.model.TbkUser;
 import com.soft.tbk.service.TbkUserService;
+import com.soft.tbk.utils.BeanUtils;
 import com.soft.tbk.utils.UuidUtil;
 import com.soft.wechat.domain.WeChartOpenIDBean;
 import com.soft.wechat.domain.WeChartUserInfoBean;
@@ -54,14 +56,19 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     public boolean requestAuth(HttpServletRequest request, HttpServletResponse response, String contextPath, String url) {
 
         try {
+
+            String redirectUrl = request.getScheme() + "://" + domainName + contextPath + url;
             String code = getauthcode(request);
             if (StringUtils.isBlank(code)) {
-                response.sendRedirect(getWeChartUrl(domainName + contextPath + url));
+                response.sendRedirect(getWeChartUrl(redirectUrl));
             } else {
                 UserSession user = getUserinfo(code);
                 if (user != null) {
-                    tbkUserService.saveTbkUserWithOpenId(user);
-                    response.sendRedirect(domainName + contextPath + url);
+                    TbkUser tbkUser = tbkUserService.saveTbkUserWithOpenId(user);
+                    response.sendRedirect(redirectUrl);
+                    try {
+                        BeanUtils.copyAllPropertysNotNull(user, tbkUser);
+                    } catch (Exception e) {}
                     request.getSession().setAttribute("userSession", user);
                     return false;
                 }

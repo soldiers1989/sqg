@@ -17,7 +17,7 @@
 					<#else>
 						${userName?default('游客')}	
 					</#if>
-					<span class="vip_span">vip${user.userLevel}</span>
+					<span class="vip_span">vip${user.userLevel!'1'}</span>
 				</h2>
 				<div>
 					账户余额￥${(amount)?string('0.00')}
