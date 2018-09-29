@@ -436,6 +436,21 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         return result;
     }
 
+    @Override
+    public String batchgetMaterial(String type, String offset, String count) {
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("type", type);
+        paramMap.put("offset", offset);
+        paramMap.put("count", count);
+        try {
+            return WebUtils.doPostByJson(BATCHGET_MATERIAL_URL + getAccessTokenCache(), paramMap, 0, 0);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
 
         WechatServiceImpl action = new WechatServiceImpl();

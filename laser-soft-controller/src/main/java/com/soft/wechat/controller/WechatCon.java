@@ -110,4 +110,21 @@ public class WechatCon extends BaseController {
         return new ResultResponse(result);
     }
 
+    /**
+     * 获取素材列表
+     * 
+     * @param request
+     * @param type 图片（image）、视频（video）、语音 （voice）、图文（news）
+     * @param offset 从全部素材的该偏移位置开始返回，0表示从第一个素材 返回
+     * @param count 返回素材的数量，取值在1到20之间
+     * @return
+     */
+    @RequestMapping(value = "/batchgetMaterial/{type}/{offset}/{count}")
+    public @ResponseBody ResultResponse deleteMenu(HttpServletRequest request, @PathVariable("type") String type,
+                    @PathVariable("offset") String offset, @PathVariable("count") String count) {
+
+        String result = wechatService.batchgetMaterial(type, offset, count);
+        return new ResultResponse(result);
+    }
+
 }

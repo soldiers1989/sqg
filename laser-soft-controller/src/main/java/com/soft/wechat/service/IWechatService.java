@@ -65,4 +65,11 @@ public interface IWechatService {
      * 发送模板消息
      */
     public String sendMessage(WechatMsgTemplateDomain wechatMsgTemplateDomain);
+
+    /**
+     * 获取素材列表
+     * 
+     * @return
+     */
+    public String batchgetMaterial(String type, String offset, String count);
 }

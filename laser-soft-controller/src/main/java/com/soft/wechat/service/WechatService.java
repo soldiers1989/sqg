@@ -80,13 +80,7 @@ public class WechatService {
             if (StringUtils.isEmpty(returnContent)) {
                 return responseMessage;
             }
-            TextMessage textMessage = new TextMessage();
-            textMessage.setMsgType(msgType);
-            textMessage.setToUserName(fromUserName);
-            textMessage.setFromUserName(toUserName);
-            textMessage.setCreateTime(System.currentTimeMillis());
-            textMessage.setContent(returnContent);
-            responseMessage = WechatMessageUtil.textMessageToXml(textMessage);
+            responseMessage = makeTextMessage(wechatMsgDomain, returnContent);
 
         } else if (MessageTypeEnum.MESSAGE_EVENT.getCode().equals(msgType)) {//事件推送消息
 
@@ -100,31 +94,63 @@ public class WechatService {
                     tbkUser.setParentId(Integer.parseInt(eventKey));
                 }
                 businessService.executorUser(tbkUser);
+                // 初始化关注时的回复
+                returnContent = "欢迎加入桃桃，让你省钱又赚钱。无需注册，完成首次查询发送后，就是终身会员了。开始吧GO\n" + "1、淘宝上随便找个宝贝，可以是买过的，或是购物车里的宝贝！分享至桃桃公众号\n"
+                                + "2、发到桃桃，就能检查出优惠券（特别是隐藏劵），佣金也是你自己的\n" + "3、操作流程图请点击查看【使用指南】\n";
+                responseMessage = makeTextMessage(wechatMsgDomain, returnContent);
             } else if (EventEnum.EVENT_UNSUBSCRIBE.getCode().equals(event)) {//取消关注
             } else if (EventEnum.EVENT_CLICK.getCode().equals(event)) {//点击菜单拉取消息时的事件推送
                 if ("share".equals(eventKey)) {
                     // 分享生成二维码
                     String mediaId = businessService.getMediaIdByShare(fromUserName);
-                    MediaMessage mediaMessage = new MediaMessage();
-                    mediaMessage.setMsgType(MessageTypeEnum.MESSAtGE_IMAGE.getCode());
-                    mediaMessage.setToUserName(fromUserName);
-                    mediaMessage.setFromUserName(toUserName);
-                    mediaMessage.setCreateTime(System.currentTimeMillis());
-                    mediaMessage.setMediaId(mediaId);
-                    responseMessage = WechatMessageUtil.textMessageToXml(mediaMessage);
+                    responseMessage = makeMediaMessage(wechatMsgDomain, mediaId);
                 } else if ("waiting".equals(eventKey)) {
-                    TextMessage textMessage = new TextMessage();
-                    textMessage.setMsgType(MessageTypeEnum.MESSAGE_TEXT.getCode());
-                    textMessage.setToUserName(fromUserName);
-                    textMessage.setFromUserName(toUserName);
-                    textMessage.setCreateTime(System.currentTimeMillis());
-                    textMessage.setContent("功能升级中，敬请期待...");
-                    responseMessage = WechatMessageUtil.textMessageToXml(textMessage);
+                    responseMessage = makeTextMessage(wechatMsgDomain, "功能升级中，敬请期待...");
+                } else if (eventKey.startsWith("mediaId-")) {
+                    // 回复永久图片素材消息
+                    String mediaId = eventKey.split("-")[1];
+                    responseMessage = makeMediaMessage(wechatMsgDomain, mediaId);
                 }
             }
         }
 
         return responseMessage;
+    }
+
+    /**
+     * 图片消息
+     * 
+     * @param wechatMsgDomain
+     * @param content
+     * @return
+     */
+    private String makeMediaMessage(WechatMsgDomain wechatMsgDomain, String mediaId) {
+
+        MediaMessage mediaMessage = new MediaMessage();
+        mediaMessage.setMsgType(MessageTypeEnum.MESSAtGE_IMAGE.getCode());
+        mediaMessage.setToUserName(wechatMsgDomain.getFromUserName());
+        mediaMessage.setFromUserName(wechatMsgDomain.getToUserName());
+        mediaMessage.setCreateTime(System.currentTimeMillis());
+        mediaMessage.setMediaId(mediaId);
+        return WechatMessageUtil.textMessageToXml(mediaMessage);
+    }
+
+    /**
+     * 文本消息
+     * 
+     * @param wechatMsgDomain
+     * @param content
+     * @return
+     */
+    private String makeTextMessage(WechatMsgDomain wechatMsgDomain, String content) {
+
+        TextMessage textMessage = new TextMessage();
+        textMessage.setMsgType(MessageTypeEnum.MESSAGE_TEXT.getCode());
+        textMessage.setToUserName(wechatMsgDomain.getFromUserName());
+        textMessage.setFromUserName(wechatMsgDomain.getToUserName());
+        textMessage.setCreateTime(System.currentTimeMillis());
+        textMessage.setContent(content);
+        return WechatMessageUtil.textMessageToXml(textMessage);
     }
 
     @SuppressWarnings("unused")
@@ -142,4 +168,5 @@ public class WechatService {
             e.printStackTrace();
         }
     }
+
 }
