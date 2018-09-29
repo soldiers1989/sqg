@@ -150,6 +150,9 @@
       <if test="sellerName != null and sellerName.trim().length() != 0">
         AND (SELLER_NAME = #{sellerName})
       </if>
+      <if test="tradeId != null">
+        AND (TRADE_ID = #{tradeId})
+      </if>
       <if test="tradeParentId != null">
         AND (TRADE_PARENT_ID = #{tradeParentId})
       </if>
