@@ -16,6 +16,7 @@ import com.soft.tbk.model.TbkUser;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
+import com.soft.wechat.model.ImageMessage;
 import com.soft.wechat.model.MediaMessage;
 import com.soft.wechat.model.TextMessage;
 import com.soft.wechat.robot.TulingRobot;
@@ -103,13 +104,13 @@ public class WechatService {
                 if ("share".equals(eventKey)) {
                     // 分享生成二维码
                     String mediaId = businessService.getMediaIdByShare(fromUserName);
-                    responseMessage = makeMediaMessage(wechatMsgDomain, mediaId);
+                    responseMessage = makeImageMessage(wechatMsgDomain, mediaId);
                 } else if ("waiting".equals(eventKey)) {
                     responseMessage = makeTextMessage(wechatMsgDomain, "功能升级中，敬请期待...");
                 } else if (eventKey.startsWith("mediaId-")) {
                     // 回复永久图片素材消息
                     String mediaId = eventKey.split("-")[1];
-                    responseMessage = makeMediaMessage(wechatMsgDomain, mediaId);
+                    responseMessage = makeImageMessage(wechatMsgDomain, mediaId);
                 }
             }
         }
@@ -124,14 +125,16 @@ public class WechatService {
      * @param content
      * @return
      */
-    private String makeMediaMessage(WechatMsgDomain wechatMsgDomain, String mediaId) {
+    private String makeImageMessage(WechatMsgDomain wechatMsgDomain, String mediaId) {
 
         MediaMessage mediaMessage = new MediaMessage();
-        mediaMessage.setMsgType(MessageTypeEnum.MESSAtGE_IMAGE.getCode());
-        mediaMessage.setToUserName(wechatMsgDomain.getFromUserName());
-        mediaMessage.setFromUserName(wechatMsgDomain.getToUserName());
-        mediaMessage.setCreateTime(System.currentTimeMillis());
         mediaMessage.setMediaId(mediaId);
+        ImageMessage imageMessage = new ImageMessage();
+        imageMessage.setMsgType(MessageTypeEnum.MESSAtGE_IMAGE.getCode());
+        imageMessage.setToUserName(wechatMsgDomain.getFromUserName());
+        imageMessage.setFromUserName(wechatMsgDomain.getToUserName());
+        imageMessage.setCreateTime(System.currentTimeMillis());
+        imageMessage.setMediaMessage(mediaMessage);
         return WechatMessageUtil.textMessageToXml(mediaMessage);
     }
 

@@ -65,6 +65,9 @@ public class SuperWechatService {
     //新增临时素材
     protected final static String UPLOAD_MEDIA_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=";
 
+    //新增永久素材
+    protected final static String ADD_MATERIAL_URL = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=";
+
     //获取素材列表
     protected final static String BATCHGET_MATERIAL_URL = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=";
 

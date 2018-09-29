@@ -1,6 +1,6 @@
 package com.soft.wechat.model;
 
-public class MediaMessage extends BaseWechatMessage {
+public class MediaMessage {
 
     /**
      * 图片消息内容
