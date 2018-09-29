@@ -26,6 +26,11 @@ public class WxQrcodeDomain implements Serializable {
                         + "\" }";
     }
 
+    public String toLimitString() {
+
+        return "{\"action_info\": " + action_info + ",\"action_name\": \"" + action_name + "\" }";
+    }
+
     public Integer getExpire_seconds() {
 
         return expire_seconds;

@@ -52,6 +52,24 @@ public class WechatCon extends BaseController {
     }
 
     /**
+     * 微信生成生成分享二维码
+     * 
+     * @param request
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "/generateWxLimitQrCode/{code}")
+    public @ResponseBody ResultResponse generateWxLimitQrCode(HttpServletRequest request, @PathVariable("code") String code) {
+
+        UserSession userSession = getUserSession(request);
+        if (userSession != null) {
+            code = userSession.getId().toString();
+        }
+        String url = wechatService.createLimitQrcode(code);
+        return new ResultResponse(url);
+    }
+
+    /**
      * 创建菜单
      * 
      * @param request

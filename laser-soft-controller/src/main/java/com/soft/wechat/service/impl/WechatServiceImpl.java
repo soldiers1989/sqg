@@ -89,7 +89,7 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
     public String getAccessTokenCache() {
 
         //读取缓存
-        String core = "access_token";
+        String core = ACCESS_TOKEN;
         return redisJsonStringService.getObject(core, new CacheSync<String>() {
 
             @Override
@@ -118,8 +118,8 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
                 if (map.containsKey("errmsg")) {
                     return null;
                 }
-                if (map.containsKey("access_token")) {
-                    return (String) map.get("access_token");
+                if (map.containsKey(ACCESS_TOKEN)) {
+                    return (String) map.get(ACCESS_TOKEN);
                 }
             }
         } catch (IOException e) {
@@ -152,6 +152,40 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         String url = QRCODE_CREATE_URL + getAccessTokenCache();
         try {
             String json = qrcodeActionDTO.toString();
+            WxQrcode wxQrcode = WebUtils.postForObject(url, json, WxQrcode.class, 0, 0);
+            if (wxQrcode == null) {
+                return null;
+            }
+            return QRCODE_SHOW + wxQrcode.getTicket();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    /**
+     * 创建永久二维码
+     *
+     * @param sceneStr
+     *            场景值字符串ID 长度限制为1到64
+     * @return
+     */
+    public String createLimitQrcode(String sceneStr) {
+
+        // 场景数据
+        String actionInfo = null;
+        if (StringUtils.isNotBlank(sceneStr)) {
+            if (sceneStr.length() > SCENE_STR_MAX_LENGTH) {
+                throw new IllegalArgumentException("sceneStr length more than 64");
+            }
+            actionInfo = String.format("{\"scene\":{\"scene_str\":\"%s\"}}", sceneStr);
+        }
+        WxQrcodeDomain qrcodeActionDTO = new WxQrcodeDomain();
+        qrcodeActionDTO.setAction_name(QR_LIMIT_STR_SCENE);
+        qrcodeActionDTO.setAction_info(actionInfo);
+        String url = QRCODE_CREATE_URL + getAccessTokenCache();
+        try {
+            String json = qrcodeActionDTO.toLimitString();
             WxQrcode wxQrcode = WebUtils.postForObject(url, json, WxQrcode.class, 0, 0);
             if (wxQrcode == null) {
                 return null;

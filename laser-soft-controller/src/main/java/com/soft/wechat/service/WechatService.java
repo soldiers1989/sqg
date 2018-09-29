@@ -106,12 +106,20 @@ public class WechatService {
                     // 分享生成二维码
                     String mediaId = businessService.getMediaIdByShare(fromUserName);
                     MediaMessage mediaMessage = new MediaMessage();
-                    mediaMessage.setMsgType(msgType);
+                    mediaMessage.setMsgType(MessageTypeEnum.MESSAtGE_IMAGE.getCode());
                     mediaMessage.setToUserName(fromUserName);
                     mediaMessage.setFromUserName(toUserName);
                     mediaMessage.setCreateTime(System.currentTimeMillis());
                     mediaMessage.setMediaId(mediaId);
                     responseMessage = WechatMessageUtil.textMessageToXml(mediaMessage);
+                } else if ("waiting".equals(eventKey)) {
+                    TextMessage textMessage = new TextMessage();
+                    textMessage.setMsgType(MessageTypeEnum.MESSAGE_TEXT.getCode());
+                    textMessage.setToUserName(fromUserName);
+                    textMessage.setFromUserName(toUserName);
+                    textMessage.setCreateTime(System.currentTimeMillis());
+                    textMessage.setContent("功能升级中，敬请期待...");
+                    responseMessage = WechatMessageUtil.textMessageToXml(textMessage);
                 }
             }
         }

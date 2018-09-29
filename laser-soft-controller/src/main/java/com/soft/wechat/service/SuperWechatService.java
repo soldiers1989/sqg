@@ -7,6 +7,8 @@ import com.soft.tbk.core.cache.IRedisJsonStringService;
 
 public class SuperWechatService {
 
+    protected final static String ACCESS_TOKEN = "access_token";
+
     /**
      * 永久的字符串参数值
      */
@@ -63,7 +65,7 @@ public class SuperWechatService {
     //新增临时素材
     protected final static String UPLOAD_MEDIA_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=";
 
-    protected static final long TOKEN_TIME_OUT = 2 * 60 * 60 * 1000L;
+    protected static final long TOKEN_TIME_OUT = 60 * 60 * 1000L;
 
     @Value("${weixin.appID}")
     protected String appid;
