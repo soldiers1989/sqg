@@ -16,8 +16,8 @@ import com.soft.tbk.model.TbkUser;
 import com.soft.wechat.domain.WechatMsgDomain;
 import com.soft.wechat.enums.EventEnum;
 import com.soft.wechat.enums.MessageTypeEnum;
+import com.soft.wechat.model.Image;
 import com.soft.wechat.model.ImageMessage;
-import com.soft.wechat.model.MediaMessage;
 import com.soft.wechat.model.TextMessage;
 import com.soft.wechat.robot.TulingRobot;
 import com.soft.wechat.util.MapUtil;
@@ -127,14 +127,14 @@ public class WechatService {
      */
     private String makeImageMessage(WechatMsgDomain wechatMsgDomain, String mediaId) {
 
-        MediaMessage mediaMessage = new MediaMessage();
-        mediaMessage.setMediaId(mediaId);
+        Image image = new Image();
+        image.setMediaId(mediaId);
         ImageMessage imageMessage = new ImageMessage();
         imageMessage.setMsgType(MessageTypeEnum.MESSAtGE_IMAGE.getCode());
         imageMessage.setToUserName(wechatMsgDomain.getFromUserName());
         imageMessage.setFromUserName(wechatMsgDomain.getToUserName());
         imageMessage.setCreateTime(System.currentTimeMillis());
-        imageMessage.setMediaMessage(mediaMessage);
+        imageMessage.setImage(image);
         return WechatMessageUtil.textMessageToXml(imageMessage);
     }
 

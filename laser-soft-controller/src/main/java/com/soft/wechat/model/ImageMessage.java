@@ -5,16 +5,16 @@ public class ImageMessage extends BaseWechatMessage {
     /**
      * 图片消息内容
      */
-    private MediaMessage mediaMessage;
+    private Image Image;
 
-    public MediaMessage getMediaMessage() {
+    public Image getImage() {
 
-        return mediaMessage;
+        return Image;
     }
 
-    public void setMediaMessage(MediaMessage mediaMessage) {
+    public void setImage(Image image) {
 
-        this.mediaMessage = mediaMessage;
+        Image = image;
     }
 
 }

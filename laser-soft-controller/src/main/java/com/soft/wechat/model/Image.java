@@ -1,6 +1,6 @@
 package com.soft.wechat.model;
 
-public class MediaMessage {
+public class Image {
 
     /**
      * 图片消息内容
