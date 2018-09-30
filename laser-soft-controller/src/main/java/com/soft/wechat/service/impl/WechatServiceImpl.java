@@ -32,6 +32,7 @@ import com.soft.tbk.service.TbkUserService;
 import com.soft.tbk.utils.BeanUtils;
 import com.soft.tbk.utils.UuidUtil;
 import com.soft.wechat.domain.WeChartOpenIDBean;
+import com.soft.wechat.domain.WeChartUserInfoBean;
 import com.soft.wechat.domain.WechatMsgTemplateDomain;
 import com.soft.wechat.domain.WxQrcodeDomain;
 import com.soft.wechat.model.WxQrcode;
@@ -39,6 +40,7 @@ import com.soft.wechat.service.IWechatService;
 import com.soft.wechat.service.SuperWechatService;
 import com.soft.wechat.util.JsonUtil;
 import com.soft.wechat.util.WebUtils;
+import com.soft.wechat.validator.ExpressionValidator;
 
 @Service
 public class WechatServiceImpl extends SuperWechatService implements IWechatService {
@@ -60,22 +62,20 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
             if (StringUtils.isBlank(code)) {
                 response.sendRedirect(getWeChartUrl(redirectUrl));
             } else {
-                // 获取openId
-                String json = getWeChartOpenId(code);
-                if (json.indexOf("errcode") == -1) {
-                    WeChartOpenIDBean open = JsonUtil.buildNonNullBinder().getJsonToObject(json, WeChartOpenIDBean.class);
-                    if (open != null) {
-                        UserSession userSession = new UserSession();
-                        TbkUser tbkUser = tbkUserService.getTbkUserByOpenid(open.getOpenid());
-                        try {
-                            BeanUtils.copyAllPropertysNotNull(userSession, tbkUser);
-                        } catch (Exception e) {}
-                        request.getSession().setAttribute("userSession", userSession);
-                        response.sendRedirect(redirectUrl);
-                        return false;
-                    }
-                }
+                UserSession user = getUserinfo(code);
+                if (user != null) {
+                    TbkUser tbkUser = tbkUserService.getTbkUserByOpenid(user.getUserOpenid());
 
+                    if (tbkUser == null || tbkUser.getUserNickname() == null || user.getUserImgurl() == null) {
+                        tbkUser = tbkUserService.saveTbkUserWithOpenId(user);
+                    }
+                    response.sendRedirect(redirectUrl);
+                    try {
+                        BeanUtils.copyAllPropertysNotNull(user, tbkUser);
+                    } catch (Exception e) {}
+                    request.getSession().setAttribute("userSession", user);
+                    return false;
+                }
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -268,6 +268,28 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         return "wx";
     }
 
+    private UserSession getUserinfo(String code) {
+
+        // 获取secret
+        String json = getWeChartOpenId(code);
+        if (json.indexOf("errcode") == -1) {
+            WeChartOpenIDBean open = JsonUtil.buildNonNullBinder().getJsonToObject(json, WeChartOpenIDBean.class);
+            if (open != null) {
+                UserSession user = new UserSession();
+                String userinfojson = getWeChartUserinfo(open.getOpenid());
+                WeChartUserInfoBean userinfo = JsonUtil.buildNonNullBinder().getJsonToObject(userinfojson, WeChartUserInfoBean.class);
+                if (userinfo != null && userinfo.getNickname() != null) {
+                    user.setUserImgurl(userinfo.getHeadimgurl());
+                    user.setUserNickname(renameNick(userinfo.getNickname(), open.getOpenid()));
+                    user.setSex(userinfo.getSex());
+                }
+                user.setUserOpenid(open.getOpenid());
+                return user;
+            }
+        }
+        return null;
+    }
+
     /**
      * 获取openid
      */
@@ -282,6 +304,17 @@ public class WechatServiceImpl extends SuperWechatService implements IWechatServ
         }
         return json;
     }
+    
+    @SuppressWarnings("static-access")
+    public String renameNick(String nickName, String openId) {
+
+        if (!new ExpressionValidator().containsEmoji(nickName)) {
+            return nickName;
+        } else {
+            return openId.substring(openId.length() - 10);
+        }
+    }
+
 
     /**
      * 获取用户信息
