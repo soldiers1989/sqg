@@ -103,7 +103,7 @@ public class WechatService {
             } else if (EventEnum.EVENT_CLICK.getCode().equals(event)) {//点击菜单拉取消息时的事件推送
                 if ("share".equals(eventKey)) {
                     // 分享生成二维码
-                    String mediaId = businessService.getMediaIdByShare(fromUserName);
+                    String mediaId = businessService.getMediaIdByShareCache(fromUserName);
                     responseMessage = makeImageMessage(wechatMsgDomain, mediaId);
                 } else if ("waiting".equals(eventKey)) {
                     responseMessage = makeTextMessage(wechatMsgDomain, "功能升级中，敬请期待...");

@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.soft.tbk.base.BaseController;
+import com.soft.tbk.core.cache.CacheSync;
+import com.soft.tbk.core.cache.IRedisJsonStringService;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
 import com.soft.tbk.model.TbkUser;
@@ -20,9 +21,12 @@ import com.soft.tbk.service.TbkCouponService;
 import com.soft.tbk.service.TbkRateService;
 import com.soft.tbk.service.TbkUserService;
 import com.soft.tbk.utils.ListUtil;
+import com.soft.wechat.domain.WeChartUserInfoBean;
+import com.soft.wechat.util.JsonUtil;
+import com.soft.wechat.validator.ExpressionValidator;
 
 @Service
-public class BusinessService extends BaseController {
+public class BusinessService extends SuperWechatService {
 
     Logger logger = LoggerFactory.getLogger(BusinessService.class);
 
@@ -43,6 +47,9 @@ public class BusinessService extends BaseController {
 
     @Autowired
     IWechatService wechatService;
+
+    @Autowired
+    IRedisJsonStringService redisJsonStringService;
 
     public void batchOrderList(List<TbkOrder> orderList) {
 
@@ -117,12 +124,51 @@ public class BusinessService extends BaseController {
 
                 logger.info("executorUser: {}", JSONArray.toJSON(tbkUser));
                 try {
+                    // 获取用户信息并保存
+                    String userOpenid = tbkUser.getUserOpenid();
+                    String userinfojson = wechatService.getWeChartUserinfo(userOpenid);
+                    WeChartUserInfoBean userinfo = JsonUtil.buildNonNullBinder().getJsonToObject(userinfojson, WeChartUserInfoBean.class);
+                    if (userinfo != null && userinfo.getNickname() != null) {
+                        tbkUser.setUserImgurl(userinfo.getHeadimgurl());
+                        tbkUser.setUserNickname(renameNick(userinfo.getNickname(), userOpenid));
+                    }
                     tbkUserService.saveTbkUserWithOpenId(tbkUser);
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 }
             }
         });
+    }
+
+    @SuppressWarnings("static-access")
+    public String renameNick(String nickName, String openId) {
+
+        if (!new ExpressionValidator().containsEmoji(nickName)) {
+            return nickName;
+        } else {
+            return openId.substring(openId.length() - 10);
+        }
+    }
+
+    public String getMediaIdByShareCache(String openId) {
+
+        //读取缓存
+        String core = "media_id-" + openId;
+        return redisJsonStringService.getObject(core, new CacheSync<String>() {
+
+            @Override
+            public String invoke() {
+
+                return getMediaIdByShare(openId);
+            }
+
+            @Override
+            public Class<?> getGenericClass() {
+
+                return String.class;
+            }
+
+        }, 2 * TOKEN_TIME_OUT);// 默认2天失效
     }
 
     /**

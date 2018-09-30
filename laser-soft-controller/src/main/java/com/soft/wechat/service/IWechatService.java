@@ -23,6 +23,14 @@ public interface IWechatService {
     public boolean requestAuth(HttpServletRequest request, HttpServletResponse response, String contextPath, String url);
 
     /**
+     * 获取用户信息
+     * 
+     * @param openid
+     * @return
+     */
+    public String getWeChartUserinfo(String openid);
+
+    /**
      * 创建二维码
      * 
      * @param code
