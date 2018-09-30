@@ -347,11 +347,16 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         
         QueryResult<TbkOrder> queryReulst = null;
         TbkOrder oldTbkOrder = null;
-        
+        boolean onlyTrade = false;
         if (tbkOrder.getTradeId() == null) {
             queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeParentId", tbkOrder.getTradeParentId()));
         }else {
-            queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeId", tbkOrder.getTradeId()));
+            queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeId,tradeParentId", tbkOrder.getTradeId(), tbkOrder.getTradeParentId()));
+            if (queryReulst == null || ListUtil.isEmpty(queryReulst.getList())) {
+                queryReulst = tbkOrderService.queryTbkOrder(getQueryParamMap("tradeParentId", tbkOrder.getTradeParentId()));
+            }else {
+                onlyTrade = true;
+            }
         }
         
         List<TbkCommission> list = null;
@@ -361,15 +366,15 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
             tbkOrder.setUserId(tbkPidItem.getUserId());
         }
         if (queryReulst != null && ListUtil.isNotEmpty(queryReulst.getList())) {
-            if (queryReulst.getList().size() > 1) {
+            if (tbkOrder.getTradeId() != null && onlyTrade) {
+                oldTbkOrder = queryReulst.getList().get(0);
+            }else {
                 for (TbkOrder order : queryReulst.getList()) {
                     if(tbkOrder.getItemPrice().compareTo(order.getItemPrice()) == 0 && tbkOrder.getItemNum().equals(order.getItemNum())) {
                         oldTbkOrder = order;
                         break;
                     }
                 }
-            }else {
-                oldTbkOrder = queryReulst.getList().get(0);
             }
         }
         
@@ -388,13 +393,14 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
             }
             
         }else {
-            
             tbkOrder.setId(oldTbkOrder.getId());
             
             QueryResult<TbkCommission> result = tbkCommissionService.queryTbkCommission(getQueryParamMap("orderId", tbkOrder.getId()));
-            //查原始佣金， 与实际结算佣金比对，不一致做更新
-            if (result != null && ListUtil.isNotEmpty(result.getList()) ) {
+            if (tbkOrder.getUserId() != null) {
                 list = saveCommissionList(tbkOrder.getCommission(), tbkOrder.getUserId(), tbkOrder);
+            }
+            //查原始佣金， 与实际结算佣金比对，不一致做更新
+            if (result != null && ListUtil.isNotEmpty(result.getList())) {
                 Map<Integer, TbkCommission> commsionMap = new HashMap<Integer, TbkCommission>();
                 for (TbkCommission tbkCommission : list) {
                     commsionMap.put(tbkCommission.getUserId(), tbkCommission);
@@ -406,17 +412,27 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
                         tbkCommissionService.updateTbkCommission(tbkCommission);
                     }
                 }
+            }else {
+                if (ListUtil.isNotEmpty(list) && !TbkConstants.TRADE_STATUS_13.equals(oldTbkOrder.getTradeStatus())) {
+                    tbkCommissionService.insertBatch(list);
+                }
             }
-            if (tbkOrder.getUserId() != null) {
-                tbkOrder.setCommissionSamount(list.get(0).getCommission());
+            if (tbkOrder.getUserId() != null && ListUtil.isNotEmpty(list)) {
+                if (oldTbkOrder.getCommissionAmount() == null) {
+                    tbkOrder.setCommissionAmount(list.get(0).getCommission());
+                }
+                if (TbkConstants.TRADE_STATUS_3.equals(tbkOrder.getTradeStatus())) {
+                    tbkOrder.setCommissionSamount(list.get(0).getCommission());
+                }
             }
             tbkOrderService.updateTbkOrder(tbkOrder);
-            
         }
         
         //更新佣金状态
         if (TbkConstants.TRADE_STATUS_3.equals(tbkOrder.getTradeStatus())) {
             tbkCommissionService.updateCommissionStatus(tbkOrder.getId(), TbkConstants.COMMSION_STATUS_1, tbkOrder.getEarningTime());
+        }else if (TbkConstants.TRADE_STATUS_13.equals(tbkOrder.getTradeStatus())) {
+            tbkCommissionService.updateCommissionStatus(tbkOrder.getId(), TbkConstants.COMMSION_STATUS_2, null);
         }
     }
 

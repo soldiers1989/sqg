@@ -42,6 +42,8 @@ public class TbkUserServiceImpl extends BaseServiceImpl implements TbkUserServic
         List<TbkUser> list = queryTbkUsersModel(map);
         if (list != null && !list.isEmpty()) {
             TbkUser oldtbkUser = list.get(0);
+            tbkUser.setParentId(oldtbkUser.getParentId());
+            tbkUser.setParentIdPath(oldtbkUser.getParentIdPath());
             try {
                 BeanUtils.copyAllPropertysNotNull(oldtbkUser, tbkUser);
             } catch (Exception e) {}
