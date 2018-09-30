@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.soft.tbk.base.BaseController;
 import com.soft.tbk.base.ResultResponse;
+import com.soft.tbk.core.cache.IRedisClientKValue;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.domain.UserSession;
 import com.soft.tbk.model.TbkAccount;
@@ -33,6 +34,8 @@ import com.soft.tbk.service.TbkWithdrawService;
 @RequestMapping("/web/wallet")
 public class WalletController extends BaseController {
 
+    private static final BigDecimal minWithdraw = new BigDecimal(5);
+
     @Autowired
     private TbkAccountService tbkAccountService;
 
@@ -47,6 +50,9 @@ public class WalletController extends BaseController {
 
     @Autowired
     private TbkWithdrawService tbkWithdrawService;
+
+    @Autowired
+    private IRedisClientKValue<String> redisClientKValue;
 
     @RequestMapping("/index")
     public String index(ModelMap model, HttpServletRequest request) {
@@ -104,9 +110,13 @@ public class WalletController extends BaseController {
     public String cash(ModelMap model, HttpServletRequest request) {
 
         UserSession user = getUserSession(request);
+        /*if (StringUtils.isBlank(user.getUserPhone())) {
+            return "/h5/wallet/phone";
+        }*/
         Integer id = user.getId();
         TbkUser tbkUser = tbkUserService.getTbkUser(id);
         model.put("user", tbkUser);
+        model.put("minWithdraw", minWithdraw);
         TbkAccount account = tbkAccountService.getTbkAccountByUserId(id);
         BigDecimal abAmount = BigDecimal.ZERO;
         if (account != null) {
@@ -177,7 +187,52 @@ public class WalletController extends BaseController {
         UserSession user = getUserSession(request);
         user.setUserAlipayAccount(userAlipayAccount);
         tbkUserService.updateTbkUser(user);
+        setUserSession(request, user);
         return new ResultResponse();
+    }
+
+    /**
+     * 绑定手机号码
+     * 
+     * @param request
+     * @param phoneNo
+     * @param code
+     * @return
+     */
+    @RequestMapping("/updatePhone")
+    @ResponseBody
+    public ResultResponse savePhone(HttpServletRequest request, String phoneNo, String code) {
+
+        ResultResponse resultResponse = new ResultResponse();
+        if (!checkCode(phoneNo, code)) {
+            resultResponse.setCode(ResultResponse.ERROR);
+            resultResponse.setMsg("验证码错误或已失效!");
+            return resultResponse;
+        }
+        UserSession user = getUserSession(request);
+        user.setUserPhone(phoneNo);
+        tbkUserService.updateTbkUser(user);
+        setUserSession(request, user);
+        return new ResultResponse();
+    }
+
+    /**
+     * 验证码校验
+     * 
+     * @param phoneNo
+     * @param code
+     * @return
+     */
+    private boolean checkCode(String phoneNo, String code) {
+
+        String key = "code-" + phoneNo;
+        String cacheCode = redisClientKValue.get(appkey, key, String.class);
+        if (StringUtils.isBlank(code) || !code.equals(cacheCode)) {
+            return false;
+        } else {
+            //redisClientKValue.delete(appkey, key);
+            return true;
+        }
     }
 
     /**
@@ -189,9 +244,26 @@ public class WalletController extends BaseController {
      */
     @RequestMapping("/withdraw")
     @ResponseBody
-    public ResultResponse withdraw(HttpServletRequest request, String userAlipayAccount, BigDecimal amount) {
+    public ResultResponse withdraw(HttpServletRequest request, String userAlipayAccount, BigDecimal amount, String code) {
 
+        ResultResponse resultResponse = new ResultResponse();
         UserSession user = getUserSession(request);
+        TbkAccount tbkAccount = tbkAccountService.getTbkAccountByUserId(user.getId());
+        if (amount.compareTo(minWithdraw) == -1) {
+            resultResponse.setCode(ResultResponse.ERROR);
+            resultResponse.setMsg("提现金额小于最小提现额");
+            return resultResponse;
+        }
+        if (amount.compareTo(tbkAccount.getAccountAmountA()) == 1) {
+            resultResponse.setCode(ResultResponse.ERROR);
+            resultResponse.setMsg("提现金额大于可用余额");
+            return resultResponse;
+        }
+        if (!checkCode(user.getUserPhone(), code)) {
+            resultResponse.setCode(ResultResponse.ERROR);
+            resultResponse.setMsg("验证码错误或已失效!");
+            return resultResponse;
+        }
         //  生成提现记录
         TbkWithdraw tbkWithdraw = new TbkWithdraw();
         tbkWithdraw.setAmount(amount);
@@ -200,13 +272,11 @@ public class WalletController extends BaseController {
         tbkWithdrawService.saveTbkWithdraw(tbkWithdraw);
 
         // 修改账户资金
-        TbkAccount tbkAccount = tbkAccountService.getTbkAccountByUserId(user.getId());
         tbkAccount.setAccountAmountA(tbkAccount.getAccountAmountA().subtract(amount));
         tbkAccount.setAccountAmountF(tbkAccount.getAccountAmountF().add(amount));
         tbkAccountService.updateTbkAccount(tbkAccount);
 
         // 插入资金流水  TODO
-
         return new ResultResponse();
     }
 

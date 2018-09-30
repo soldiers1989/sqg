@@ -61,10 +61,6 @@ public class WechatCon extends BaseController {
     @RequestMapping(value = "/generateWxLimitQrCode/{code}")
     public @ResponseBody ResultResponse generateWxLimitQrCode(HttpServletRequest request, @PathVariable("code") String code) {
 
-        UserSession userSession = getUserSession(request);
-        if (userSession != null) {
-            code = userSession.getId().toString();
-        }
         String url = wechatService.createLimitQrcode(code);
         return new ResultResponse(url);
     }

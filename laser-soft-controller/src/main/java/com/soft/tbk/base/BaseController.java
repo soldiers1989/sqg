@@ -1,6 +1,5 @@
 package com.soft.tbk.base;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -10,10 +9,12 @@ import com.soft.tbk.domain.UserSession;
 
 public class BaseController {
 
+    protected final static String appkey = "tbk";
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    
+
     protected UserSession getUserSession(HttpServletRequest request) {
-        
+
         UserSession userSession = (UserSession) request.getSession().getAttribute("userSession");
 
         if (userSession == null) {
@@ -23,6 +24,12 @@ public class BaseController {
             userSession.setUserLevel("5");
             userSession.setId(5);
         }
-        return userSession; 
+        return userSession;
+    }
+
+    protected void setUserSession(HttpServletRequest request, UserSession userSession) {
+
+        request.getSession().setAttribute("userSession", userSession);
+
     }
 }
