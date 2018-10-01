@@ -1,5 +1,3 @@
-<%@ page language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,17 +45,14 @@ function login() {
 	}
  	$.ajax({
 		type:"GET",
-		url: "${sysContextPath}/doLogin?code=" + code + "&pwd=" + pwd,
+		url: "${sysContextPath}/admin/login.json?code=" + code + "&pwd=" + pwd,
 		contentType:"text/html",
 		success : function(data, textStatus, jqXHR) {
-			if (data == "success") {
+			if (data.success) {
 				window.location.href = "${sysContextPath}/admin/index";
 			}else {
 				common_alert_error("账号或密码错误");
 			}
-		},
-		error : function(data, textStatus, jqXHR) {
-			window.location.href = "${sysContextPath}/admin/index";
 		}});
 }
 
