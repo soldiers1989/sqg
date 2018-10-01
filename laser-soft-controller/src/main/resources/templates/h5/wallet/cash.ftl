@@ -19,7 +19,6 @@
 							${user.userAlipayAccount!''}
 							<input type="hidden" id="userAlipayAccount" value="${user.userAlipayAccount!''}"/>
 						</div>
-						<div class="weui-cell__ft"></div>
 					</a>
 				<#else>
 					<a class="weui-cell weui-cell_access" href="${sysContextPath}/web/wallet/addAlipay">
@@ -29,13 +28,17 @@
 					</a>
 				</#if>
 				<div class="weui-cell">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" style="width:70%" class="weui-input" id="verCode" name="verCode" placeholder="验证码" />
+	            	<a href="javascript:void(0)" id="btn-time" onclick="sendMsg(this);" class="btn_message">获取验证码</a>
+			    </div>
+				<div class="weui-cell">
 			        <div class="cash_biginput">
 				          <span>￥</span>
 				          <input class="weui-input" type="number" id="withdrawAmout" placeholder="提现金额">
 			        </div>
 			    </div>
 			    <div class="weui-cell f14">
-			    		可用余额：￥${(amount)?string('0.00')}元
+			    		可用余额：￥${(amount)?string('0.00')}元 &nbsp;&nbsp;&nbsp;&nbsp;最小提现金额：￥${(minWithdraw)?string('0.00')}元
 			    </div>
 			</div>
 			<div class="weui-btn-area">
@@ -59,7 +62,9 @@
 		</div>
 		<!--引用 js-->
 		<script>
-		
+			var phoneNo = "${phoneNo!''}";
+			var minWithdraw = "${(minWithdraw)?string('0.00')}";
+			minWithdraw = parseFloat(minWithdraw);
 			var amount = "${(amount)?string('0.00')}";
 			amount = parseFloat(amount);
 			function saveWithdraw(){
@@ -70,6 +75,16 @@
 					$("#withdrawAmout").val("");
 					return;
 				}
+				if (withdrawAmout < minWithdraw) {
+					alert("提现金额不能小于最小提现金额");
+					$("#withdrawAmout").val("");
+					return;
+				}
+				var code = $("#verCode").val();
+				if (code == "") {
+					alert("验证码不能为空!");
+					return;
+				}
 				var userAlipayAccount = $("#userAlipayAccount").val();
 				if (userAlipayAccount == "" || userAlipayAccount == null){
 					alert("请先绑定支付宝账号!");
@@ -77,7 +92,7 @@
 				}
 				var config = {
 					url : "${sysContextPath}/web/wallet/withdraw",
-					postData : {"amount": withdrawAmout, "userAlipayAccount": userAlipayAccount},
+					postData : {"amount": withdrawAmout, "userAlipayAccount": userAlipayAccount, "code": code},
 					dataType:"json",
 					onSuccessFunction : function(data) {
 						if (data.code == "success") {
@@ -125,11 +140,17 @@
 								if (showStr == null){
 									showStr = order.account;
 								}
+								var status = order.status;
+								var statusStr = "提现中";
+								if (status == 1) {
+									statusStr = "已完成";
+								}
 								html += '<div class="weui-cell wallet_list">' + 
 						            '<div class="weui-cell__bd">' +
 				            			'<p>' + showStr + '</p>' +
 						              	'<p class="gary">' + dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.createTime)) + '</p>' +
 						            '</div>' +
+						            '<div class="weui-cell__ft"><span>' + statusStr + '</span></div>' +
 						            '<div class="weui-cell__ft green">-<span>' + Number(order.amount).toFixed(2) + '</span></div>' +
 						        '</div>';
 							})
@@ -158,7 +179,49 @@
 				 currentPage=currentPage+1;
 				 load("");
 			});
+			
+			
+			var phone_check=false;
+			 var wait=60; 
+			function time(o) {
+			    if (wait == 0) {
+			    	phone_check=true;
+			    	$(o).html("获取验证码");
+			         wait = 60;
+			         addClick();
+			       } else {
+			       		phone_check=false;
+			         	$(o).html(wait+"秒重新获取");
+			          wait--;
+			          setTimeout(function() {
+			              time(o)
+			           },
+			           1000)
+			      }
+			 }
+			 function addClick(){
+				 $("#btn-time").attr("onclick","sendMsg(this)");
+			 }
+			function sendMsg(obj){
+				$(obj).attr("onclick","");
+				var data=new Object();
+				data.phoneNo=phoneNo;
+				$.ajax({
+					type:"POST",
+					url: "${sysContextPath}/laserDirect/sms/getCode",
+					async:false,
+					data:data,
+					dataType:"json",
+					success : function(data, textStatus, jqXHR) {
+							if(data.success){
+								 time(obj);
+							}else if(!data.success){
+								alert(data.msg);
+							}
+						}
+					});
 			 
+		 }
 		</script>
 	</body>
 </html>

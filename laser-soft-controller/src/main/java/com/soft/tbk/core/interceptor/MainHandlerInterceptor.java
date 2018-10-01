@@ -21,7 +21,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
 
     @Value("${tbk.domain.name}")
     protected String domainName;
-    
+
     @Autowired
     private IWechatService wechatService;
 
@@ -38,7 +38,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
         if (userSession == null) {
             if (url.startsWith("/web/account")) {
                 // 暂时就个人中心
-                wechatService.requestAuth(request, response, contentPath, url);
+                //wechatService.requestAuth(request, response, contentPath, url);
             } else {
                 // TODO
                 //                logger.info("没有登录");

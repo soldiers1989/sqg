@@ -110,13 +110,14 @@ public class WalletController extends BaseController {
     public String cash(ModelMap model, HttpServletRequest request) {
 
         UserSession user = getUserSession(request);
-        /*if (StringUtils.isBlank(user.getUserPhone())) {
+        if (StringUtils.isBlank(user.getUserPhone())) {
             return "/h5/wallet/phone";
-        }*/
+        }
         Integer id = user.getId();
         TbkUser tbkUser = tbkUserService.getTbkUser(id);
         model.put("user", tbkUser);
         model.put("minWithdraw", minWithdraw);
+        model.put("phoneNo", tbkUser.getUserPhone());
         TbkAccount account = tbkAccountService.getTbkAccountByUserId(id);
         BigDecimal abAmount = BigDecimal.ZERO;
         if (account != null) {
@@ -230,7 +231,7 @@ public class WalletController extends BaseController {
         if (StringUtils.isBlank(code) || !code.equals(cacheCode)) {
             return false;
         } else {
-            //redisClientKValue.delete(appkey, key);
+            redisClientKValue.delete(appkey, key);
             return true;
         }
     }
@@ -275,8 +276,6 @@ public class WalletController extends BaseController {
         tbkAccount.setAccountAmountA(tbkAccount.getAccountAmountA().subtract(amount));
         tbkAccount.setAccountAmountF(tbkAccount.getAccountAmountF().add(amount));
         tbkAccountService.updateTbkAccount(tbkAccount);
-
-        // 插入资金流水  TODO
         return new ResultResponse();
     }
 

@@ -24,16 +24,16 @@ public class AliyunSmsService {
     //产品域名,开发者无需替换
     private static final String domain = "dysmsapi.aliyuncs.com";
 
-    @Value("tbk.sms.AccessKeyId")
+    @Value("${tbk.sms.AccessKeyId}")
     private String accessKeyId;
 
-    @Value("tbk.sms.AccessKeySecret")
+    @Value("${tbk.sms.AccessKeySecret}")
     private String accessKeySecret;
 
-    @Value("tbk.sms.SignName")
+    @Value("${tbk.sms.SignName}")
     private String signName;
 
-    @Value("tbk.sms.TempCode")
+    @Value("${tbk.sms.TempCode}")
     private String tempCode;
 
     /**
@@ -62,7 +62,7 @@ public class AliyunSmsService {
             //必填:待发送手机号
             request.setPhoneNumbers(phoneNo);
             //必填:短信签名-可在短信控制台中找到
-            request.setSignName(signName);
+            request.setSignName("惠淘街");
             //必填:短信模板-可在短信控制台中找到
             request.setTemplateCode(tempCode);
             //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为

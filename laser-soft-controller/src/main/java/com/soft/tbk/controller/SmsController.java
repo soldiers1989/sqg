@@ -42,7 +42,7 @@ public class SmsController extends BaseController {
             redisClientKValue.set(appkey, key, code, 5 * 60 * 1000);// 5分钟失效
         }
         aliyunSmsService.sendSms(phoneNo, code);
-        return new ResultResponse(code);
+        return new ResultResponse();
     }
 
 }
