@@ -46,6 +46,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
             }
         }
         request.setAttribute("domainName", domainName);
+        request.setAttribute("userSession", userSession);
         request.setAttribute("sysContextPath", requestPath + contentPath);
         return true;
     }

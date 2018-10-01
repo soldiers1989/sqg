@@ -25,8 +25,11 @@
                 <#include 'layout/center.ftl' />
             </div>
         </div>
-        <jsp:include page="layout/footer.ftl"></jsp:include>
+        <#include 'layout/footer.ftl' />
     </body>
 </html>
 <script>
+ <#if !userSession?exists>
+ 	window.location.href = "${sysContextPath}/admin/login";
+ </#if>
 </script>

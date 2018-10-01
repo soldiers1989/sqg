@@ -16,22 +16,6 @@
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li>
-                            <a href="javascript:void(0)" onclick="changeEnv('sit')">
-                                <i class="icon-user"></i> sit </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" onclick="changeEnv('uat')">
-                                <i class="icon-user"></i> uat </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" onclick="changeEnv('sandbox')">
-                                <i class="icon-user"></i> sandbox </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" onclick="changeEnv('prod')">
-                            <i class="icon-user"></i> prod</a>
-                        </li>
                     </ul>
                 </li>
                 <li class="dropdown dropdown-quick-sidebar-toggler">
