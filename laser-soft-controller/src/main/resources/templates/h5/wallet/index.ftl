@@ -53,7 +53,7 @@
 				        </div>
 						<div class="weui-cell wallet_list">
 				            <div class="weui-cell__bd">
-				              <p>上月预估奖励金&nbsp;<span class="vip_span" style="background-color:#228B22;border-radius:10px;">&nbsp;本月21号结算&nbsp;</span></p>
+				              <p>上月预估奖励金&nbsp;<span class="vip_span" style="background-color:#228B22;border-radius:10px;">&nbsp;本月25号结算&nbsp;</span></p>
 				            </div>
 				            <div class="weui-cell__ft red">￥<span>${(nowSum_1['sumAmount'])?string('0.00')}</span></div>
 				        </div>

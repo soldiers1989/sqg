@@ -58,7 +58,7 @@ public class WalletController extends BaseController {
     public String index(ModelMap model, HttpServletRequest request) {
 
         UserSession user = getUserSession(request);
-        user.setUserLevel("1");
+
         model.put("user", user);
 
         TbkAccount account = tbkAccountService.getTbkAccountByUserId(user.getId());

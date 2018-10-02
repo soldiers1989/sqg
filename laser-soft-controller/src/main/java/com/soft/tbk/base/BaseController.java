@@ -27,8 +27,9 @@ public class BaseController {
             userSession = new UserSession();
             userSession.setUserNickname("体验账号");
             userSession.setUserImgurl("http://gw.alicdn.com/bao/uploaded/i4/TB1rQ6dMVXXXXbwXXXXXXXXXXXX_!!0-item_pic.jpg");
-            userSession.setUserLevel("0");
+            userSession.setUserLevel("5");
             userSession.setId(5);
+            userSession.setUserPhone("1822213111");
         }
         return userSession;
     }

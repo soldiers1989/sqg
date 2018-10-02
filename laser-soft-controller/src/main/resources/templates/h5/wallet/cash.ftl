@@ -149,7 +149,7 @@
 								}
 								var remark = order.remark;
 								if (remark != "" && remark != null) {
-									statusStr += "("remark + remark + ")";
+									statusStr += "(" + remark + ")";
 								}
 								html += '<div class="weui-cell wallet_list">' + 
 						            '<div class="weui-cell__bd">' +
