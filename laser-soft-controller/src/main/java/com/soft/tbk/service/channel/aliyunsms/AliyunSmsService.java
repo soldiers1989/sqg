@@ -30,9 +30,6 @@ public class AliyunSmsService {
     @Value("${tbk.sms.AccessKeySecret}")
     private String accessKeySecret;
 
-    @Value("${tbk.sms.SignName}")
-    private String signName;
-
     @Value("${tbk.sms.TempCode}")
     private String tempCode;
 
