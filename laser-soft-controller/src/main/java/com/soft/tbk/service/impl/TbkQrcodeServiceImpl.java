@@ -1,6 +1,7 @@
 package com.soft.tbk.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,14 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageInfo;
 import com.soft.tbk.base.BaseServiceImpl;
+import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.dao.TbkQrcodeMapper;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
 import com.soft.tbk.model.TbkQrcode;
 import com.soft.tbk.service.TbkQrcodeService;
+import com.soft.wechat.util.DateUtils;
 
 @Service
-public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeService{
+public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeService {
 
     private static final String SYS_CODE = "TbkQrcodeSerciceImpl";
 
@@ -29,6 +32,7 @@ public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeSe
 
     @Override
     public TbkQrcode saveTbkQrcode(TbkQrcode tbkQrcode) throws ApiException {
+
         //1.check
         check(tbkQrcode);
         //3.set default
@@ -39,8 +43,8 @@ public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeSe
         return tbkQrcode;
     }
 
-
     private void setDefault(TbkQrcode tbkQrcode) {
+
         if (tbkQrcode == null) {
             return;
         }
@@ -53,7 +57,7 @@ public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeSe
         if (null == tbkQrcode) {
             throw new ApiException(SYS_CODE + ".saveTbkQrcode", "数据不能为空");
         }
-        
+
     }
 
     @Override
@@ -110,7 +114,6 @@ public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeSe
         return list;
 
     }
-
 
     private void saveTbkQrcodeModel(TbkQrcode tbkQrcode) {
 
@@ -171,6 +174,29 @@ public class TbkQrcodeServiceImpl extends BaseServiceImpl implements TbkQrcodeSe
             logger.error(e.getMessage(), e);
             throw new ApiException(SYS_CODE + ".insertBatch", "插入失败");
         }
+    }
+
+    @Override
+    public String getTbkQrcode(Integer userId, String qrType) {
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("qrType", qrType);
+        List<TbkQrcode> list = queryTbkQrcodesModel(param);
+        if (list == null || list.isEmpty() || list.get(0) == null)
+            return null;
+        TbkQrcode tbkQrcode = list.get(0);
+        if (TbkConstants.QR_TYPE_0.equals(qrType)) {
+            Date createDate = tbkQrcode.getCreateTime();
+            Date nowDate = new Date();
+            long days = DateUtils.getBetweenDays(createDate, nowDate);
+            if (days > 15) {
+                // 臨時二維碼有效時長30天，超過15天后刪除，重新生成
+                deleteTbkQrcodeModel(tbkQrcode.getId());
+                return null;
+            }
+        }
+        return tbkQrcode.getQrUrl();
     }
 
 }

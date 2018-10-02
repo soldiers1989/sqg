@@ -8,10 +8,7 @@ import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.exception.ApiException;
 import com.soft.tbk.model.TbkQrcode;
 
-
-public interface TbkQrcodeService extends BaseService{
-    
-
+public interface TbkQrcodeService extends BaseService {
 
     /**
      * 
@@ -35,7 +32,16 @@ public interface TbkQrcodeService extends BaseService{
     public boolean deleteTbkQrcode(Integer id);
 
     /**
-     * 根據ID獲取
+     * 根據用戶的二維碼
+     * 
+     * @param userId
+     * @param qrType
+     * @return
+     */
+    public String getTbkQrcode(Integer userId, String qrType);
+
+    /**
+     * 根據用戶id獲取二維碼
      * 
      * @param id
      * @return
@@ -50,7 +56,6 @@ public interface TbkQrcodeService extends BaseService{
      */
     QueryResult<TbkQrcode> queryTbkQrcode(Map<String, Object> map);
 
-    
     public void insertBatch(List<TbkQrcode> tbkQrcodeList);
 
 }

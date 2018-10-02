@@ -2,6 +2,7 @@ package com.soft.wechat.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.soft.tbk.base.BaseController;
 import com.soft.tbk.base.ResultResponse;
+import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.domain.UserSession;
+import com.soft.tbk.model.TbkQrcode;
+import com.soft.tbk.service.TbkQrcodeService;
 import com.soft.wechat.service.IWechatService;
 
 /**
@@ -31,6 +35,9 @@ public class WechatCon extends BaseController {
     Logger logger = LoggerFactory.getLogger(WechatCon.class);
 
     @Autowired
+    TbkQrcodeService tbkQrcodeService;
+
+    @Autowired
     IWechatService wechatService;
 
     /**
@@ -41,14 +48,25 @@ public class WechatCon extends BaseController {
      * @return
      */
     @RequestMapping(value = "/generateWxQrCode/{code}")
-    public @ResponseBody ResultResponse generateWxQrCode(HttpServletRequest request, @PathVariable("code") String code) {
+    public @ResponseBody ResultResponse generateWxQrCode(HttpServletRequest request, @PathVariable("code") Integer code) {
 
         UserSession userSession = getUserSession(request);
         if (userSession != null) {
-            code = userSession.getId().toString();
+            code = userSession.getId();
         }
-        String url = wechatService.createQrcode(code);
-        return new ResultResponse(url);
+        String qrUrl = tbkQrcodeService.getTbkQrcode(code, TbkConstants.QR_TYPE_0);
+        if (StringUtils.isNotBlank(qrUrl)) {
+            return new ResultResponse(qrUrl);
+        } else {
+            String url = wechatService.createQrcode(code.toString());
+            TbkQrcode tbkQrcode = new TbkQrcode();
+            tbkQrcode.setQrType(TbkConstants.QR_TYPE_0);
+            tbkQrcode.setQrUrl(url);
+            tbkQrcode.setUserId(code);
+            tbkQrcodeService.saveTbkQrcode(tbkQrcode);
+            return new ResultResponse(url);
+        }
+
     }
 
     /**
@@ -59,10 +77,20 @@ public class WechatCon extends BaseController {
      * @return
      */
     @RequestMapping(value = "/generateWxLimitQrCode/{code}")
-    public @ResponseBody ResultResponse generateWxLimitQrCode(HttpServletRequest request, @PathVariable("code") String code) {
+    public @ResponseBody ResultResponse generateWxLimitQrCode(HttpServletRequest request, @PathVariable("code") Integer code) {
 
-        String url = wechatService.createLimitQrcode(code);
-        return new ResultResponse(url);
+        String qrUrl = tbkQrcodeService.getTbkQrcode(code, TbkConstants.QR_TYPE_1);
+        if (StringUtils.isNotBlank(qrUrl)) {
+            return new ResultResponse(qrUrl);
+        } else {
+            String url = wechatService.createLimitQrcode(code.toString());
+            TbkQrcode tbkQrcode = new TbkQrcode();
+            tbkQrcode.setQrType(TbkConstants.QR_TYPE_1);
+            tbkQrcode.setQrUrl(url);
+            tbkQrcode.setUserId(code);
+            tbkQrcodeService.saveTbkQrcode(tbkQrcode);
+            return new ResultResponse(url);
+        }
     }
 
     /**
