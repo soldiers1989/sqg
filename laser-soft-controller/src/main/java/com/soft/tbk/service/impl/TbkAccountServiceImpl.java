@@ -1,5 +1,6 @@
 package com.soft.tbk.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -181,8 +182,15 @@ public class TbkAccountServiceImpl extends BaseServiceImpl implements TbkAccount
         List<TbkAccount> result = queryTbkAccountsModel(getQueryParamMap("userId", userId));
         if (ListUtil.isNotEmpty(result)) {
             return result.get(0);
+        }else {
+            TbkAccount tbkAccount = new TbkAccount();
+            tbkAccount.setUserId(userId);
+            tbkAccount.setAccountAmount(BigDecimal.ZERO);
+            tbkAccount.setAccountAmountA(BigDecimal.ZERO);
+            tbkAccount.setAccountAmountE(BigDecimal.ZERO);
+            tbkAccount.setAccountAmountF(BigDecimal.ZERO);
+            return saveTbkAccount(tbkAccount);
         }
-        return null;
     }
 
 }

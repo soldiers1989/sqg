@@ -15,20 +15,51 @@
 				<p class="wallet_text"><i class="iconfont icon-anquan"></i>每月25号结算上月预估奖励金到余额，本月奖励金预估在下月25号进行结算到</p>
 			</div>
 			<div class="weui-panel weui-panel_access">
-				<div class="weui-panel__bd" id="walletlist">
+			
+				<#if user.userLevel != '0'> 
 					<div class="weui-cell wallet_list">
-			            <div class="weui-cell__bd">
-			              <p>本月预估奖励金&nbsp;<span class="vip_span" style="background-color:#00B2EE;border-radius:10px;">&nbsp;待结算&nbsp;</span></p>
-			            </div>
-			            <div class="weui-cell__ft red">￥<span>${(nowSum['sumAmount'])?string('0.00')}</span></div>
+			              <span class="vip_span" style="background-color:#00B2EE;border-radius:10px;">&nbsp;待结算&nbsp;</span>
 			        </div>
 					<div class="weui-cell wallet_list">
 			            <div class="weui-cell__bd">
-			              <p>上月预估奖励金&nbsp;<span class="vip_span" style="background-color:#228B22;border-radius:10px;">&nbsp;本月21号结算&nbsp;</span></p>
+			              <p>本月预估奖励金&nbsp;</p>
+			            	<div class="weui-cell__ft red">￥<span>${(nowSum['sumAmount'])?string('0.00')}</span></div>
 			            </div>
-			            <div class="weui-cell__ft red">￥<span>${(nowSum_1['sumAmount'])?string('0.00')}</span></div>
+			            <div class="weui-cell__bd">
+			              <p>本月团队预估奖励金&nbsp;</p>
+				            <div class="weui-cell__ft red">￥<span>${(nowTeam['sumAmount'])?string('0.00')}</span></div>
+			            </div>
 			        </div>
-				</div>
+			        <div class="weui-cell wallet_list">
+			              <span class="vip_span" style="background-color:#228B22;border-radius:10px;">&nbsp;本月25号结算&nbsp;</span>
+			        </div>
+					<div class="weui-cell wallet_list">
+			            <div class="weui-cell__bd">
+			              <p>上月预估奖励金&nbsp;</p>
+				            <div class="weui-cell__ft red">￥<span>${(nowSum_1['sumAmount'])?string('0.00')}</span></div>
+			            </div>
+			            <div class="weui-cell__bd">
+			              <p>上月团队预估奖励金&nbsp;</p>
+				            <div class="weui-cell__ft red">￥<span>${(nowTeam_1['sumAmount'])?string('0.00')}</span></div>
+			            </div>
+			        </div>
+			    <#else>
+					<div class="weui-panel__bd" id="walletlist">
+						<div class="weui-cell wallet_list">
+				            <div class="weui-cell__bd">
+				              <p>本月预估奖励金&nbsp;<span class="vip_span" style="background-color:#00B2EE;border-radius:10px;">&nbsp;待结算&nbsp;</span></p>
+				            </div>
+				            <div class="weui-cell__ft red">￥<span>${(nowSum['sumAmount'])?string('0.00')}</span></div>
+				        </div>
+						<div class="weui-cell wallet_list">
+				            <div class="weui-cell__bd">
+				              <p>上月预估奖励金&nbsp;<span class="vip_span" style="background-color:#228B22;border-radius:10px;">&nbsp;本月21号结算&nbsp;</span></p>
+				            </div>
+				            <div class="weui-cell__ft red">￥<span>${(nowSum_1['sumAmount'])?string('0.00')}</span></div>
+				        </div>
+					</div>
+				</#if>
+			
 			</div>
 			<div class="weui-panel weui-panel_access">
 				<div class="weui-panel__bd" id="walletlist">

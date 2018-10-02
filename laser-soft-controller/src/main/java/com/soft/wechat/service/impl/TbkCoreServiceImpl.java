@@ -13,17 +13,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.soft.tbk.base.BaseServiceImpl;
 import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.domain.QueryResult;
+import com.soft.tbk.exception.ApiException;
+import com.soft.tbk.model.TbkAccount;
+import com.soft.tbk.model.TbkAccountList;
 import com.soft.tbk.model.TbkCommission;
 import com.soft.tbk.model.TbkCoupon;
 import com.soft.tbk.model.TbkOrder;
 import com.soft.tbk.model.TbkPid;
 import com.soft.tbk.model.TbkPidItem;
 import com.soft.tbk.model.TbkUser;
+import com.soft.tbk.service.TbkAccountListService;
+import com.soft.tbk.service.TbkAccountService;
 import com.soft.tbk.service.TbkCommissionService;
 import com.soft.tbk.service.TbkCouponService;
 import com.soft.tbk.service.TbkOrderService;
@@ -31,6 +37,7 @@ import com.soft.tbk.service.TbkPidItemService;
 import com.soft.tbk.service.TbkPidService;
 import com.soft.tbk.service.TbkRateService;
 import com.soft.tbk.service.TbkUserService;
+import com.soft.tbk.utils.DateUtil;
 import com.soft.tbk.utils.ListUtil;
 import com.soft.wechat.domain.CouponContext;
 import com.soft.wechat.service.TbkCoreService;
@@ -62,6 +69,12 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
 
     @Autowired
     private TbkCommissionService tbkCommissionService;
+    
+    @Autowired
+    private TbkAccountService tbkAccountService;
+
+    @Autowired
+    private TbkAccountListService tbkAccountListService;
 
     @Override
     public TbkUser loadTbkUserInfo(String openid, Integer parentUserId) {
@@ -434,6 +447,38 @@ public class TbkCoreServiceImpl extends BaseServiceImpl implements TbkCoreServic
         }else if (TbkConstants.TRADE_STATUS_13.equals(tbkOrder.getTradeStatus())) {
             tbkCommissionService.updateCommissionStatus(tbkOrder.getId(), TbkConstants.COMMSION_STATUS_2, null);
         }
+    }
+
+    @Override
+    @Transactional
+    public void settelCommission(Integer userId, BigDecimal settleAmount, Date sellteDate) {
+
+        TbkAccount tbkAccount = tbkAccountService.getTbkAccountByUserId(userId);
+        
+        tbkAccount.setAccountAmount(tbkAccount.getAccountAmount().add(settleAmount));
+        tbkAccount.setAccountAmountA(tbkAccount.getAccountAmountA().add(settleAmount));
+        tbkAccount.setAccountAmountE(tbkAccount.getAccountAmountE().add(settleAmount));
+        
+        boolean flag = tbkAccountService.updateTbkAccount(tbkAccount);
+        
+        if (!flag) {
+            throw new ApiException("core.settelCommission", "更新用户余额失败");
+        }
+        
+        TbkAccountList tbkAccountList = new TbkAccountList();
+        tbkAccountList.setAmount(settleAmount);
+        tbkAccountList.setRemark(DateUtil.getDateString(sellteDate, "yyyy年MM") + "月奖励金结算");
+        tbkAccountList.setType("1");
+        tbkAccountList.setStatus(1);
+        tbkAccountList.setUserId(userId);
+        tbkAccountListService.saveTbkAccountList(tbkAccountList);
+        
+        flag = tbkCommissionService.updateCommissionStatusByUser(userId, TbkConstants.COMMSION_STATUS_3, sellteDate);
+        
+        if (!flag) {
+            throw new ApiException("core.settelCommission", "更新佣金状态失败");
+        }
+
     }
 
 }

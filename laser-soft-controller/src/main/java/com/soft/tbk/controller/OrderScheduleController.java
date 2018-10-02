@@ -183,13 +183,10 @@ public class OrderScheduleController extends BaseController {
     
     public static void main(String[] args) {
 
-        Date now = new Date();
-        Date now_10 = new Date(now.getTime() - 600000);
-
         Map<String, Object> orderMap = new HashMap<String, Object>();
         orderMap.put("appkey", "1822410736221674");
         orderMap.put("appsecret", "1c6f031ac7bcf150ea983712fc413af2");
-        orderMap.put("startTime", "2018-09-25 11:00:00");
+        orderMap.put("startTime", "2018-10-01 21:53:14");
         orderMap.put("span", "600");
         orderMap.put("pageNo", "1");
         orderMap.put("pageSize", "100");
@@ -199,7 +196,9 @@ public class OrderScheduleController extends BaseController {
         try {
 
             String result = WebUtils.doGet(URL, orderMap);
-
+            
+            System.out.println(result);
+            
             JSONObject order = JSONObject.parseObject(result);
 
             JSONArray orderList = order.getJSONArray("data");

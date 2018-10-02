@@ -17,10 +17,14 @@ public interface TbkCommissionMapper extends BaseMapper<TbkCommission> {
     int updateStateByPrimaryKey(Map<String, Object> map);
 
     int updateStatusByOrderId(Map<String, Object> map);
+    
+    int updateStatusByUserId(Map<String, Object> map);
 
     void insertBatch(List<TbkCommission> list);
     
-    Map<String, Object> sumCommission(Map<String, Object> map);
+    List<Map<String, Object>> sumCommission(Map<String, Object> map);
+
+    List<Map<String, Object>> sellteCommission(Map<String, Object> map);
 
 }
 

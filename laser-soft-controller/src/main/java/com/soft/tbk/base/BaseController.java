@@ -1,5 +1,7 @@
 package com.soft.tbk.base;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +27,7 @@ public class BaseController {
             userSession = new UserSession();
             userSession.setUserNickname("体验账号");
             userSession.setUserImgurl("http://gw.alicdn.com/bao/uploaded/i4/TB1rQ6dMVXXXXbwXXXXXXXXXXXX_!!0-item_pic.jpg");
-            userSession.setUserLevel("5");
+            userSession.setUserLevel("0");
             userSession.setId(5);
         }
         return userSession;
@@ -59,4 +61,15 @@ public class BaseController {
             }
         }
     }
+    
+    protected Date getMonthDate(int month) {
+
+        Date date = new Date();//获取当前时间    
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, month);//当前时间前去一个月，即一个月前的时间    
+        //获取一年前的时间，或者一个月前的时间   
+        return calendar.getTime();
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.soft.tbk.controller;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.soft.tbk.base.BaseController;
 import com.soft.tbk.base.ResultResponse;
+import com.soft.tbk.constants.TbkConstants;
 import com.soft.tbk.core.cache.IRedisClientKValue;
 import com.soft.tbk.domain.QueryResult;
 import com.soft.tbk.domain.UserSession;
@@ -58,6 +58,7 @@ public class WalletController extends BaseController {
     public String index(ModelMap model, HttpServletRequest request) {
 
         UserSession user = getUserSession(request);
+        user.setUserLevel("1");
         model.put("user", user);
 
         TbkAccount account = tbkAccountService.getTbkAccountByUserId(user.getId());
@@ -80,32 +81,46 @@ public class WalletController extends BaseController {
         model.put("now", nowMap);
         model.put("now_1", beforeMap);
 
-        Map<String, Object> nowSumMap = tbkCommissionService.sumCommission(user.getId(), new Date());
-        if (!nowSumMap.containsKey("sumAmount")) {
-            nowSumMap.put("sumAmount", 0);
+        Map<String, Object> nowSumMap = makeSumMap();
+        Map<String, Object> nowTeamMap = makeSumMap();
+        Map<String, Object> beforeSumMap = makeSumMap();
+        Map<String, Object> beforeTeamMap = makeSumMap();
+        
+        List<Map<String, Object>> nowSumList = tbkCommissionService.sumCommission(user.getId(), new Date());
+        for (Map<String, Object> smap : nowSumList) {
+            if (TbkConstants.RATE_LEVEL_0.toString().equals(smap.get("commissionType").toString())) {
+                nowSumMap.putAll(smap); 
+            }
+            if (TbkConstants.RATE_LEVEL_1.toString().equals(smap.get("commissionType").toString()) || TbkConstants.RATE_LEVEL_2.toString().equals(smap.get("commissionType").toString())) {
+                nowTeamMap.put("count", Integer.valueOf(nowTeamMap.get("count").toString())  + Integer.valueOf(smap.get("count").toString()));
+                nowTeamMap.put("sumAmount", new BigDecimal(nowTeamMap.get("sumAmount").toString()).add(new BigDecimal(smap.get("sumAmount").toString())).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+            }
         }
-
-        Map<String, Object> beforeSumMap = tbkCommissionService.sumCommission(user.getId(), getMonthDate(-1));
-        if (!beforeSumMap.containsKey("sumAmount")) {
-            beforeSumMap.put("sumAmount", 0);
+        
+        List<Map<String, Object>> nowSumList_1 = tbkCommissionService.sumCommission(user.getId(), getMonthDate(-1));
+        for (Map<String, Object> smap : nowSumList_1) {
+            if (TbkConstants.RATE_LEVEL_0.toString().equals(smap.get("commissionType").toString())) {
+                beforeSumMap.putAll(smap); 
+            }
+            if (TbkConstants.RATE_LEVEL_1.toString().equals(smap.get("commissionType").toString()) || TbkConstants.RATE_LEVEL_2.toString().equals(smap.get("commissionType").toString())) {
+                beforeTeamMap.put("count", Integer.valueOf(beforeTeamMap.get("count").toString())  + Integer.valueOf(smap.get("count").toString()));
+                beforeTeamMap.put("sumAmount", new BigDecimal(beforeTeamMap.get("sumAmount").toString()).add(new BigDecimal(smap.get("sumAmount").toString())).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+            }
         }
-
         model.put("nowSum", nowSumMap);
+        model.put("nowTeam", nowTeamMap);
         model.put("nowSum_1", beforeSumMap);
-
+        model.put("nowTeam_1", beforeTeamMap);
         return "/h5/wallet/index";
     }
 
-    private Date getMonthDate(int month) {
-
-        Date date = new Date();//获取当前时间    
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.MONTH, month);//当前时间前去一个月，即一个月前的时间    
-        //获取一年前的时间，或者一个月前的时间   
-        return calendar.getTime();
+    private Map<String, Object> makeSumMap() {
+        Map<String, Object> sumMap = new HashMap<String, Object>();
+        sumMap.put("count", 0);
+        sumMap.put("sumAmount", 0);
+        return sumMap;
     }
-
+    
     @RequestMapping("/cash")
     public String cash(ModelMap model, HttpServletRequest request) {
 

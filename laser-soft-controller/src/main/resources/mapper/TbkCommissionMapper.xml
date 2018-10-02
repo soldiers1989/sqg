@@ -124,11 +124,21 @@
     where ORDER_ID = #{orderId,jdbcType=INTEGER}
   </update>
   
+  <update id="updateStatusByUserId" parameterType="Map">
+    update t_tbk_commission 
+     set COMMISSION_STATUS = #{commissionStatus,jdbcType=INTEGER},UPDATE_TIME=SYSDATE()
+    where USER_ID = #{userId,jdbcType=INTEGER} and DATE_FORMAT(TRADE_TIME,'%Y%m') = #{settleDate,jdbcType=VARCHAR} and COMMISSION_STATUS = 2
+  </update>
+  
     <select id="sumCommission" resultType="java.util.HashMap"  parameterType="Map">
-     SELECT COUNT(1) as count, SUM(commission) as sumAmount FROM t_tbk_commission
-      where USER_ID = #{userId,jdbcType=INTEGER} and DATE_FORMAT(TRADE_TIME,'%Y%m') = #{sumDate,jdbcType=VARCHAR} and COMMISSION_STATUS in (0,1)
+     SELECT COUNT(1) as count, SUM(commission) as sumAmount, COMMISSION_TYPE as commissionType FROM t_tbk_commission
+      where USER_ID = #{userId,jdbcType=INTEGER} and DATE_FORMAT(TRADE_TIME,'%Y%m') = #{sumDate,jdbcType=VARCHAR} and COMMISSION_STATUS in (0,1) group by COMMISSION_TYPE
   </select>
   
+    <select id="sellteCommission" resultType="java.util.HashMap"  parameterType="Map">
+     SELECT USER_ID as userId, SUM(commission) as sumAmount FROM t_tbk_commission
+      where COMMISSION_STATUS = 2 and DATE_FORMAT(TRADE_TIME,'%Y%m') = #{sumDate,jdbcType=VARCHAR} group by USER_ID
+  </select>
   
   
 </mapper>

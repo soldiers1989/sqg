@@ -5,7 +5,7 @@
 		<div class="user_info">
 			<div class="user_pic">
 				<#if user?exists>
-					<img src="${user.userImgurl}" />
+					<img src="${user.userImgurl!''}" />
 				<#else>
 					<img src="/images/user_pic.png" />
 				</#if>

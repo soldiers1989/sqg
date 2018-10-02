@@ -32,6 +32,7 @@ public class IndexController extends BaseController{
         String pwd = request.getParameter("pwd");
         if ("admin".equals(code) && "admin888".equals(pwd)) {
             UserSession userSession = new UserSession();
+            userSession.setUserNickname("admin");
             request.getSession().setAttribute("userSession", userSession);
             return new ResultResponse(true);
         }else {

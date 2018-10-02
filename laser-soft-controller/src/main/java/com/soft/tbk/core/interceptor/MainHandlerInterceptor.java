@@ -17,7 +17,7 @@ import com.soft.wechat.service.IWechatService;
 @Component
 public class MainHandlerInterceptor implements HandlerInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(MainHandlerInterceptor.class);
+    public static final Logger logger = LoggerFactory.getLogger(MainHandlerInterceptor.class);
 
     @Value("${tbk.domain.name}")
     protected String domainName;
@@ -38,7 +38,7 @@ public class MainHandlerInterceptor implements HandlerInterceptor {
         if (userSession == null) {
             if (url.startsWith("/web/account")) {
                 // 暂时就个人中心
-                //wechatService.requestAuth(request, response, contentPath, url);
+                wechatService.requestAuth(request, response, contentPath, url);
             } else {
                 // TODO
                 //                logger.info("没有登录");

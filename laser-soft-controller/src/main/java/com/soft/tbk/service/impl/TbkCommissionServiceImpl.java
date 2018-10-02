@@ -1,7 +1,7 @@
 package com.soft.tbk.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -191,7 +191,7 @@ public class TbkCommissionServiceImpl extends BaseServiceImpl implements TbkComm
 
 
     @Override
-    public Map<String, Object> sumCommission(Integer userId, Date sumDate) {
+    public List<Map<String, Object>> sumCommission(Integer userId, Date sumDate) {
         
         try {
             return tbkCommissionMapper.sumCommission(getQueryParamMap("userId,sumDate", userId, DateUtil.getDateString(sumDate, "yyyyMM")));
@@ -199,7 +199,34 @@ public class TbkCommissionServiceImpl extends BaseServiceImpl implements TbkComm
             logger.error(e.getMessage(), e);
         }
         
-        return new HashMap<String, Object>();
+        return new ArrayList<Map<String,Object>>();
+    }
+
+
+    @Override
+    public List<Map<String, Object>> sellteCommission(Date sellteDate) {
+        try {
+            return tbkCommissionMapper.sellteCommission(getQueryParamMap("sumDate", DateUtil.getDateString(sellteDate, "yyyyMM")));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        
+        return new ArrayList<Map<String,Object>>();
+
+    }
+
+
+    @Override
+    public boolean updateCommissionStatusByUser(Integer userId, Integer commissionStatus, Date settleDate) throws ApiException {
+        try {
+            int rows = tbkCommissionMapper.updateStatusByUserId(getQueryParamMap("userId,commissionStatus,settleDate", userId, commissionStatus, DateUtil.getDateString(settleDate, "yyyyMM")));
+            if (rows > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return false;
     }
 
 }

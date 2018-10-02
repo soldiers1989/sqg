@@ -1,5 +1,8 @@
 package com.soft.wechat.service;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.springframework.stereotype.Service;
 
 import com.soft.tbk.model.TbkCoupon;
@@ -29,4 +32,12 @@ public interface TbkCoreService {
      * @param tbkOrder
      */
     public void settleOrder(TbkOrder tbkOrder);
+    
+    
+    /**
+     * 结算
+     * @param userId
+     * @param settleAmount
+     */
+    public void settelCommission(Integer userId, BigDecimal settleAmount, Date sellteDate);
 }

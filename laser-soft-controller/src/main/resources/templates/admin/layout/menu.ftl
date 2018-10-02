@@ -3,8 +3,10 @@
 
 <script>
 	
-var data = [{'menuName':'订单管理','menuCode':'1','menuList':[{'menuName':'订单列表','menuCode':'1-1','menuUrl':'/admin/order/index'}]},
-			{'menuName':'用户管理','menuCode':'2','menuList':['']}];
+var data = [
+			{'menuName':'订单管理','menuCode':'1','menuList':[{'menuName':'订单列表','menuCode':'1-1','menuUrl':'/admin/order/index'}]},
+			{'menuName':'用户管理','menuCode':'2','menuList':[{'menuName':'用户列表','menuCode':'1-1','menuUrl':'/admin/user/index'}]}
+			];
 loadMenu();
 function loadMenu(){
 var htmlStr = ""; 

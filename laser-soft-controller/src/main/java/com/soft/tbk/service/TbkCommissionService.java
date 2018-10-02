@@ -11,8 +11,6 @@ import com.soft.tbk.model.TbkCommission;
 
 
 public interface TbkCommissionService extends BaseService{
-    
-
 
     /**
      * 
@@ -61,7 +59,20 @@ public interface TbkCommissionService extends BaseService{
      */
     public boolean updateCommissionStatus(Integer orderId, Integer commissionStatus, Date settleDate) throws ApiException;
 
+    /**
+     * 
+     * @param tbkCommission
+     */
+    public boolean updateCommissionStatusByUser(Integer userId, Integer commissionStatus, Date settleDate) throws ApiException;
 
     
-    public Map<String, Object> sumCommission(Integer userId, Date sumDate);
+    public List<Map<String, Object>> sumCommission(Integer userId, Date sumDate);
+
+    /**
+     * 查某个月待结算佣金
+     * @param sellteDate
+     * @return
+     */
+    public List<Map<String, Object>> sellteCommission(Date sellteDate);
+
 }

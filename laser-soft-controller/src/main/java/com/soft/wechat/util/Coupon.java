@@ -14,8 +14,10 @@ import com.soft.wechat.domain.CouponContext;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
+import com.taobao.api.request.TbkDgItemCouponGetRequest;
 import com.taobao.api.request.TbkItemInfoGetRequest;
 import com.taobao.api.request.TbkTpwdCreateRequest;
+import com.taobao.api.response.TbkDgItemCouponGetResponse;
 import com.taobao.api.response.TbkItemInfoGetResponse;
 import com.taobao.api.response.TbkTpwdCreateResponse;
 
@@ -23,12 +25,13 @@ public class Coupon {
 
     public static final String tklparseURL = "http://api.chaozhi.hk/tb/tklParse";
 
-    public static final String tklGenURL = "http://api.chaozhi.hk/tb/linkTkl";
-
     public static final String tbkHighURL = "http://open.jxb001.cn/openApi/high/api";
 
     public static final String unulandURL = "http://open.jxb001.cn/openApi/unuland/api";
     
+    @Deprecated
+    public static final String tklGenURL = "http://api.chaozhi.hk/tb/linkTkl";
+
     
     public static TbkItemInfoGetResponse getItemDetail(String itemId) {
 
@@ -294,10 +297,10 @@ public class Coupon {
     
     public static void main(String[] args) {
 
-        System.out.println(getHighObject("￥dHJvbVbORt8￥","mm_47328993_112850356_23198400420").getTkl());
+        //System.out.println(getHighObject("￥dHJvbVbORt8￥","mm_47328993_112850356_23198400420").getTkl());
 
         
-      //TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "25073090", "4a0d538064e190a89ae4cfa10e5bf393");
+      TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "25073090", "4a0d538064e190a89ae4cfa10e5bf393");
      
 /*     TbkItemGetRequest req = new TbkItemGetRequest();
 
@@ -313,13 +316,8 @@ public class Coupon {
      } catch (ApiException e) {
 
      }*/
-    /* TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
-     req.setAdzoneId(23198400420L);
-     req.setPlatform(1L);
-     req.setCat("16,18");
-     req.setPageSize(1L);
-     req.setQ("女装");
-     req.setPageNo(1L);
+    TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
+     req.setAdzoneId(23059300214L);
      
      try {
          TbkDgItemCouponGetResponse rsp = client.execute(req);
@@ -331,7 +329,7 @@ public class Coupon {
          System.out.println(rsp);
      } catch (ApiException e) {
 
-     }*/
+     }
      
     }
 
