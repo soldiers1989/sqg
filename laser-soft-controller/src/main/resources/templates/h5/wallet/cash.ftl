@@ -144,6 +144,12 @@
 								var statusStr = "提现中";
 								if (status == 1) {
 									statusStr = "已完成";
+								} else if (status == -1) {
+									statusStr = "提现失败";
+								}
+								var remark = order.remark;
+								if (remark != "" && remark != null) {
+									statusStr += "("remark + remark + ")";
 								}
 								html += '<div class="weui-cell wallet_list">' + 
 						            '<div class="weui-cell__bd">' +
