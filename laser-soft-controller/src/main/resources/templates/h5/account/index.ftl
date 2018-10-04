@@ -56,7 +56,7 @@
           
         </div>
         <div class="weui-cells">
-         <a class="weui-cell weui-cell_access" href="">
+         <a class="weui-cell weui-cell_access" href="${sysContextPath}/web/friend/index">
            <div class="weui-cell__hd">
            		<span class="round_icon round_icon04"><i class="iconfont icon-pause"></i></span>
            </div>
