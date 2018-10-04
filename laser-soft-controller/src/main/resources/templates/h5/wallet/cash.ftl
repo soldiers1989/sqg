@@ -45,20 +45,19 @@
 		      <a class="weui-btn weui-btn_primary" href="javascript:void(0)" onclick="saveWithdraw()">确认提现</a>
 		    </div>
 		    
-		    <div class="weui-panel weui-panel_access">
+		    <div class="weui-panel weui-panel_access" style="overflow-y:auto; overflow-x:hidden;height:600px;">
 				<div class="weui-panel__hd">最近提现明细</div>
-					<div class="weui-panel__bd" id="walletlist">
-					
+				<div class="weui-panel__bd" id="walletlist">
+				</div>
+				<!--向下滚动加载样式-->
+				<div class="weui-loadmore" id="weui-loadmore">
+			      <i class="weui-loading"></i>
+			      <span class="weui-loadmore__tips">正在加载</span>
+			    </div>
+			    <div class="weui-loadmore weui-loadmore_line" id="weui-loadmore_line" style="display: none;">
+				  <span class="weui-loadmore__tips">没有更多数据</span>
 				</div>
 			</div>
-		</div>
-		<!--向下滚动加载样式-->
-		<div class="weui-loadmore" id="weui-loadmore"  style="display: none;">
-	      <i class="weui-loading"></i>
-	      <span class="weui-loadmore__tips">正在加载</span>
-	    </div>
-	    <div class="weui-loadmore weui-loadmore_line" id="weui-loadmore_line" style="display: none;">
-		  <span class="weui-loadmore__tips">没有更多数据</span>
 		</div>
 		<!--引用 js-->
 		<script>
@@ -109,7 +108,7 @@
 		</script>
 		<script>
 			var currentPage = 1;
-			var rows = 8;
+			var rows = 10;
 			var loading=false;
 				$(document).ready(function(){
 					load("pull");
@@ -177,9 +176,8 @@
 				};
 				myAjaxRequest(config);
 			}
-			
 			//下拉加载页面
-			$(document.body).infinite().on("infinite", function() {
+			$(".weui-panel_access").infinite().on("infinite", function() {
 			  if(loading) return;
 				  loading = true;
 				 currentPage=currentPage+1;

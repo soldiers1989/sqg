@@ -9,20 +9,19 @@
 	      <div class="refresh">正在刷新</div>
 	    </div>
 		<div class="content">
-		    <div class="weui-panel weui-panel_access">
+		    <div class="weui-panel weui-panel_access"  style="overflow-y:auto; overflow-x:hidden;height:900px;">
 				<div class="weui-panel__hd">邀请好友人数:<font color="red" id="total"></font>人</div>
-					<div class="weui-panel__bd" id="walletlist">
-					
+				<div class="weui-panel__bd" id="walletlist">
+				</div>
+				<!--向下滚动加载样式-->
+				<div class="weui-loadmore" id="weui-loadmore"  style="display: none;">
+			      <i class="weui-loading"></i>
+			      <span class="weui-loadmore__tips">正在加载</span>
+			    </div>
+			    <div class="weui-loadmore weui-loadmore_line" id="weui-loadmore_line" style="display: none;">
+				  <span class="weui-loadmore__tips">没有更多数据</span>
 				</div>
 			</div>
-		</div>
-		<!--向下滚动加载样式-->
-		<div class="weui-loadmore" id="weui-loadmore"  style="display: none;">
-	      <i class="weui-loading"></i>
-	      <span class="weui-loadmore__tips">正在加载</span>
-	    </div>
-	    <div class="weui-loadmore weui-loadmore_line" id="weui-loadmore_line" style="display: none;">
-		  <span class="weui-loadmore__tips">没有更多数据</span>
 		</div>
 		<!--引用 js-->
 		<script>
@@ -93,7 +92,7 @@
 			}
 			
 			//下拉加载页面
-			$(document.body).infinite().on("infinite", function() {
+			$(".weui-panel_access").infinite().on("infinite", function() {
 			  if(loading) return;
 				  loading = true;
 				 currentPage=currentPage+1;
