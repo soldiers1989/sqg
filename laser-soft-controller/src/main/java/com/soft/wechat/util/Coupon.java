@@ -15,9 +15,11 @@ import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.TbkDgItemCouponGetRequest;
+import com.taobao.api.request.TbkItemGetRequest;
 import com.taobao.api.request.TbkItemInfoGetRequest;
 import com.taobao.api.request.TbkTpwdCreateRequest;
 import com.taobao.api.response.TbkDgItemCouponGetResponse;
+import com.taobao.api.response.TbkItemGetResponse;
 import com.taobao.api.response.TbkItemInfoGetResponse;
 import com.taobao.api.response.TbkTpwdCreateResponse;
 
@@ -295,13 +297,19 @@ public class Coupon {
     
     
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ApiException {
 
         //System.out.println(getHighObject("￥dHJvbVbORt8￥","mm_47328993_112850356_23198400420").getTkl());
 
         
       TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "25073090", "4a0d538064e190a89ae4cfa10e5bf393");
      
+      TbkItemGetRequest req = new TbkItemGetRequest();
+      req.setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick");
+      req.setPageSize(20L);
+      TbkItemGetResponse rsp = client.execute(req);
+      System.out.println(rsp.getBody());
+      
 /*     TbkItemGetRequest req = new TbkItemGetRequest();
 
      req.setQ("武夷山特级正山小种红茶散装正山小种红茶桂圆香正品新茶500g");
@@ -316,7 +324,7 @@ public class Coupon {
      } catch (ApiException e) {
 
      }*/
-    TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
+   /* TbkDgItemCouponGetRequest req = new TbkDgItemCouponGetRequest();
      req.setAdzoneId(23059300214L);
      
      try {
@@ -329,7 +337,7 @@ public class Coupon {
          System.out.println(rsp);
      } catch (ApiException e) {
 
-     }
+     }*/
      
     }
 

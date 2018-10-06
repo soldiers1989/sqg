@@ -186,12 +186,12 @@ public class OrderScheduleController extends BaseController {
         Map<String, Object> orderMap = new HashMap<String, Object>();
         orderMap.put("appkey", "1822410736221674");
         orderMap.put("appsecret", "1c6f031ac7bcf150ea983712fc413af2");
-        orderMap.put("startTime", "2018-10-01 21:53:14");
-        orderMap.put("span", "600");
+        orderMap.put("startTime", "2018-10-05 11:35:14");
+        orderMap.put("span", "1200");
         orderMap.put("pageNo", "1");
         orderMap.put("pageSize", "100");
         orderMap.put("tkStatus", "1");
-        orderMap.put("orderQueryType", "settle_time");
+        orderMap.put("orderQueryType", "create_time");
 
         try {
 

@@ -4,7 +4,7 @@
 <meta content="" name="author" />
 
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
-<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+<link href="http:/fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
 <link href="${domainName}/static/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link href="${domainName}/static/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
 <link href="${domainName}/static/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -98,18 +98,18 @@
 <script src="${domainName}/static/js/jquery.form.js" type="text/javascript"></script>
 <script src="${domainName}/static/js/enums.js" type="text/javascript"></script>
 <script src="${domainName}/static/js/business.js" type="text/javascript"></script>
-<link href="${domainName}/static/css//sweetalert.css" rel="stylesheet" type="text/css" />
+<link href="${domainName}/static/css/sweetalert.css" rel="stylesheet" type="text/css" />
 
 <!-- <script src="${domainName}/static/js/jquery.ztree.all-3.5.min.js"></script>
-<link href="${domainName}/static/css//zTreeStyle/zTreeStyle.css" rel="stylesheet"> -->
+<link href="${domainName}/static/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"> -->
 
 <script src="${domainName}/static/js/bootstrapValidator.js" type="text/javascript"></script>
-<link href="${domainName}/static/css//bootstrapValidator.min.css" rel="stylesheet" type="text/css" />
+<link href="${domainName}/static/css/bootstrapValidator.min.css" rel="stylesheet" type="text/css" />
 
 
 <!-- DATAGRID 所需 -->
 <script src="${domainName}/static/js/jquery-ui.min.js" type="text/javascript"></script>
-<link href="${domainName}/static/css//jquery-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="${domainName}/static/css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 <!--  FILTERS plugin --> 
 <link rel="stylesheet" type="text/css" href="${domainName}/static/js/bsfilter/jquery.jui_filter_rules.min.css">
 <script type="text/javascript" src="${domainName}/static/js/bsfilter/jquery.jui_filter_rules.min.js"></script>

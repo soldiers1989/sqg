@@ -153,7 +153,7 @@
 								html += '<div class="weui-cell wallet_list">' + 
 						            '<div class="weui-cell__bd">' +
 				            			'<p>' + showStr + '</p>' +
-						              	'<p class="gary">' + dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.createTime)) + '</p>' +
+						              	'<p class="gary">' + order.createTime + '</p>' +
 						            '</div>' +
 						            '<div class="weui-cell__ft"><span>' + statusStr + '</span></div>' +
 						            '<div class="weui-cell__ft green">-<span>' + Number(order.amount).toFixed(2) + '</span></div>' +

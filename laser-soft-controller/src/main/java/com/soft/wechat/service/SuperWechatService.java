@@ -79,8 +79,7 @@ public class SuperWechatService {
     @Value("${weixin.appsecret}")
     protected String secret;
 
-    @Value("${tbk.domain.name}")
-    protected String domainName;
+    protected String domainName = "http://www.taohuijie.work";
 
     @Value("${weixin.templateId}")
     protected String templateId;

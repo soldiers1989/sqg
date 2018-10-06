@@ -166,7 +166,7 @@ var tabNum = "${tabNum!'1'}";
 															"</div>"+
 														"</div>";
 														
-									settelDateHtml = "<span style='float:right'>"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.earningTime)) + " 结算</span>";
+									settelDateHtml = "<span style='float:right'>"+order.earningTime + " 结算</span>";
 								}else if (order.tradeStatus == 13) {
 									state = "已失效";
 								}
@@ -202,7 +202,7 @@ var tabNum = "${tabNum!'1'}";
 												"</div>"+
 											"</div>"+
 										"</a>";
-									html=html+"<div class='order_btn' style='font-size:12px'><span>"+dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.tradeTime)) + " 创建</span>"+settelDateHtml+"</div></div>"+
+									html=html+"<div class='order_btn' style='font-size:12px'><span>"+order.tradeTime + " 创建</span>"+settelDateHtml+"</div></div>"+
 											"</div>"+
 										"</div>"+
 									"</div>";

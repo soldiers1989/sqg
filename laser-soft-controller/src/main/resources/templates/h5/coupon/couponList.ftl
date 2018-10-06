@@ -116,7 +116,7 @@ var tabNum = "${tabNum!'1'}";
 											"</div>"+
 										"</a>";
 									html=html+"<div class='order_btn' style='font-size:13px'><div style='float:left;margin-top: 10px;'>转券时间"+
-												dateFtt('yyyy-MM-dd hh:mm:ss',new Date(order.createTime)) + 
+												order.createTime + 
 												"</div><div style='float:right'>"+tklHave+"</div></div></div>"+
 											"</div>"+
 										"</div>"+
